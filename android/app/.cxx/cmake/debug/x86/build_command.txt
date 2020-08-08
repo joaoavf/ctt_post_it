@@ -1,14 +1,14 @@
-Executable : /Users/hugogomes/Library/Android/sdk/cmake/3.6.4111459/bin/cmake
+Executable : /Users/Juliana/Library/Android/sdk/cmake/3.6.4111459/bin/cmake
 arguments : 
--H/Users/hugogomes/Desktop/Coding/Flutter/CameraTutorial/camera_tutorial/android
--B/Users/hugogomes/Desktop/Coding/Flutter/CameraTutorial/camera_tutorial/android/app/.cxx/cmake/debug/x86
+-H/Users/Juliana/AndroidStudioProjects/camera_tutorial/android
+-B/Users/Juliana/AndroidStudioProjects/camera_tutorial/android/app/.cxx/cmake/debug/x86
 -DANDROID_ABI=x86
 -DANDROID_PLATFORM=android-21
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/Users/hugogomes/Desktop/Coding/Flutter/CameraTutorial/camera_tutorial/build/app/intermediates/cmake/debug/obj/x86
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/Users/Juliana/AndroidStudioProjects/camera_tutorial/build/app/intermediates/cmake/debug/obj/x86
 -DCMAKE_BUILD_TYPE=Debug
--DANDROID_NDK=/Users/hugogomes/Library/Android/sdk/ndk/21.1.6352462
--DCMAKE_TOOLCHAIN_FILE=/Users/hugogomes/Library/Android/sdk/ndk/21.1.6352462/build/cmake/android.toolchain.cmake
--DCMAKE_MAKE_PROGRAM=/Users/hugogomes/Library/Android/sdk/cmake/3.6.4111459/bin/ninja
+-DANDROID_NDK=/Users/Juliana/Library/Android/sdk/ndk/21.3.6528147
+-DCMAKE_TOOLCHAIN_FILE=/Users/Juliana/Library/Android/sdk/ndk/21.3.6528147/build/cmake/android.toolchain.cmake
+-DCMAKE_MAKE_PROGRAM=/Users/Juliana/Library/Android/sdk/cmake/3.6.4111459/bin/ninja
 -GAndroid Gradle - Ninja
 jvmArgs : 
 
