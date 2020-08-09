@@ -9,6 +9,7 @@ import 'package:camera/camera.dart';
 import 'package:image/image.dart' as imglib;
 
 import 'ImagePreview.dart';
+import 'buscode.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -183,6 +185,19 @@ class _MyHomePageState extends State<MyHomePage> {
               format: imglib.Format.bgra,
             );
           }
+
+          if (img.height > img.width) {
+            img = imglib.copyRotate(img, 90);
+          }
+
+          var horizOffset = 0;
+          var vertOffset = (img.height) * 0.40 ~/ 1;
+          var height = img.height;
+          var width = (img.height) * 0.20 ~/ 1;
+
+          img = imglib.copyCrop(img, horizOffset, vertOffset, height, width);
+
+          read_buscode(img);
 
           Navigator.push(
               context,
