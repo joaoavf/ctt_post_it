@@ -37,20 +37,22 @@ List splitList(summarized_1d, int height, int width) {
 from_1d_to_buscode(List bottomList, upperList) {
   var newListB = bottomList.sublist(0);
   newListB.sort();
+
   var delta;
   var l;
   var up;
-  var threshold_whiteB = newListB[500] * 0.98;
-  var threshold_blackB = newListB[70] * 1.1;
+
+  var threshold_whiteB = newListB[(newListB.length ~/ 5) * 4] * 0.98;
+  var threshold_blackB = newListB[(newListB.length ~/ 9)] * 1.1;
   delta = threshold_whiteB - threshold_blackB;
   var threshold_black_30B = threshold_blackB + delta * .3;
   var threshold_black_75B = threshold_blackB + delta * .8;
 
-  var newListU = bottomList.sublist(0);
+  var newListU = upperList.sublist(0);
   newListB.sort();
 
-  var threshold_whiteU = newListU[500] * 0.98;
-  var threshold_blackU = newListU[70] * 1.1;
+  var threshold_whiteU = newListU[(newListU.length ~/ 5) * 4] * 0.98;
+  var threshold_blackU = newListU[(newListB.length ~/ 9)] * 1.1;
   delta = threshold_whiteU - threshold_blackU;
   var threshold_black_30U = threshold_blackU + delta * .3;
   var threshold_black_75U = threshold_blackU + delta * .8;
@@ -90,8 +92,6 @@ from_1d_to_buscode(List bottomList, upperList) {
 }
 
 List to_binary(imglib.Image img) {
-  final int height = img.height;
-  final int width = img.width;
   List newList = [];
 
   var colorized;
@@ -99,7 +99,7 @@ List to_binary(imglib.Image img) {
     colorized = Color(img.data[i]);
     newList.add((colorized.red + colorized.green + colorized.blue) / 3);
   }
-  var threshold = newList[(newList.length ~/ 7)];
+  var threshold = newList[(newList.length ~/ 6)];
   print('threshold');
   print(threshold);
 
@@ -116,8 +116,4 @@ List to_binary_color(List summarized_1d, double threshold) {
     }
   }
   return newList;
-}
-
-processColors(meanRed, meanGreen, meanBlue) {
-  return (meanRed + meanGreen + meanBlue) / 3;
 }
