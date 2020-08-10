@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:math';
 
-void read_buscode(imglib.Image img) {
+List read_buscode(imglib.Image img) {
   var height = img.height;
   var width = img.width;
   var stride = 4;
@@ -12,14 +12,13 @@ void read_buscode(imglib.Image img) {
   img_1d = conv2d(img_1d, stride, height, width);
   img_1d = toBinaryColor(img_1d);
 
-  var splitedList = splitList(img_1d, height, width);
+  var splitedList = splitList(img_1d, height - stride + 1, width - stride + 1);
   var buscode = from_1d_to_buscode(splitedList[0], splitedList[1]);
-  print(buscode);
-  print(buscode.length);
+  var l = buscode.length;
   return buscode;
 }
 
-List splitList(summarized_1d, int height, int width) {
+List splitList(img_1d, int height, int width) {
   List bottomCalc = [];
   List upperCalc = [];
   List upperList = [];
@@ -30,9 +29,9 @@ List splitList(summarized_1d, int height, int width) {
     upperCalc = [];
     for (var j = 0; j < height; j++) {
       if (j < height / 2) {
-        bottomCalc.add(summarized_1d[i + (width * j)]);
+        upperCalc.add(img_1d[i + (width * j)]);
       } else {
-        upperCalc.add(summarized_1d[i + (width * j)]);
+        bottomCalc.add(img_1d[i + (width * j)]);
       }
     }
     bottomList.add(bottomCalc.reduce((a, b) => a + b) / bottomCalc.length);
@@ -42,37 +41,30 @@ List splitList(summarized_1d, int height, int width) {
   return [bottomList, upperList];
 }
 
-from_1d_to_buscode(List bottomList, List upperList) {
-  var newListB = bottomList.sublist(0);
-  newListB.sort();
+List generate_thresholds(List entryList) {
+  List tmpList = entryList.sublist(0); //copy List
+  tmpList.sort();
+  var whiteThreshold = tmpList[(tmpList.length ~/ 2)] * 0.98;
+  var blackThreshold = tmpList[(tmpList.length ~/ 10)] * 1.1;
+  var delta = whiteThreshold - blackThreshold;
+  var fullThreshold = blackThreshold + delta * .5;
+  var midThreshold = blackThreshold + delta * .96;
 
-  var delta;
+  List finalT = [midThreshold, fullThreshold];
+  return finalT;
+}
+
+List from_1d_to_buscode(List bottomList, List upperList) {
   var l;
   var up;
 
-  var threshold_whiteB = newListB[(newListB.length ~/ 5) * 4] * 0.98;
-  var threshold_blackB = newListB[(newListB.length ~/ 9)] * 1.1;
-  delta = threshold_whiteB - threshold_blackB;
-  var threshold_black_30B = threshold_blackB + delta * .3;
-  var threshold_black_75B = threshold_blackB + delta * .8;
-
-  var newListU = upperList.sublist(0);
-  newListB.sort();
-
-  var threshold_whiteU = newListU[(newListU.length ~/ 5) * 4] * 0.98;
-  var threshold_blackU = newListU[(newListB.length ~/ 9)] * 1.1;
-  delta = threshold_whiteU - threshold_blackU;
-  var threshold_black_30U = threshold_blackU + delta * .3;
-  var threshold_black_75U = threshold_blackU + delta * .8;
+  List bThresholds = generate_thresholds(bottomList);
+  List uThresholds = generate_thresholds(upperList);
 
   List result = [];
 
   var lm = 255.0;
   var um = 255.0;
-
-  print('inside');
-  print(bottomList.length);
-  print(upperList.length);
 
   for (var i = 0; i < bottomList.length; i++) {
     l = bottomList[i];
@@ -81,18 +73,14 @@ from_1d_to_buscode(List bottomList, List upperList) {
     lm = min(l, lm);
     um = min(up, um);
 
-    print(l);
-    print(up);
-
-    if (l > 254 && up > 254) {
-      // TODO might be necessary to use conv here
-      if (lm < threshold_black_30B && um < threshold_black_30U) {
+    if (l > 250 && up > 250) {
+      if (lm < bThresholds[1] && um < uThresholds[1]) {
         result.add('F');
-      } else if (lm < threshold_black_30B && um < threshold_black_75U) {
+      } else if (lm < bThresholds[1] && um < uThresholds[0]) {
         result.add('D');
-      } else if (lm < threshold_black_75B && um < threshold_black_30U) {
+      } else if (lm < bThresholds[0] && um < uThresholds[1]) {
         result.add('A');
-      } else if (lm < threshold_black_75B && um < threshold_black_75U) {
+      } else if (lm < bThresholds[0] && um < uThresholds[0]) {
         result.add('T');
       }
 
@@ -114,7 +102,6 @@ List to_binary(imglib.Image img) {
         colorized.blue * 0.1140);
   }
 
-
   return toBinaryColor(newList);
 }
 
@@ -122,7 +109,7 @@ List toBinaryColor(List img_1d) {
   List thresholdList = [];
   thresholdList = img_1d.sublist(0);
   thresholdList.sort();
-  var threshold = thresholdList[(thresholdList.length ~/ 5)];
+  var threshold = thresholdList[(thresholdList.length ~/ 6)];
 
   List newList = [];
   for (var i = 0; i < img_1d.length; i++) {
