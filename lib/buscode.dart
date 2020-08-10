@@ -16,10 +16,10 @@ List splitList(summarized_1d, int height, int width) {
   List upperCalc = [];
   List upperList = [];
   List bottomList = [];
-  List row;
 
   for (var i = 0; i < width; i++) {
-    row = summarized_1d.sublist(i * height, (i + 1) * height);
+    bottomCalc = [];
+    upperCalc = [];
     for (var j = 0; j < height; j++) {
       if (j < height / 2) {
         bottomCalc.add(summarized_1d[i + (width * j)]);
@@ -34,7 +34,7 @@ List splitList(summarized_1d, int height, int width) {
   return [bottomList, upperList];
 }
 
-from_1d_to_buscode(List bottomList, upperList) {
+from_1d_to_buscode(List bottomList, List upperList) {
   var newListB = bottomList.sublist(0);
   newListB.sort();
 
@@ -62,7 +62,11 @@ from_1d_to_buscode(List bottomList, upperList) {
   var lm = 255.0;
   var um = 255.0;
 
-  for (var i = 0; i < 670; i++) {
+  print('inside');
+  print(bottomList.length);
+  print(upperList.length);
+
+  for (var i = 0; i < bottomList.length; i++) {
     l = bottomList[i];
     up = upperList[i];
 
@@ -72,7 +76,7 @@ from_1d_to_buscode(List bottomList, upperList) {
     print(l);
     print(up);
 
-    if (l > 240 && up > 240) {
+    if (l > 254 && up > 254) {
       // TODO might be necessary to use conv here
       if (lm < threshold_black_30B && um < threshold_black_30U) {
         result.add('F');
@@ -97,9 +101,13 @@ List to_binary(imglib.Image img) {
   var colorized;
   for (var i = 0; i < img.data.length; i++) {
     colorized = Color(img.data[i]);
-    newList.add((colorized.red + colorized.green + colorized.blue) / 3);
+    newList.add(colorized.red * 0.2989 +
+        colorized.green * 0.5870 +
+        colorized.blue * 0.1140);
   }
-  var threshold = newList[(newList.length ~/ 6)];
+  List thresholdList = newList.sublist(0);
+  thresholdList.sort();
+  var threshold = thresholdList[(thresholdList.length ~/ 5)];
   print('threshold');
   print(threshold);
 
@@ -109,7 +117,7 @@ List to_binary(imglib.Image img) {
 List to_binary_color(List summarized_1d, double threshold) {
   List newList = [];
   for (var i = 0; i < summarized_1d.length; i++) {
-    if (summarized_1d[i] < threshold) {
+    if (summarized_1d[i] <= threshold) {
       newList.add(0);
     } else {
       newList.add(255);
