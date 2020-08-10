@@ -192,10 +192,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
           var horizOffset = 0;
           var vertOffset = (img.height) * 0.40 ~/ 1;
-          var height = img.height;
-          var width = (img.height) * 0.20 ~/ 1;
+          var width = img.width;
+          var height = (img.width) * 0.12 ~/ 1;
 
-          img = imglib.copyCrop(img, horizOffset, vertOffset, height, width);
+          img = imglib.copyCrop(img, horizOffset, vertOffset, width, height);
 
           read_buscode(img);
 
