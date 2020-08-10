@@ -3,8 +3,16 @@ import 'package:image/image.dart' as imglib;
 import 'dart:math';
 
 void read_buscode(imglib.Image img) {
-  var summarized_1d = to_binary(img);
-  var splitedList = splitList(summarized_1d, img.height, img.width);
+  var height = img.height;
+  var width = img.width;
+  var stride = 4;
+
+  var img_1d = to_binary(img);
+
+  img_1d = conv2d(img_1d, stride, height, width);
+  img_1d = toBinaryColor(img_1d);
+
+  var splitedList = splitList(img_1d, height, width);
   var buscode = from_1d_to_buscode(splitedList[0], splitedList[1]);
   print(buscode);
   print(buscode.length);
@@ -105,22 +113,41 @@ List to_binary(imglib.Image img) {
         colorized.green * 0.5870 +
         colorized.blue * 0.1140);
   }
-  List thresholdList = newList.sublist(0);
-  thresholdList.sort();
-  var threshold = thresholdList[(thresholdList.length ~/ 5)];
-  print('threshold');
-  print(threshold);
 
-  return to_binary_color(newList, threshold);
+
+  return toBinaryColor(newList);
 }
 
-List to_binary_color(List summarized_1d, double threshold) {
+List toBinaryColor(List img_1d) {
+  List thresholdList = [];
+  thresholdList = img_1d.sublist(0);
+  thresholdList.sort();
+  var threshold = thresholdList[(thresholdList.length ~/ 5)];
+
   List newList = [];
-  for (var i = 0; i < summarized_1d.length; i++) {
-    if (summarized_1d[i] <= threshold) {
+  for (var i = 0; i < img_1d.length; i++) {
+    if (img_1d[i] <= threshold) {
       newList.add(0);
     } else {
       newList.add(255);
+    }
+  }
+  return newList;
+}
+
+List conv2d(List img_1d, int stride, int height, int width) {
+  List newList = [];
+  List strideList;
+  for (var i = 0; i < (height - stride + 1); i++) {
+    for (var j = 0; j < (width - stride + 1); j++) {
+      strideList = [];
+      for (var z = 0; z < stride; z++) {
+        for (var y = 0; y < stride; y++) {
+          strideList.add(img_1d[(j + y) + (i + z) * width]);
+        }
+      }
+
+      newList.add(strideList.reduce((a, b) => a + b));
     }
   }
   return newList;
