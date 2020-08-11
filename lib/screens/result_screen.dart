@@ -6,15 +6,9 @@ class ResultScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          Container(
-            child: Image(
-              image: AssetImage('lib/assets/buscode'),
-            ),
-          ),
-          GridView.count(
-            crossAxisCount: 2,
-            children: [],
-          )
+          Container(child:),
+//          GridView.count(crossAxisCount: 2)
+          Text(''),
         ],
       ),
     );

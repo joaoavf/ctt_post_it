@@ -1,18 +1,16 @@
 import 'dart:ffi';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/services.dart';
 
-import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:image/image.dart' as imglib;
 
 import 'functions/ImagePreview.dart';
-import 'functions/buscode.dart';
 import 'functions/get_buscode.dart';
 
 import 'components/bottom_navigation_bar.dart';
+
+import 'screens/result_screen.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
@@ -31,13 +29,16 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     return MaterialApp(
-      title: 'Camera App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Camera App'),
-    );
+        title: 'Camera App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: MyHomePage(title: 'Camera App'),
+        routes: {
+          '/': (context) => MyHomePage(),
+          '/second': (context) => ResultScreen(),
+        });
   }
 }
 
@@ -135,10 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           getBuscode();
 
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => new ImagePreview(img: img)));
+          Navigator.pushNamed(context, '/second');
         },
         tooltip: 'Increment',
         child: Icon(Icons.camera_alt),
