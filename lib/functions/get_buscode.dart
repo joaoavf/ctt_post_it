@@ -16,7 +16,7 @@ typedef Convert = Pointer<Uint32> Function(
 
 imglib.Image img;
 
-Map getBuscode() {
+DecodedBusCode getBuscode() {
   CameraController _camera;
   bool _cameraInitialized = false;
   CameraImage _savedImage;
@@ -88,12 +88,8 @@ Map getBuscode() {
   img = imglib.copyCrop(img, horizOffset, vertOffset, width, height);
 
   List buscode = read_buscode(img);
-  if (buscode.length == 75) {
-    DecodedBusCode decodedBusCode = DecodedBusCode(buscode);
-    resultMap = {'result': true, 'decoded': decodedBusCode};
-  } else {
-    resultMap = {'result': false};
-  }
 
-  return resultMap;
+  DecodedBusCode decodedBusCode = DecodedBusCode(buscode);
+
+  return decodedBusCode;
 }

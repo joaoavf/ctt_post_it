@@ -181,38 +181,45 @@ class DecodedBusCode {
   int serialNumber;
 
   String trackingIndicator;
+  bool valid;
+
+  bool success = false;
 
   DecodedBusCode(this.buscode) {
-    integers = bus_to_integers(buscode);
-    print(integers);
+    if (buscode.length == 75) {
+      success = true;
+      integers = bus_to_integers(buscode);
+      print(integers);
 
-    bin = integers.map(to_6bin).reduce((a, b) => a + b);
-    print(bin);
+      bin = integers.map(to_6bin).reduce((a, b) => a + b);
+      print(bin);
 
-    main =
-        bin.substring(0, 12) + bin.substring(18, 60) + bin.substring(138, 150);
-    print(main);
+      main = bin.substring(0, 12) +
+          bin.substring(18, 60) +
+          bin.substring(138, 150);
+      print(main);
 
-    formatId = decode_format_id(main.substring(0, 4));
-    print(formatId);
+      formatId = decode_format_id(main.substring(0, 4));
+      print(formatId);
 
-    issuerCode = issuer_code_conversion(main.substring(4, 20));
-    print(issuerCode);
+      issuerCode = issuer_code_conversion(main.substring(4, 20));
+      print(issuerCode);
 
-    equipmentId = decodeEquipmentId(main.substring(20, 32));
-    print(equipmentId);
+      equipmentId = decodeEquipmentId(main.substring(20, 32));
+      print(equipmentId);
 
-    itemPriority = decodeItemPriority(main.substring(32, 34));
-    print(itemPriority);
+      itemPriority = decodeItemPriority(main.substring(32, 34));
+      print(itemPriority);
 
-    serialNumberMap =
-        processSerialNumber(main.substring(34, 54) + main.substring(56));
-    month = serialNumberMap['month'];
-    day = serialNumberMap['day'];
-    hour = serialNumberMap['hour'];
-    minute = serialNumberMap['minute'];
-    serialNumber = serialNumberMap['serial'];
-    print(serialNumberMap);
-    trackingIndicator = decodeTrackingIndicator(main.substring(54, 56));
+      serialNumberMap =
+          processSerialNumber(main.substring(34, 54) + main.substring(56));
+      month = serialNumberMap['month'];
+      day = serialNumberMap['day'];
+      hour = serialNumberMap['hour'];
+      minute = serialNumberMap['minute'];
+      serialNumber = serialNumberMap['serial'];
+      print(serialNumberMap);
+      trackingIndicator = decodeTrackingIndicator(main.substring(54, 56));
+    }
   }
 }
