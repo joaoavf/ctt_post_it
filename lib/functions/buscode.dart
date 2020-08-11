@@ -14,7 +14,6 @@ List read_buscode(imglib.Image img) {
 
   var splitedList = splitList(img_1d, height - stride + 1, width - stride + 1);
   var buscode = from_1d_to_buscode(splitedList[0], splitedList[1]);
-  var l = buscode.length;
   return buscode;
 }
 

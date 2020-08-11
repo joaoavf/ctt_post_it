@@ -17,8 +17,6 @@ typedef Convert = Pointer<Uint32> Function(
 imglib.Image img;
 
 DecodedBusCode getBuscode() {
-  CameraController _camera;
-  bool _cameraInitialized = false;
   CameraImage _savedImage;
 
   final DynamicLibrary convertImageLib = Platform.isAndroid
@@ -83,7 +81,6 @@ DecodedBusCode getBuscode() {
   var vertOffset = (img.height) * 0.40 ~/ 1;
   var width = img.width;
   var height = (img.width) * 0.12 ~/ 1;
-  Map resultMap;
 
   img = imglib.copyCrop(img, horizOffset, vertOffset, width, height);
 
