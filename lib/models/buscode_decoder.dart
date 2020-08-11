@@ -1,5 +1,5 @@
 import 'package:image/image.dart' as imglib;
-import 'buscode_maps.dart';
+import '../data/buscode_maps.dart';
 
 List<int> bus_to_integers(buscode) {
   List<int> output = [];
@@ -25,7 +25,7 @@ String issuer_code_conversion(String issuerCode) {
   int l1 = issuerCodeInt ~/ 1600;
   int l2 = issuerCodeInt % 1600 ~/ 40;
   int l3 = issuerCodeInt % 1600 % 40;
-  return issue_code_map[l1] + issue_code_map[l2] + issue_code_map[l3];
+  return issueCodeMap[l1] + issueCodeMap[l2] + issueCodeMap[l3];
 }
 
 String decodeEquipmentId(String equipmentId) {

@@ -1,119 +1,140 @@
-import 'package:post_it/functions/image_processing.dart';
-import 'package:post_it/models/exif.dart';
 import 'package:flutter/material.dart';
-import 'package:post_it/functions/buscode_processing.dart';
 import 'package:image/image.dart' as imglib;
+import 'dart:math';
 
-import 'buscode_view.dart';
+List read_buscode(imglib.Image img) {
+  var height = img.height;
+  var width = img.width;
+  var stride = 4;
 
-class Buscode {
-  // Broad data
-  List<String> code;
-  imglib.Image image;
-  List<int> integers;
-  String bin;
+  var img_1d = to_binary(img);
 
-  BuscodeView view;
-  Map data;
+  img_1d = conv2d(img_1d, stride, height, width);
+  img_1d = toBinaryColor(img_1d);
 
-  operator [](index) => data[index];
+  var splitedList = splitList(img_1d, height - stride + 1, width - stride + 1);
+  var buscode = from_1d_to_buscode(splitedList[0], splitedList[1]);
+  return buscode;
+}
 
-  // Specific Data
-  String formatId;
-  String issuerCode;
-  String equipmentId;
-  String itemPriority;
+List splitList(img_1d, int height, int width) {
+  List bottomCalc = [];
+  List upperCalc = [];
+  List upperList = [];
+  List bottomList = [];
 
-  // Time Related Data
-  Map serialNumberMap;
-  String hour;
-  String month;
-  String day;
-  String minute;
-  String serialNumber;
-
-  String photoDate;
-  String buscodeDate;
-
-  // Other
-  String trackingIndicator;
-  bool valid;
-  String idTag;
-  bool success = false;
-
-  Buscode({@required this.image}) {
-    code = readBuscode(image);
-    Map codeEval = evaluateCode(code);
-    if (codeEval['is_rotate']){
-      image = imglib.copyRotate(image, 180);
+  for (var i = 0; i < width; i++) {
+    bottomCalc = [];
+    upperCalc = [];
+    for (var j = 0; j < height; j++) {
+      if (j < height / 2) {
+        upperCalc.add(img_1d[i + (width * j)]);
+      } else {
+        bottomCalc.add(img_1d[i + (width * j)]);
+      }
     }
-    if (codeEval['is_valid'] == true) {
-      integers = codeEval['code'];
+    bottomList.add(bottomCalc.reduce((a, b) => a + b) / bottomCalc.length);
+    upperList.add(upperCalc.reduce((a, b) => a + b) / upperCalc.length);
+  }
 
-      integers = integers.sublist(0, 2)
-        ..addAll(integers.sublist(3, 10))
-        ..addAll(integers.sublist(11, 13));
+  return [bottomList, upperList];
+}
 
-      bin = integers.map(to6Bin).reduce((a, b) => a + b);
+List generate_thresholds(List entryList) {
+  List tmpList = entryList.sublist(0); //copy List
+  tmpList.sort();
+  var whiteThreshold = tmpList[(tmpList.length ~/ 2)] * 0.98;
+  var blackThreshold = tmpList[(tmpList.length ~/ 10)] * 1.1;
+  var delta = whiteThreshold - blackThreshold;
+  var fullThreshold = blackThreshold + delta * .5;
+  var midThreshold = blackThreshold + delta * .96;
 
-      formatId = decodeFormatId(bin.substring(0, 4));
-      issuerCode = issuerCodeConversion(bin.substring(4, 20));
-      equipmentId = decodeEquipmentId(bin.substring(20, 32));
-      itemPriority = decodeItemPriority(bin.substring(32, 34));
+  List finalT = [midThreshold, fullThreshold];
+  return finalT;
+}
 
-      serialNumberMap =
-          processSerialNumber(bin.substring(34, 54) + bin.substring(56));
+List from_1d_to_buscode(List bottomList, List upperList) {
+  var l;
+  var up;
 
-      month = serialNumberMap['month'];
-      day = serialNumberMap['day'];
-      hour = serialNumberMap['hour'];
-      minute = serialNumberMap['minute'];
-      serialNumber = serialNumberMap['serial'];
+  List bThresholds = generate_thresholds(bottomList);
+  List uThresholds = generate_thresholds(upperList);
 
-      trackingIndicator = decodeTrackingIndicator(bin.substring(54, 56));
+  List result = [];
 
-      idTag = formatId +
-          issuerCode +
-          equipmentId +
-          itemPriority +
-          month +
-          day +
-          hour +
-          minute +
-          serialNumber +
-          trackingIndicator;
+  var lm = 255.0;
+  var um = 255.0;
 
-      photoDate =
-          DateTime.now().toString().replaceAll('-', ':').substring(0, 19);
-      buscodeDate =
-          '2000:' + month + ':' + day + ' ' + hour + ':0' + minute + ':00';
+  for (var i = 0; i < bottomList.length; i++) {
+    l = bottomList[i];
+    up = upperList[i];
 
-      data = {
-        'formatId': formatId,
-        'issuerCode': issuerCode,
-        'equipmentId': equipmentId,
-        'buscodeDate': buscodeDate,
-        'photoDate': photoDate,
-        'serialNumber': serialNumber,
-        'itemPriority': itemPriority,
-        'trackingIndicator': trackingIndicator,
-      };
+    lm = min(l, lm);
+    um = min(up, um);
 
-      view = BuscodeView(
-          image: image,
-          formatId: formatId,
-          issuerCode: issuerCode,
-          equipmentId: equipmentId,
-          buscodeDate: buscodeDate,
-          serialNumber: serialNumber,
-          itemPriority: itemPriority,
-          trackingIndicator: trackingIndicator);
+    if (l > 250 && up > 250) {
+      if (lm < bThresholds[1] && um < uThresholds[1]) {
+        result.add('F');
+      } else if (lm < bThresholds[1] && um < uThresholds[0]) {
+        result.add('D');
+      } else if (lm < bThresholds[0] && um < uThresholds[1]) {
+        result.add('A');
+      } else if (lm < bThresholds[0] && um < uThresholds[0]) {
+        result.add('T');
+      }
 
-      success = true;
-    }
-    if (success) {
-      image.exif.rawData = Exif(buscode: this).bytes;
-      saveImage(image);
+      lm = 255.0;
+      um = 255.0;
     }
   }
+  return result;
+}
+
+List to_binary(imglib.Image img) {
+  List newList = [];
+
+  var colorized;
+  for (var i = 0; i < img.data.length; i++) {
+    colorized = Color(img.data[i]);
+    newList.add(colorized.red * 0.2989 +
+        colorized.green * 0.5870 +
+        colorized.blue * 0.1140);
+  }
+
+  return toBinaryColor(newList);
+}
+
+List toBinaryColor(List img_1d) {
+  List thresholdList = [];
+  thresholdList = img_1d.sublist(0);
+  thresholdList.sort();
+  var threshold = thresholdList[(thresholdList.length ~/ 6)];
+
+  List newList = [];
+  for (var i = 0; i < img_1d.length; i++) {
+    if (img_1d[i] <= threshold) {
+      newList.add(0);
+    } else {
+      newList.add(255);
+    }
+  }
+  return newList;
+}
+
+List conv2d(List img_1d, int stride, int height, int width) {
+  List newList = [];
+  List strideList;
+  for (var i = 0; i < (height - stride + 1); i++) {
+    for (var j = 0; j < (width - stride + 1); j++) {
+      strideList = [];
+      for (var z = 0; z < stride; z++) {
+        for (var y = 0; y < stride; y++) {
+          strideList.add(img_1d[(j + y) + (i + z) * width]);
+        }
+      }
+
+      newList.add(strideList.reduce((a, b) => a + b));
+    }
+  }
+  return newList;
 }

@@ -1,4 +1,4 @@
-Map decoder ={
+Map decoder = {
   'FFF': 0,
   'FFA': 1,
   'FFD': 2,
@@ -6,7 +6,6 @@ Map decoder ={
   'FAF': 4,
   'FAA': 5,
   'FAD': 6,
-  'FAT': 7,
   'FDF': 8,
   'FDA': 9,
   'FDD': 10,

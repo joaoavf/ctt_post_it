@@ -2,12 +2,12 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:camera_tutorial/functions/buscode_decoder.dart';
+import '../models/buscode_decoder.dart';
 import 'package:ffi/ffi.dart';
 import 'package:camera/camera.dart';
 import 'package:image/image.dart' as imglib;
 
-import 'package:camera_tutorial/functions/buscode.dart';
+import '../models/buscode.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);

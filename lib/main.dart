@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:typed_data';
-import 'package:camera_tutorial/functions/buscode_decoder.dart';
+import 'models/buscode_decoder.dart';
 import 'package:ffi/ffi.dart';
-import 'package:camera_tutorial/functions/buscode.dart';
+import 'models/buscode.dart';
 import 'components/bottom_navigation_bar.dart';
 import 'screens/result_screen.dart';
 
