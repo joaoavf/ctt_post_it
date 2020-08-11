@@ -1,7 +1,7 @@
 import 'package:image/image.dart' as imglib;
 import '../data/buscode_maps.dart';
 
-List<int> bus_to_integers(buscode) {
+List<int> busToIntegers(buscode) {
   List<int> output = [];
   for (var i = 0; i < 25; i++) {
     var triad = buscode[i * 3] + buscode[i * 3 + 1] + buscode[i * 3 + 2];
@@ -10,17 +10,17 @@ List<int> bus_to_integers(buscode) {
   return output;
 }
 
-String to_6bin(int integerInput) {
+String to6Bin(int integerInput) {
   String binary = integerInput.toRadixString(2);
   return '0' * (6 - binary.length) + '$binary';
 }
 
-String decode_format_id(String formatId) {
+String decodeFormatId(String formatId) {
   var position = int.parse(formatId, radix: 2);
   return 'J18' + 'ABCDEFGHIJKLMNOPQ'[position];
 }
 
-String issuer_code_conversion(String issuerCode) {
+String issuerCodeConversion(String issuerCode) {
   int issuerCodeInt = int.parse(issuerCode, radix: 2);
   int l1 = issuerCodeInt ~/ 1600;
   int l2 = issuerCodeInt % 1600 ~/ 40;
@@ -92,10 +92,10 @@ class DecodedBusCode {
   DecodedBusCode(this.buscode, this.img) {
     if (buscode.length == 75) {
       success = true;
-      integers = bus_to_integers(buscode);
+      integers = busToIntegers(buscode);
       print(integers);
 
-      bin = integers.map(to_6bin).reduce((a, b) => a + b);
+      bin = integers.map(to6Bin).reduce((a, b) => a + b);
       print(bin);
 
       main = bin.substring(0, 12) +
@@ -103,10 +103,10 @@ class DecodedBusCode {
           bin.substring(138, 150);
       print(main);
 
-      formatId = decode_format_id(main.substring(0, 4));
+      formatId = decodeFormatId(main.substring(0, 4));
       print(formatId);
 
-      issuerCode = issuer_code_conversion(main.substring(4, 20));
+      issuerCode = issuerCodeConversion(main.substring(4, 20));
       print(issuerCode);
 
       equipmentId = decodeEquipmentId(main.substring(20, 32));

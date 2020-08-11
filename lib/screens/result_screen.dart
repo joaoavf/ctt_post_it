@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/joaoa/AndroidStudioProjects/time_tracker_flutter_course/bus_code_reader/lib/models/buscode_decoder.dart';
+import '../models/buscode_decoder.dart';
 import 'package:camera_tutorial/components/bottom_navigation_bar.dart';
 
 class ResultScreen extends StatelessWidget {
