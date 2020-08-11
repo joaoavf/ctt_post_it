@@ -140,20 +140,25 @@ String decodeItemPriority(String itemPriority) {
   return item_priority_map[itemPriority];
 }
 
+String fillZeros(String inputString, int stringLength){
+  return '0' * (stringLength - inputString.length) + inputString;
+
+}
+
 Map processSerialNumber(String serialNumberStr) {
   int serialNumber = int.parse(serialNumberStr, radix: 2);
-  int serial = serialNumber % 16384;
+  String serial = (serialNumber % 16384).toString();
   int datePart = serialNumber ~/ 16384;
-  int month = datePart ~/ 5120;
-  int day = datePart % 5120 ~/ 160;
-  int hour = datePart % 5120 % 160 ~/ 6;
-  int minute = datePart % 5120 % 160 % 6;
+  String month = (datePart ~/ 5120 + 1).toString();
+  String day = (datePart % 5120 ~/ 160).toString();
+  String hour = (datePart % 5120 % 160 ~/ 6).toString();
+  String minute = (datePart % 5120 % 160 % 6).toString();
   Map returnMap = {
-    'month': month,
-    'day': day,
-    'hour': hour,
-    'minute': minute,
-    'serial': serial
+    'month': fillZeros(month, 2),
+    'day': fillZeros(day, 2),
+    'hour': fillZeros(hour, 2),
+    'minute': fillZeros(minute, 2),
+    'serial': fillZeros(serial, 5)
   };
   return returnMap;
 }
@@ -182,6 +187,8 @@ class DecodedBusCode {
 
   String trackingIndicator;
   bool valid;
+
+  String fullCode;
 
   bool success = false;
 
@@ -220,6 +227,10 @@ class DecodedBusCode {
       serialNumber = serialNumberMap['serial'];
       print(serialNumberMap);
       trackingIndicator = decodeTrackingIndicator(main.substring(54, 56));
+
+      fullCode = formatId + issuerCode + equipmentId + itemPriority +
+          month.toString() + day.toString() + hour.toString() +
+          minute.toString() + serialNumber.toString();
     }
   }
 }
