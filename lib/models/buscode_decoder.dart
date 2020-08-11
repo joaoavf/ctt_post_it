@@ -1,4 +1,5 @@
-import 'package:image/image.dart' as imglib;
+import 'package:flutter/material.dart';
+
 import '../data/buscode_maps.dart';
 
 List<int> busToIntegers(buscode) {
@@ -63,9 +64,7 @@ String decodeTrackingIndicator(String trackingIndicator) {
 }
 
 class DecodedBusCode {
-  imglib.Image img;
-
-  List buscode;
+  List code;
   List<int> integers;
   String bin;
   String main;
@@ -89,10 +88,10 @@ class DecodedBusCode {
 
   bool success = false;
 
-  DecodedBusCode(this.buscode, this.img) {
-    if (buscode.length == 75) {
+  DecodedBusCode({@required this.code}) {
+    if (code.length == 75) {
       success = true;
-      integers = busToIntegers(buscode);
+      integers = busToIntegers(code);
       print(integers);
 
       bin = integers.map(to6Bin).reduce((a, b) => a + b);

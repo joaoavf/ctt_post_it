@@ -16,7 +16,7 @@ typedef Convert = Pointer<Uint32> Function(
 
 imglib.Image img;
 
-DecodedBusCode getBuscode() {
+Buscode getBuscode() {
   CameraImage _savedImage;
 
   final DynamicLibrary convertImageLib = Platform.isAndroid
@@ -84,9 +84,7 @@ DecodedBusCode getBuscode() {
 
   img = imglib.copyCrop(img, horizOffset, vertOffset, width, height);
 
-  List buscode = read_buscode(img);
+  Buscode buscode = Buscode(buscodeImage: img);
 
-  DecodedBusCode decodedBusCode = DecodedBusCode(buscode, img);
-
-  return decodedBusCode;
+  return buscode;
 }

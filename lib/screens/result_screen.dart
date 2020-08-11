@@ -1,10 +1,12 @@
+import 'package:camera_tutorial/models/buscode.dart';
 import 'package:flutter/material.dart';
 import '../models/buscode_decoder.dart';
 import 'package:camera_tutorial/components/bottom_navigation_bar.dart';
 
 class ResultScreen extends StatelessWidget {
-  final DecodedBusCode decodedBusCode;
-  ResultScreen({Key key, @required this.decodedBusCode}) : super(key: key);
+  final Buscode buscode;
+
+  ResultScreen({Key key, @required this.buscode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,19 +18,19 @@ class ResultScreen extends StatelessWidget {
             Column(
               children: [
                 Text('Date'),
-                Text(decodedBusCode.day + '/' + decodedBusCode.month),
+                Text(buscode.decoded.day),
               ],
             ),
             Column(
               children: [
                 Text('Hour'),
-                Text(decodedBusCode.hour + ':' + decodedBusCode.minute),
+                Text(buscode.decoded.hour),
               ],
             ),
             Column(
               children: [
                 Text('Equipment Id'),
-                Text(decodedBusCode.equipmentId),
+                Text(buscode.decoded.equipmentId),
               ],
             )
           ],
