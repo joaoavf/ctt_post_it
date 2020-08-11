@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:camera_tutorial/functions/buscode_decoder.dart';
 import 'package:ffi/ffi.dart';
 import 'package:camera/camera.dart';
 import 'package:image/image.dart' as imglib;
@@ -15,7 +16,7 @@ typedef Convert = Pointer<Uint32> Function(
 
 imglib.Image img;
 
-List getBuscode() {
+Map getBuscode() {
   CameraController _camera;
   bool _cameraInitialized = false;
   CameraImage _savedImage;
@@ -82,8 +83,17 @@ List getBuscode() {
   var vertOffset = (img.height) * 0.40 ~/ 1;
   var width = img.width;
   var height = (img.width) * 0.12 ~/ 1;
+  Map resultMap;
 
   img = imglib.copyCrop(img, horizOffset, vertOffset, width, height);
 
-  return read_buscode(img);
+  List buscode = read_buscode(img);
+  if (buscode.length == 75) {
+    DecodedBusCode decodedBusCode = DecodedBusCode(buscode);
+    resultMap = {'result': true, 'decoded': decodedBusCode};
+  } else {
+    resultMap = {'result': false};
+  }
+
+  return resultMap;
 }
