@@ -1,3 +1,5 @@
+import 'package:image/image.dart' as imglib;
+
 Map decoder = {
   'FFF': 0,
   'FFA': 1,
@@ -140,9 +142,8 @@ String decodeItemPriority(String itemPriority) {
   return item_priority_map[itemPriority];
 }
 
-String fillZeros(String inputString, int stringLength){
+String fillZeros(String inputString, int stringLength) {
   return '0' * (stringLength - inputString.length) + inputString;
-
 }
 
 Map processSerialNumber(String serialNumberStr) {
@@ -168,6 +169,8 @@ String decodeTrackingIndicator(String trackingIndicator) {
 }
 
 class DecodedBusCode {
+  imglib.Image img;
+
   List buscode;
   List<int> integers;
   String bin;
@@ -179,11 +182,11 @@ class DecodedBusCode {
   String itemPriority;
 
   Map serialNumberMap;
-  int hour;
-  int month;
-  int day;
-  int minute;
-  int serialNumber;
+  String hour;
+  String month;
+  String day;
+  String minute;
+  String serialNumber;
 
   String trackingIndicator;
   bool valid;
@@ -192,7 +195,7 @@ class DecodedBusCode {
 
   bool success = false;
 
-  DecodedBusCode(this.buscode) {
+  DecodedBusCode(this.buscode, this.img) {
     if (buscode.length == 75) {
       success = true;
       integers = bus_to_integers(buscode);
@@ -228,9 +231,15 @@ class DecodedBusCode {
       print(serialNumberMap);
       trackingIndicator = decodeTrackingIndicator(main.substring(54, 56));
 
-      fullCode = formatId + issuerCode + equipmentId + itemPriority +
-          month.toString() + day.toString() + hour.toString() +
-          minute.toString() + serialNumber.toString();
+      fullCode = formatId +
+          issuerCode +
+          equipmentId +
+          itemPriority +
+          month +
+          day +
+          hour +
+          minute +
+          serialNumber.toString();
     }
   }
 }

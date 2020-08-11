@@ -89,7 +89,7 @@ DecodedBusCode getBuscode() {
 
   List buscode = read_buscode(img);
 
-  DecodedBusCode decodedBusCode = DecodedBusCode(buscode);
+  DecodedBusCode decodedBusCode = DecodedBusCode(img, buscode);
 
   return decodedBusCode;
 }
