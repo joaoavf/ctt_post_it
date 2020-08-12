@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:math';
 
-List readBuscode(imglib.Image busCodeImage) {
+List<String> readBuscode(imglib.Image busCodeImage) {
   var height = busCodeImage.height;
   var width = busCodeImage.width;
   var stride = 4;
@@ -12,12 +12,12 @@ List readBuscode(imglib.Image busCodeImage) {
   img_1d = conv2d(img_1d, stride, height, width);
   img_1d = toBinaryColor(img_1d);
 
-  var splitedList = splitList(img_1d, height - stride + 1, width - stride + 1);
-  var code = from1dToBuscode(splitedList[0], splitedList[1]);
+  List<List> splitedList = splitList(img_1d, height - stride + 1, width - stride + 1);
+  List<String> code = from1dToBuscode(splitedList[0], splitedList[1]);
   return code;
 }
 
-List splitList(img_1d, int height, int width) {
+List<List> splitList(img_1d, int height, int width) {
   List bottomCalc = [];
   List upperCalc = [];
   List upperList = [];
@@ -53,14 +53,14 @@ List generateThresholds(List entryList) {
   return finalT;
 }
 
-List from1dToBuscode(List bottomList, List upperList) {
+List<String> from1dToBuscode(List bottomList, List upperList) {
   var l;
   var up;
 
   List bThresholds = generateThresholds(bottomList);
   List uThresholds = generateThresholds(upperList);
 
-  List result = [];
+  List<String> result = [];
 
   var lm = 255.0;
   var um = 255.0;
