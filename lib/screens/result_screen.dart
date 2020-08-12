@@ -16,13 +16,13 @@ class ResultScreen extends StatelessWidget {
             Column(
               children: [
                 Text('Date'),
-                Text(decodedBusCode.day),
+                Text(decodedBusCode.day + '/' + decodedBusCode.month),
               ],
             ),
             Column(
               children: [
                 Text('Hour'),
-                Text(decodedBusCode.hour),
+                Text(decodedBusCode.hour + ':' + decodedBusCode.minute),
               ],
             ),
             Column(
