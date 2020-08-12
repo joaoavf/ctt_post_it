@@ -1,14 +1,5 @@
 import 'package:camera_tutorial/data/buscode_maps.dart'; // TODO change name
 
-List<int> busToIntegers(buscode) {
-  List<int> output = [];
-  for (var i = 0; i < 25; i++) {
-    var triad = buscode[i * 3] + buscode[i * 3 + 1] + buscode[i * 3 + 2];
-    output.add(decoder[triad]);
-  }
-  return output;
-}
-
 String to6Bin(int integerInput) {
   String binary = integerInput.toRadixString(2);
   return '0' * (6 - binary.length) + '$binary';
@@ -59,4 +50,51 @@ Map processSerialNumber(String serialNumberStr) {
 
 String decodeTrackingIndicator(String trackingIndicator) {
   return tracking_indicator_map[trackingIndicator];
+}
+
+Map evaluateCode(List code) {
+  if (code.length != 75) {
+    return {'valid': false};
+  } else {
+    if (validateSyncs(code)) {
+      return {'valid': true, 'code': code};
+    } else {
+      code = rotateCode(code);
+      if (validateSyncs(code)) {
+        return {'valid': true, 'code': code};
+      } else {
+        return {'valid': false};
+      }
+    }
+  }
+}
+
+List rotateCode(List code) {
+  Map charMap = {'A': 'D', 'D': 'A', 'T': 'T', 'F': 'F'};
+  List newCode = [];
+  for (var i = code.length - 1; i < code.length; i--) {
+    newCode.add(charMap[code[i]]);
+  }
+  return newCode;
+}
+
+bool validateSyncs(code) {
+  List<int> integers = busToIntegers(code);
+  String bin = integers.map(to6Bin).reduce((a, b) => a + b);
+
+  String leftSync = bin.substring(12, 18);
+  String rightSync = bin.substring(bin.length - 18, bin.length - 12);
+
+  int leftSyncInt = int.parse(leftSync, radix: 2);
+  int rightSyncInt = int.parse(rightSync, radix: 2);
+  return leftSyncInt != 22 || rightSyncInt != 38;
+}
+
+List<int> busToIntegers(buscode) {
+  List<int> output = [];
+  for (var i = 0; i < 25; i++) {
+    var triad = buscode[i * 3] + buscode[i * 3 + 1] + buscode[i * 3 + 2];
+    output.add(decoder[triad]);
+  }
+  return output;
 }

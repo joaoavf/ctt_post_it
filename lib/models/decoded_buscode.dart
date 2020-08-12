@@ -29,7 +29,10 @@ class DecodedBuscode {
   bool success = false;
 
   DecodedBuscode({@required this.code}) {
-    if (code.length == 75) {
+    Map codeEval = evaluateCode(code);
+    if (codeEval['valid'] == true) {
+      code = codeEval['code'];
+
       success = true;
       integers = busToIntegers(code);
 
