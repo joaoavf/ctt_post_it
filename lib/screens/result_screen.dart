@@ -1,6 +1,6 @@
 import 'package:camera_tutorial/models/buscode.dart';
 import 'package:flutter/material.dart';
-import '../models/buscode_decoder.dart';
+import '../models/decoded_buscode.dart';
 import 'package:camera_tutorial/components/bottom_navigation_bar.dart';
 
 class ResultScreen extends StatelessWidget {
