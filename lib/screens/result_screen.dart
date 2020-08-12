@@ -1,11 +1,10 @@
 import 'package:camera_tutorial/models/buscode.dart';
 import 'package:flutter/material.dart';
-import '../models/decoded_buscode.dart';
+import 'package:camera_tutorial/models/buscode.dart';
 import 'package:camera_tutorial/components/bottom_navigation_bar.dart';
 
 class ResultScreen extends StatelessWidget {
   final Buscode buscode;
-
   ResultScreen({Key key, @required this.buscode}) : super(key: key);
 
   @override
@@ -18,13 +17,13 @@ class ResultScreen extends StatelessWidget {
             Column(
               children: [
                 Text('Date'),
-                Text(buscode.decoded.day),
+                Text(buscode.decoded.day + '/' + buscode.decoded.month),
               ],
             ),
             Column(
               children: [
                 Text('Hour'),
-                Text(buscode.decoded.hour),
+                Text(buscode.decoded.hour + ':' + buscode.decoded.minute),
               ],
             ),
             Column(
