@@ -72,7 +72,7 @@ Map evaluateCode(List code) {
 List rotateCode(List code) {
   Map charMap = {'A': 'D', 'D': 'A', 'T': 'T', 'F': 'F'};
   List newCode = [];
-  for (var i = code.length - 1; i < code.length; i--) {
+  for (var i = code.length - 1; i >= 0; i--) {
     newCode.add(charMap[code[i]]);
   }
   return newCode;
@@ -87,12 +87,12 @@ bool validateSyncs(code) {
 
   int leftSyncInt = int.parse(leftSync, radix: 2);
   int rightSyncInt = int.parse(rightSync, radix: 2);
-  return leftSyncInt != 22 || rightSyncInt != 38;
+  return leftSyncInt == 22 && rightSyncInt == 38;
 }
 
 List<int> busToIntegers(buscode) {
   List<int> output = [];
-  for (var i = 0; i < 25; i++) {
+  for (var i = 0; i < buscode.length ~/ 3; i++) {
     var triad = buscode[i * 3] + buscode[i * 3 + 1] + buscode[i * 3 + 2];
     output.add(decoder[triad]);
   }
