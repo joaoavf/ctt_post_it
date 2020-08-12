@@ -199,14 +199,13 @@ class _MyHomePageState extends State<MyHomePage> {
           img = imglib.copyCrop(img, horizOffset, vertOffset, width, height);
 
           Buscode buscode = Buscode(buscodeImage: img);
-
-
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    ResultScreen(buscode: buscode),
-              ));
+          if (buscode.decoded.success) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ResultScreen(buscode: buscode),
+                ));
+          }
         },
         tooltip: 'Increment',
         child: Icon(Icons.camera_alt),
