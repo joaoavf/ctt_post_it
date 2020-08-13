@@ -1,7 +1,7 @@
 import 'package:camera_tutorial/models/buscode.dart';
 import 'package:flutter/material.dart';
-import 'package:camera_tutorial/models/buscode.dart';
 import 'package:camera_tutorial/components/bottom_navigation_bar.dart';
+import 'package:camera_tutorial/components/result_card.dart';
 
 class ResultScreen extends StatelessWidget {
   final Buscode buscode;
@@ -10,28 +10,14 @@ class ResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffF6F6F6),
       body: SafeArea(
         child: GridView.count(
           crossAxisCount: 2,
           children: [
-            Column(
-              children: [
-                Text('Date'),
-                Text(buscode.decoded.day + '/' + buscode.decoded.month),
-              ],
-            ),
-            Column(
-              children: [
-                Text('Hour'),
-                Text(buscode.decoded.hour + ':' + buscode.decoded.minute),
-              ],
-            ),
-            Column(
-              children: [
-                Text('Equipment Id'),
-                Text(buscode.decoded.equipmentId),
-              ],
-            )
+            ItemResultCard(),
+            ItemResultCard(),
+            ItemResultCard(),
           ],
         ),
       ),
