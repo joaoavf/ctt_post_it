@@ -1,4 +1,4 @@
-name: post_it
+name: camera_tutorial
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -24,17 +24,17 @@ dependencies:
   flutter:
     sdk: flutter
 
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
 
   # INSERT THE DEPENDENCIES HERE
-  camera: ^0.5.8+5
+  camera_camera: ^1.0.30
   ffi: ^0.1.3
   image: ^2.1.12
   path_provider: ^1.6.11
-  flutter_spinkit: ^4.1.2
-  get: ^3.4.6
+
 
 dev_dependencies:
   flutter_test:

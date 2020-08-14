@@ -42,7 +42,7 @@ Map processSerialNumber(String serialNumberStr) {
     'month': fillZeros(month, 2),
     'day': fillZeros(day, 2),
     'hour': fillZeros(hour, 2),
-    'minute': fillZeros(minute, 2),
+    'minute': fillZeros(minute, 1),
     'serial': fillZeros(serial, 5)
   };
   return returnMap;
@@ -69,9 +69,9 @@ Map evaluateCode(List code) {
   }
 }
 
-List rotateCode(List code) {
+List<String> rotateCode(List code) {
   Map charMap = {'A': 'D', 'D': 'A', 'T': 'T', 'F': 'F'};
-  List newCode = [];
+  List<String> newCode = [];
   for (var i = code.length - 1; i >= 0; i--) {
     newCode.add(charMap[code[i]]);
   }
