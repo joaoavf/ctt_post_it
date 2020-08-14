@@ -1,8 +1,23 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:math';
+import 'package:path_provider/path_provider.dart';
+
+Future<String> get _localPath async {
+  final directory = await getExternalStorageDirectory();
+  return directory.path;
+}
+
+void saveImage(imglib.Image img) async {
+  var date = new DateTime.now().toString();
+  var dateParse = DateTime.parse(date).toString().replaceAll(':', '-');
+  final path = await _localPath;
+  File('$path/$dateParse.png')..writeAsBytesSync(imglib.encodePng(img));
+}
 
 List<String> readBuscode(imglib.Image busCodeImage) {
+  saveImage(busCodeImage);
   var height = busCodeImage.height;
   var width = busCodeImage.width;
   var stride = 4;
@@ -12,7 +27,8 @@ List<String> readBuscode(imglib.Image busCodeImage) {
   img_1d = conv2d(img_1d, stride, height, width);
   img_1d = toBinaryColor(img_1d);
 
-  List<List> splitedList = splitList(img_1d, height - stride + 1, width - stride + 1);
+  List<List> splitedList =
+      splitList(img_1d, height - stride + 1, width - stride + 1);
   List<String> code = from1dToBuscode(splitedList[0], splitedList[1]);
   return code;
 }
