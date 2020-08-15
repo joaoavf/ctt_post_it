@@ -13,14 +13,12 @@ void saveImage(imglib.Image img) async {
   var date = new DateTime.now().toString();
   var dateParse = DateTime.parse(date).toString().replaceAll(':', '-');
   final path = await _localPath;
-  File('$path/$dateParse.png')..writeAsBytesSync(imglib.encodePng(img));
+  File('$path/$dateParse.png')
+    ..writeAsBytesSync(imglib.encodePng(img));
 }
 
 List<String> readBuscode(imglib.Image busCodeImage, {bool primitive = true}) {
   saveImage(busCodeImage);
-
-  busCodeImage = extractBuscode(busCodeImage);
-
   var height = busCodeImage.height;
   var width = busCodeImage.width;
   var stride = 4;
@@ -30,8 +28,8 @@ List<String> readBuscode(imglib.Image busCodeImage, {bool primitive = true}) {
   img_1d = conv2d(img_1d, stride, height, width);
   img_1d = toBinaryColor(img_1d);
 
-  List<List> splitedList =
-      splitList(img_1d, height - stride + 1, width - stride + 1);
+  List<List> splitedList = splitList(
+      img_1d, height - stride + 1, width - stride + 1);
   List<String> code = from1dToBuscode(splitedList[0], splitedList[1]);
 
   List rotations = [0.25, -0.25, 0.5, -0.5];
@@ -52,26 +50,25 @@ imglib.Image extractBuscode(imglib.Image busCodeImage) {
 }
 
 List<List> splitList(img_1d, int height, int width) {
-  List bottomCalc = [];
+  List fullCalc = [];
   List upperCalc = [];
   List upperList = [];
-  List bottomList = [];
+  List fullList = [];
 
   for (var i = 0; i < width; i++) {
-    bottomCalc = [];
+    fullCalc = [];
     upperCalc = [];
     for (var j = 0; j < height; j++) {
       if (j < height / 2) {
         upperCalc.add(img_1d[i + (width * j)]);
-      } else {
-        bottomCalc.add(img_1d[i + (width * j)]);
       }
+      fullCalc.add(img_1d[i + (width * j)]);
     }
-    bottomList.add(bottomCalc.reduce((a, b) => a + b) / bottomCalc.length);
+    fullList.add(fullCalc.reduce((a, b) => a + b) / fullCalc.length);
     upperList.add(upperCalc.reduce((a, b) => a + b) / upperCalc.length);
   }
 
-  return [bottomList, upperList];
+  return [fullList, upperList];
 }
 
 List generateThresholds(List entryList) {
