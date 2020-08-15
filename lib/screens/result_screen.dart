@@ -2,6 +2,7 @@ import 'package:camera_tutorial/models/buscode.dart';
 import 'package:flutter/material.dart';
 import 'package:camera_tutorial/components/bottom_navigation_bar.dart';
 import 'package:camera_tutorial/components/result_card.dart';
+import 'package:image/image.dart' as imglib;
 
 class ResultScreen extends StatelessWidget {
   final Buscode buscode;
@@ -10,14 +11,16 @@ class ResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffF6F6F6),
       body: SafeArea(
         child: Column(
           children: [
             Container(
-              child: Image(image: buscode.buscodeImage),
+              padding: EdgeInsets.symmetric(vertical: 40, horizontal: 8),
+              child: Image.memory(imglib.encodeJpg(buscode.buscodeImage)),
             ),
             GridView.count(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
               childAspectRatio: 5 / 3,
               crossAxisCount: 2,
               padding: const EdgeInsets.all(8),

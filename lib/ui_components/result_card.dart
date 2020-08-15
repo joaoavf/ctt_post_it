@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:camera_tutorial/models/buscode.dart';
 
 class ItemResultCard extends StatelessWidget {
   final String title;

@@ -9,6 +9,7 @@ import 'package:ffi/ffi.dart';
 import 'models/buscode.dart';
 import 'components/bottom_navigation_bar.dart';
 import 'screens/result_screen.dart';
+import 'screens/search_screen.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
@@ -27,12 +28,14 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     return MaterialApp(
-      title: 'Camera App',
+      title: 'Buscode Reader',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        scaffoldBackgroundColor: Color(0xffF6F6F6),
       ),
-      home: MyHomePage(title: 'Camera App'),
+      home: SearchScreen(),
+//      home: MyHomePage(title: 'Camera Screen'),
     );
   }
 }
