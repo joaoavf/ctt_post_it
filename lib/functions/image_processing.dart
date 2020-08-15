@@ -88,7 +88,7 @@ List<String> from1dToBuscode(List bottomList, List upperList) {
     lm = min(l, lm);
     um = min(up, um);
 
-    if (l > 250 && up > 250) {
+    if (l > 254 && up > 254) {
       if (lm < bThresholds[1] && um < uThresholds[1]) {
         result.add('F');
       } else if (lm < bThresholds[1] && um < uThresholds[0]) {
@@ -120,11 +120,11 @@ List toBinary(imglib.Image img) {
   return toBinaryColor(newList);
 }
 
-List toBinaryColor(List img_1d) {
+List toBinaryColor(List img_1d, {int buffer = 20}) {
   List thresholdList = [];
   thresholdList = img_1d.sublist(0);
   thresholdList.sort();
-  var threshold = thresholdList[(thresholdList.length ~/ 6)];
+  var threshold = thresholdList[(thresholdList.length ~/ 6)] + buffer;
 
   List newList = [];
   for (var i = 0; i < img_1d.length; i++) {
