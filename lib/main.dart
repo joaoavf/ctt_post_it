@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'screens/search_screen.dart';
+import 'screens/library_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,11 +16,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Buscode Reader',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Color(0xffCE2B2F),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor: Color(0xffF6F6F6),
       ),
-      home: SearchScreen(),
+      home: LibraryScreen(),
 //      home: MyHomePage(title: 'Camera Screen'),
     );
   }

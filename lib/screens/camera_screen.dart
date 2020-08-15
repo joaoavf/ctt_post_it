@@ -8,7 +8,7 @@ import 'package:ffi/ffi.dart';
 import 'package:camera_tutorial/models/buscode.dart';
 import 'package:camera_tutorial/widgets/bottom_navigation_bar.dart';
 import 'package:camera_tutorial/screens/result_screen.dart';
-import 'package:camera_tutorial/screens/search_screen.dart';
+import 'package:camera_tutorial/screens/library_screen.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);

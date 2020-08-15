@@ -20,7 +20,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       onTap: _onItemTapped,
       currentIndex: _selectedIndex,
       backgroundColor: Colors.white,
-      selectedItemColor: Color(0xffCE2B2F),
+      selectedItemColor: Theme.of(context).primaryColor,
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.camera),
