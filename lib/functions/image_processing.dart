@@ -60,13 +60,13 @@ List extractBuscode(List splitedList) {
       }
     }
   }
-  var start;
-  var finish;
+  int start;
+  int finish;
   for (var i = 0; i < whiteSpacePosition.length; i++) {
     if (whiteSpacePosition[i] < whiteSpacePosition.length / 2) {
       start = whiteSpacePosition[i];
     } else {
-      finish = whiteSpacePosition[i];
+      finish = whiteSpacePosition[i] - fullList.length ~/ 75;
       break;
     }
   }
