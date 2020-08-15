@@ -13,8 +13,7 @@ void saveImage(imglib.Image img) async {
   var date = new DateTime.now().toString();
   var dateParse = DateTime.parse(date).toString().replaceAll(':', '-');
   final path = await _localPath;
-  File('$path/$dateParse.png')
-    ..writeAsBytesSync(imglib.encodePng(img));
+  File('$path/$dateParse.png')..writeAsBytesSync(imglib.encodePng(img));
 }
 
 List<String> readBuscode(imglib.Image busCodeImage, {bool primitive = true}) {
@@ -28,8 +27,11 @@ List<String> readBuscode(imglib.Image busCodeImage, {bool primitive = true}) {
   img_1d = conv2d(img_1d, stride, height, width);
   img_1d = toBinaryColor(img_1d);
 
-  List<List> splitedList = splitList(
-      img_1d, height - stride + 1, width - stride + 1);
+  List<List> splitedList =
+      splitList(img_1d, height - stride + 1, width - stride + 1);
+
+  splitedList = extractBuscode(splitedList);
+
   List<String> code = from1dToBuscode(splitedList[0], splitedList[1]);
 
   List rotations = [0.25, -0.25, 0.5, -0.5];
@@ -44,9 +46,31 @@ List<String> readBuscode(imglib.Image busCodeImage, {bool primitive = true}) {
   return code;
 }
 
-imglib.Image extractBuscode(imglib.Image busCodeImage) {
-  // TODO create logic to extract buscodeImage
-  return busCodeImage;
+List extractBuscode(List splitedList) {
+  List fullList = splitedList[0];
+  List whiteSpacePosition = [];
+  int counter = 0;
+  for (var i = 0; i < fullList.length; i++) {
+    if (fullList[i] > 254) {
+      counter = counter + 1;
+    } else {
+      if (counter > fullList.length / 75) {
+        whiteSpacePosition.add([i]);
+        counter = 0;
+      }
+    }
+  }
+  var start;
+  var finish;
+  for (var i = 0; i < whiteSpacePosition.length; i++) {
+    if (whiteSpacePosition[i] < whiteSpacePosition.length / 2) {
+      start = whiteSpacePosition[i];
+    } else {
+      finish = whiteSpacePosition[i];
+      break;
+    }
+  }
+  return [fullList.sublist(start, finish), splitedList[1].sublist(start, finish)];
 }
 
 List<List> splitList(img_1d, int height, int width) {
