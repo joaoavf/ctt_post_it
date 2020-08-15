@@ -16,8 +16,11 @@ void saveImage(imglib.Image img) async {
   File('$path/$dateParse.png')..writeAsBytesSync(imglib.encodePng(img));
 }
 
-List<String> readBuscode(imglib.Image busCodeImage) {
+List<String> readBuscode(imglib.Image busCodeImage, {bool primitive = true}) {
   saveImage(busCodeImage);
+
+  busCodeImage = extractBuscode(busCodeImage);
+
   var height = busCodeImage.height;
   var width = busCodeImage.width;
   var stride = 4;
@@ -30,7 +33,22 @@ List<String> readBuscode(imglib.Image busCodeImage) {
   List<List> splitedList =
       splitList(img_1d, height - stride + 1, width - stride + 1);
   List<String> code = from1dToBuscode(splitedList[0], splitedList[1]);
+
+  List rotations = [0.25, -0.25, 0.5, -0.5];
+
+  for (var i = 0; i < rotations.length; i++) {
+    if (code.length != 75 && primitive) {
+      code = readBuscode(imglib.copyRotate(busCodeImage, rotations[i]),
+          primitive: false);
+    }
+  }
+
   return code;
+}
+
+imglib.Image extractBuscode(imglib.Image busCodeImage) {
+  // TODO create logic to extract buscodeImage
+  return busCodeImage;
 }
 
 List<List> splitList(img_1d, int height, int width) {
