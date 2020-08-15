@@ -7,7 +7,7 @@ import 'package:image/image.dart' as imglib;
 import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'models/buscode.dart';
-import 'components/bottom_navigation_bar.dart';
+import 'ui_components/bottom_navigation_bar.dart';
 import 'screens/result_screen.dart';
 import 'screens/search_screen.dart';
 

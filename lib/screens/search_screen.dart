@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:camera_tutorial/components/bottom_navigation_bar.dart';
+import 'package:camera_tutorial/ui_components/bottom_navigation_bar.dart';
 
 class SearchScreen extends StatefulWidget {
   @override

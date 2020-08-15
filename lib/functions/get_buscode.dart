@@ -17,10 +17,6 @@ imglib.Image img;
 
 Buscode getBuscode() {
   CameraImage _savedImage;
-
-  final DynamicLibrary convertImageLib = Platform.isAndroid
-      ? DynamicLibrary.open("libconvertImage.so")
-      : DynamicLibrary.process();
   Convert conv;
 
   if (Platform.isAndroid) {
