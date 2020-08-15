@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:camera_tutorial/ui_components/bottom_navigation_bar.dart';
+import 'package:camera_tutorial/widgets/bottom_navigation_bar.dart';
+import 'package:camera_tutorial/widgets/buscode_card.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -18,11 +19,24 @@ class _SearchScreenState extends State<SearchScreen> {
               margin: EdgeInsets.symmetric(vertical: 26, horizontal: 20),
               child: TextField(
                 decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30))),
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
               ),
             ),
+            Expanded(
+              child: ListView(
+                children: [
+                  BuscodeCard(),
+                  BuscodeCard(),
+                  BuscodeCard(),
+                  BuscodeCard(),
+                  BuscodeCard(),
+                ],
+              ),
+            )
           ],
         ),
       ),

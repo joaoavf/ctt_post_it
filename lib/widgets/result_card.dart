@@ -9,6 +9,7 @@ class ItemResultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 84,
       alignment: Alignment.topLeft,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(2),
@@ -24,14 +25,12 @@ class ItemResultCard extends StatelessWidget {
               style: TextStyle(fontSize: 14),
             ),
           ),
-          Expanded(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                buscodeInformation,
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 30),
-              ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              buscodeInformation,
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 30),
             ),
           )
         ],

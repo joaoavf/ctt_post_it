@@ -1,34 +1,32 @@
 import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
-import 'package:post_it/models/buscode.dart';
-import 'package:post_it/screens/result_screen.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:camera/camera.dart';
+import 'package:camera_tutorial/models/buscode.dart';
+import 'package:camera_tutorial/widgets/bottom_navigation_bar.dart';
+import 'package:camera_tutorial/screens/result_screen.dart';
+import 'package:camera_tutorial/screens/search_screen.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
 typedef Convert = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, int, int, int, int);
 
-class CameraScreen extends StatefulWidget {
-  CameraScreen({Key key, this.title}) : super(key: key);
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _CameraScreenState createState() => _CameraScreenState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _CameraScreenState extends State<CameraScreen> {
+class _MyHomePageState extends State<MyHomePage> {
   CameraController _camera;
   bool _cameraInitialized = false;
   CameraImage _savedImage;
-//  final FlashMode _flashOn = FlashMode.torch;
-//  final FlashMode _flashOff = FlashMode.off;
-  bool _flashlightOn = true;
 
   final DynamicLibrary convertImageLib = Platform.isAndroid
       ? DynamicLibrary.open("libconvertImage.so")
@@ -58,7 +56,6 @@ class _CameraScreenState extends State<CameraScreen> {
           .startImageStream((CameraImage image) => _processCameraImage(image));
       setState(() {
         _cameraInitialized = true;
-//        _camera.setFlashMode(_flashOn);
       });
     });
   }
@@ -68,19 +65,6 @@ class _CameraScreenState extends State<CameraScreen> {
       _savedImage = image;
     });
   }
-
-  void _flashlightToggle(state) {
-    if (_flashlightOn == true) {
-//      _camera.setFlashMode(_flashOn);
-    } else if (_flashlightOn == false) {
-//      _camera.setFlashMode(_flashOff);
-    }
-  }
-
-//  void dispose() {
-//    _camera.dispose();
-//    super.dispose();
-//  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,34 +77,16 @@ class _CameraScreenState extends State<CameraScreen> {
                       aspectRatio: _camera.value.aspectRatio,
                       child: CameraPreview(_camera),
                     )
-                  : SpinKitWave(
-                      color: Theme.of(context).primaryColor,
-                      size: 30,
-                    )),
+                  : CircularProgressIndicator()),
           Positioned.fill(
             child: Opacity(
-              opacity: 0.5,
+              opacity: 0.6,
               child: Row(
                 children: [
                   Expanded(
                     child: Container(
-                        alignment: Alignment.topLeft,
-                        color: Colors.black,
-                        child: RotatedBox(
-                          quarterTurns: -1,
-                          child: IconButton(
-                            padding: EdgeInsets.all(20),
-                            icon: _flashlightOn == false
-                                ? Icon(Icons.flash_on, color: Colors.white)
-                                : Icon(Icons.flash_off, color: Colors.white),
-                            onPressed: () {
-                              setState(() {
-                                _flashlightOn = !_flashlightOn;
-                              });
-                              _flashlightToggle(_flashlightOn);
-                            },
-                          ),
-                        )),
+                      color: Colors.black,
+                    ),
                   ),
                   Container(
                     color: Colors.transparent,
@@ -130,15 +96,6 @@ class _CameraScreenState extends State<CameraScreen> {
                   Expanded(
                     child: Container(
                       color: Colors.black,
-                      child: Center(
-                        child: RotatedBox(
-                          quarterTurns: -1,
-                          child: Text(
-                            'PLACE THE BUSCODE IN THE AREA ABOVE',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
                     ),
                   ),
                 ],
@@ -153,7 +110,7 @@ class _CameraScreenState extends State<CameraScreen> {
           imglib.Image img;
 
           if (Platform.isAndroid) {
-            // Allocate memory for the 3 planes of the image
+// Allocate memory for the 3 planes of the image
             Pointer<Uint8> p =
                 allocate(count: _savedImage.planes[0].bytes.length);
             Pointer<Uint8> p1 =
@@ -161,7 +118,7 @@ class _CameraScreenState extends State<CameraScreen> {
             Pointer<Uint8> p2 =
                 allocate(count: _savedImage.planes[2].bytes.length);
 
-            // Assign the planes data to the pointers of the image
+// Assign the planes data to the pointers of the image
             Uint8List pointerList =
                 p.asTypedList(_savedImage.planes[0].bytes.length);
             Uint8List pointerList1 =
@@ -175,7 +132,7 @@ class _CameraScreenState extends State<CameraScreen> {
             pointerList2.setRange(0, _savedImage.planes[2].bytes.length,
                 _savedImage.planes[2].bytes);
 
-            // Call the convertImage function and convert the YUV to RGB
+// Call the convertImage function and convert the YUV to RGB
             Pointer<Uint32> imgP = conv(
                 p,
                 p1,
@@ -185,15 +142,15 @@ class _CameraScreenState extends State<CameraScreen> {
                 _savedImage.planes[0].bytesPerRow,
                 _savedImage.height);
 
-            // Get the pointer of the data returned from the function to a List
+// Get the pointer of the data returned from the function to a List
             List imgData = imgP.asTypedList(
                 (_savedImage.planes[0].bytesPerRow * _savedImage.height));
-            // Generate image from the converted data
+// Generate image from the converted data
             img = imglib.Image.fromBytes(
                 _savedImage.height, _savedImage.planes[0].bytesPerRow, imgData);
 
-            // Free the memory space allocated
-            // from the planes and the converted data
+// Free the memory space allocated
+// from the planes and the converted data
             free(p);
             free(p1);
             free(p2);
@@ -218,18 +175,19 @@ class _CameraScreenState extends State<CameraScreen> {
 
           img = imglib.copyCrop(img, horizOffset, vertOffset, width, height);
 
-          Buscode buscode = Buscode(image: img);
-          if (buscode.success) {
+          Buscode buscode = Buscode(buscodeImage: img);
+          if (buscode.decoded.success) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ResultScreen(buscodeView: buscode.view),
+                  builder: (context) => ResultScreen(buscode: buscode),
                 ));
           }
         },
         tooltip: 'Increment',
         child: Icon(Icons.camera_alt),
-      ),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+      bottomNavigationBar: BottomNavigation(),
     );
   }
 }

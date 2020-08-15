@@ -1,7 +1,7 @@
 import 'package:camera_tutorial/models/buscode.dart';
 import 'package:flutter/material.dart';
-import 'package:camera_tutorial/ui_components/bottom_navigation_bar.dart';
-import 'package:camera_tutorial/ui_components/result_card.dart';
+import 'package:camera_tutorial/widgets/bottom_navigation_bar.dart';
+import 'package:camera_tutorial/widgets/result_card.dart';
 import 'package:image/image.dart' as imglib;
 
 class ResultScreen extends StatelessWidget {
