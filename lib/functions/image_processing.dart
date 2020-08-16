@@ -10,10 +10,16 @@ Future<String> get _localPath async {
 }
 
 void saveImage(imglib.Image img) async {
-  var date = new DateTime.now().toString();
-  var dateParse = DateTime.parse(date).toString().replaceAll(':', '-');
+  img.exif.data = {10: 'oi'};
+  String date = new DateTime.now().toString();
+  String dateParse = DateTime.parse(date).toString().replaceAll(':', '-');
   final path = await _localPath;
-  File('$path/$dateParse.png')..writeAsBytesSync(imglib.encodePng(img));
+  File('$path/$dateParse.jpg')..writeAsBytesSync(imglib.encodeJpg(img));
+  print(img.exif.hasRawData);
+  print(img.exif.data);
+  imglib.Image img2 =
+      imglib.readJpg(File('$path/$dateParse.jpg').readAsBytesSync());
+  print(img2.exif.data);
 }
 
 List<String> readBuscode(imglib.Image busCodeImage, {bool primitive = true}) {
@@ -70,7 +76,10 @@ List extractBuscode(List splitedList) {
       break;
     }
   }
-  return [fullList.sublist(start, finish), splitedList[1].sublist(start, finish)];
+  return [
+    fullList.sublist(start, finish),
+    splitedList[1].sublist(start, finish)
+  ];
 }
 
 List<List> splitList(img_1d, int height, int width) {

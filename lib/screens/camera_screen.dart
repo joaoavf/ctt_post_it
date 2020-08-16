@@ -8,22 +8,21 @@ import 'package:ffi/ffi.dart';
 import 'package:camera_tutorial/models/buscode.dart';
 import 'package:camera_tutorial/widgets/bottom_navigation_bar.dart';
 import 'package:camera_tutorial/screens/result_screen.dart';
-import 'package:camera_tutorial/screens/library_screen.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
 typedef Convert = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, int, int, int, int);
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class CameraScreen extends StatefulWidget {
+  CameraScreen({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _CameraScreenState createState() => _CameraScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _CameraScreenState extends State<CameraScreen> {
   CameraController _camera;
   bool _cameraInitialized = false;
   CameraImage _savedImage;
@@ -80,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   : CircularProgressIndicator()),
           Positioned.fill(
             child: Opacity(
-              opacity: 0.6,
+              opacity: 0.5,
               child: Row(
                 children: [
                   Expanded(
@@ -110,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
           imglib.Image img;
 
           if (Platform.isAndroid) {
-// Allocate memory for the 3 planes of the image
+            // Allocate memory for the 3 planes of the image
             Pointer<Uint8> p =
                 allocate(count: _savedImage.planes[0].bytes.length);
             Pointer<Uint8> p1 =
@@ -118,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Pointer<Uint8> p2 =
                 allocate(count: _savedImage.planes[2].bytes.length);
 
-// Assign the planes data to the pointers of the image
+            // Assign the planes data to the pointers of the image
             Uint8List pointerList =
                 p.asTypedList(_savedImage.planes[0].bytes.length);
             Uint8List pointerList1 =
@@ -132,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
             pointerList2.setRange(0, _savedImage.planes[2].bytes.length,
                 _savedImage.planes[2].bytes);
 
-// Call the convertImage function and convert the YUV to RGB
+            // Call the convertImage function and convert the YUV to RGB
             Pointer<Uint32> imgP = conv(
                 p,
                 p1,
@@ -142,15 +141,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 _savedImage.planes[0].bytesPerRow,
                 _savedImage.height);
 
-// Get the pointer of the data returned from the function to a List
+            // Get the pointer of the data returned from the function to a List
             List imgData = imgP.asTypedList(
                 (_savedImage.planes[0].bytesPerRow * _savedImage.height));
-// Generate image from the converted data
+            // Generate image from the converted data
             img = imglib.Image.fromBytes(
                 _savedImage.height, _savedImage.planes[0].bytesPerRow, imgData);
 
-// Free the memory space allocated
-// from the planes and the converted data
+            // Free the memory space allocated
+            // from the planes and the converted data
             free(p);
             free(p1);
             free(p2);
@@ -186,7 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         tooltip: 'Increment',
         child: Icon(Icons.camera_alt),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
       bottomNavigationBar: BottomNavigation(),
     );
   }

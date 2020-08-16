@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'screens/camera_screen.dart';
 import 'screens/library_screen.dart';
 
 void main() {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor: Color(0xffF6F6F6),
       ),
-      home: LibraryScreen(),
+      home: CameraScreen(),
 //      home: MyHomePage(title: 'Camera Screen'),
     );
   }
