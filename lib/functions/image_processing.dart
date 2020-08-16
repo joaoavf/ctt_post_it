@@ -40,7 +40,7 @@ List<String> readBuscode(imglib.Image busCodeImage, {bool primitive = true}) {
 
   List<String> code = from1dToBuscode(splitedList[0], splitedList[1]);
 
-  List rotations = [0.25, -0.25, 0.5, -0.5];
+  List rotations = [0.5, -0.5];
 
   for (var i = 0; i < rotations.length; i++) {
     if (code.length != 75 && primitive) {
@@ -105,50 +105,53 @@ List<List> splitList(img_1d, int height, int width) {
 }
 
 List generateThresholds(List entryList) {
-  List tmpList = entryList.sublist(0); //copy List
-  tmpList.sort();
-  var whiteThreshold = tmpList[(tmpList.length ~/ 2)] * 0.98;
-  var blackThreshold = tmpList[(tmpList.length ~/ 10)] * 1.1;
-  var delta = whiteThreshold - blackThreshold;
-  var fullThreshold = blackThreshold + delta * .5;
-  var midThreshold = blackThreshold + delta * .96;
-
-  List finalT = [midThreshold, fullThreshold];
-  return finalT;
+  return [75, 145, 215];
 }
 
-List<String> from1dToBuscode(List bottomList, List upperList) {
-  var l;
+List<String> from1dToBuscode(List fullList, List upperList) {
+  var w;
   var up;
 
-  List bThresholds = generateThresholds(bottomList);
-  List uThresholds = generateThresholds(upperList);
+  List thresholds = generateThresholds(fullList);
 
   List<String> result = [];
-
-  var lm = 255.0;
+  List<int> positions = [];
+  List<double> values = [];
+  var wm = 255.0;
   var um = 255.0;
 
-  for (var i = 0; i < bottomList.length; i++) {
-    l = bottomList[i];
+  for (var i = 0; i < fullList.length; i++) {
+    w = fullList[i];
     up = upperList[i];
 
-    lm = min(l, lm);
+    wm = min(w, wm);
     um = min(up, um);
 
-    if (l > 254 && up > 254) {
-      if (lm < bThresholds[1] && um < uThresholds[1]) {
+    if (w > 254) {
+      if (wm < thresholds[0]) {
         result.add('F');
-      } else if (lm < bThresholds[1] && um < uThresholds[0]) {
-        result.add('D');
-      } else if (lm < bThresholds[0] && um < uThresholds[1]) {
-        result.add('A');
-      } else if (lm < bThresholds[0] && um < uThresholds[0]) {
+      } else if (wm < thresholds[1]) {
+        positions.add(result.length);
+        values.add(um);
+        result.add('AD');
+      } else if (wm < thresholds[2]) {
         result.add('T');
       }
 
-      lm = 255.0;
+      wm = 255.0;
       um = 255.0;
+    }
+  }
+
+  if (values.length > 1) {
+    var threshold =
+        (values.reduce(max) - values.reduce(min)) / 2 + values.reduce(min);
+    for (var i = 0; i < positions.length; i++) {
+      if (values[i] > threshold) {
+        result[positions[i]] = 'D';
+      } else {
+        result[positions[i]] = 'A';
+      }
     }
   }
   return result;
