@@ -48,14 +48,14 @@ List<String> readBuscode(imglib.Image busCodeImage, {bool primitive = true}) {
 
 List<List> extractBuscode(List<List> splitedList) {
   List fullList = splitedList[0];
-  List whiteSpacePosition = [];
+  List<int> whiteSpacePosition = [];
   int counter = 0;
-  for (var i = 0; i < fullList.length; i++) {
+  for (int i = 0; i < fullList.length; i++) {
     if (fullList[i] > 254) {
       counter = counter + 1;
     } else {
       if (counter > fullList.length / 75) {
-        whiteSpacePosition.add([i]);
+        whiteSpacePosition.add(i);
         counter = 0;
       }
     }
