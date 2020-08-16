@@ -52,7 +52,7 @@ List<String> readBuscode(imglib.Image busCodeImage, {bool primitive = true}) {
   return code;
 }
 
-List extractBuscode(List splitedList) {
+List<List> extractBuscode(List<List> splitedList) {
   List fullList = splitedList[0];
   List whiteSpacePosition = [];
   int counter = 0;
@@ -66,10 +66,10 @@ List extractBuscode(List splitedList) {
       }
     }
   }
-  int start;
-  int finish;
+  int start = 0;
+  int finish = fullList.length - 1;
   for (var i = 0; i < whiteSpacePosition.length; i++) {
-    if (whiteSpacePosition[i] < whiteSpacePosition.length / 2) {
+    if (whiteSpacePosition[i] < fullList.length / 2) {
       start = whiteSpacePosition[i];
     } else {
       finish = whiteSpacePosition[i] - fullList.length ~/ 75;
