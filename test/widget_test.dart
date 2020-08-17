@@ -13,12 +13,15 @@ void printFiles() {
     curDir = curDir.substring(12, curDir.length - 1).replaceAll('\\', '/');
     path = curDir + '/' + path;
     imglib.Image img = readImage(path);
-    //print(readBuscode(img));
+    print(path);
+    print(readBuscode(img));
   }
 }
 
 imglib.Image readImage(path) {
-  return imglib.decodePng(File(path).readAsBytesSync());
+  var intermediate = File(path).readAsBytesSync();
+  var output = imglib.readJpg(intermediate);
+  return output;
 }
 
 void main() {
