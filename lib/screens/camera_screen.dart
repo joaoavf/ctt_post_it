@@ -1,5 +1,6 @@
 import 'dart:ffi';
 import 'dart:io';
+import 'package:camera_tutorial/functions/image_processing.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:image/image.dart' as imglib;
@@ -174,8 +175,8 @@ class _CameraScreenState extends State<CameraScreen> {
 
           img = imglib.copyCrop(img, horizOffset, vertOffset, width, height);
 
-          Buscode buscode = Buscode(buscodeImage: img);
-          if (buscode.decoded.success) {
+          Buscode buscode = imageToBuscode(img);
+          if (buscode.success) {
             Navigator.push(
                 context,
                 MaterialPageRoute(

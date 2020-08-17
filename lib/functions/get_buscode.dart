@@ -1,13 +1,10 @@
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:camera_tutorial/functions/image_processing.dart';
 import 'package:ffi/ffi.dart';
 import 'package:image/image.dart' as imglib;
 import '../models/buscode.dart';
-
-import 'package:flutter/material.dart';
-import 'package:camera_tutorial/screens/result_screen.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
@@ -79,9 +76,9 @@ void getBuscode(image) {
 
   img = imglib.copyCrop(img, horizOffset, vertOffset, width, height);
 
-  Buscode buscode = Buscode(buscodeImage: img);
+  Buscode buscode = imageToBuscode(img);
 
-  if (buscode.decoded.success) {
-    print(buscode.decoded.fullCode);
+  if (buscode.success) {
+    print(buscode.fullCode);
   }
 }

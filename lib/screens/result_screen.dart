@@ -16,7 +16,7 @@ class ResultScreen extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.symmetric(vertical: 40, horizontal: 8),
-              child: Image.memory(imglib.encodeJpg(buscode.buscodeImage)),
+              child: Image.memory(imglib.encodeJpg(buscode.image)),
             ),
             GridView.count(
               scrollDirection: Axis.vertical,
@@ -30,29 +30,29 @@ class ResultScreen extends StatelessWidget {
                 ItemResultCard(
                     title: 'Date',
                     buscodeInformation:
-                        buscode.decoded.day + '/' + buscode.decoded.month),
+                        buscode.day + '/' + buscode.month),
                 ItemResultCard(
                     title: 'Time',
                     buscodeInformation:
-                        buscode.decoded.hour + 'h' + buscode.decoded.minute),
+                        buscode.hour + 'h' + buscode.minute),
                 ItemResultCard(
                     title: 'Equipment ID',
-                    buscodeInformation: buscode.decoded.equipmentId),
+                    buscodeInformation: buscode.equipmentId),
                 ItemResultCard(
                     title: 'Issuer code',
-                    buscodeInformation: buscode.decoded.issuerCode),
+                    buscodeInformation: buscode.issuerCode),
                 ItemResultCard(
                     title: 'Format ID',
-                    buscodeInformation: buscode.decoded.formatId),
+                    buscodeInformation: buscode.formatId),
                 ItemResultCard(
                     title: 'Item priority',
-                    buscodeInformation: buscode.decoded.itemPriority),
+                    buscodeInformation: buscode.itemPriority),
                 ItemResultCard(
                     title: 'Serial number',
-                    buscodeInformation: buscode.decoded.serialNumber),
+                    buscodeInformation: buscode.serialNumber),
                 ItemResultCard(
                     title: 'Tracking indicator',
-                    buscodeInformation: buscode.decoded.trackingIndicator),
+                    buscodeInformation: buscode.trackingIndicator),
               ],
             ),
           ],

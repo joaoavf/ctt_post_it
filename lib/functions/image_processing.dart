@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:camera_tutorial/models/buscode.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:math';
@@ -16,13 +17,21 @@ void saveImage(imglib.Image img) async {
   File('$path/$dateParse.jpg')..writeAsBytesSync(imglib.encodeJpg(img));
 }
 
-List<String> readBuscode(imglib.Image busCodeImage, {bool primitive = true}) {
-  saveImage(busCodeImage);
-  var height = busCodeImage.height;
-  var width = busCodeImage.width;
+Buscode imageToBuscode(imglib.Image buscodeImage, {bool save = true}) {
+  if (save) {
+    saveImage(buscodeImage);
+  }
+  Buscode buscode = Buscode(image: buscodeImage);
+
+  return buscode;
+}
+
+List<String> readBuscode(imglib.Image buscodeImage, {bool primitive = true}) {
+  var height = buscodeImage.height;
+  var width = buscodeImage.width;
   var stride = 4;
 
-  var img_1d = toBinary(busCodeImage);
+  var img_1d = toBinary(buscodeImage);
 
   img_1d = conv2d(img_1d, stride, height, width);
   img_1d = toBinaryColor(img_1d);
@@ -38,7 +47,7 @@ List<String> readBuscode(imglib.Image busCodeImage, {bool primitive = true}) {
 
   for (var i = 0; i < rotations.length; i++) {
     if (code.length != 75 && primitive) {
-      code = readBuscode(imglib.copyRotate(busCodeImage, rotations[i]),
+      code = readBuscode(imglib.copyRotate(buscodeImage, rotations[i]),
           primitive: false);
     }
   }
