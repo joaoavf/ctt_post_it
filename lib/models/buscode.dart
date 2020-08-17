@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:camera_tutorial/functions/buscode_processing.dart';
 import 'package:image/image.dart' as imglib;
 
-
 class Buscode {
   // Broad data
   List code;
@@ -29,7 +28,7 @@ class Buscode {
   // Other
   String trackingIndicator;
   bool valid;
-  String fullCode;
+  String idTag;
   bool success = false;
 
   Buscode({@required this.image}) {
@@ -63,7 +62,7 @@ class Buscode {
 
       trackingIndicator = decodeTrackingIndicator(main.substring(54, 56));
 
-      fullCode = formatId +
+      idTag = formatId +
           issuerCode +
           equipmentId +
           itemPriority +

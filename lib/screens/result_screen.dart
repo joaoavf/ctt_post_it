@@ -18,6 +18,13 @@ class ResultScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 40, horizontal: 8),
               child: Image.memory(imglib.encodeJpg(buscode.image)),
             ),
+            Container(
+              padding: EdgeInsets.only(bottom: 15),
+              child: Text(
+                buscode.idTag,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+            ),
             GridView.count(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
@@ -29,12 +36,10 @@ class ResultScreen extends StatelessWidget {
               children: [
                 ItemResultCard(
                     title: 'Date',
-                    buscodeInformation:
-                        buscode.day + '/' + buscode.month),
+                    buscodeInformation: buscode.day + '/' + buscode.month),
                 ItemResultCard(
                     title: 'Time',
-                    buscodeInformation:
-                        buscode.hour + 'h' + buscode.minute),
+                    buscodeInformation: buscode.hour + 'h' + buscode.minute),
                 ItemResultCard(
                     title: 'Equipment ID',
                     buscodeInformation: buscode.equipmentId),
@@ -42,8 +47,7 @@ class ResultScreen extends StatelessWidget {
                     title: 'Issuer code',
                     buscodeInformation: buscode.issuerCode),
                 ItemResultCard(
-                    title: 'Format ID',
-                    buscodeInformation: buscode.formatId),
+                    title: 'Format ID', buscodeInformation: buscode.formatId),
                 ItemResultCard(
                     title: 'Item priority',
                     buscodeInformation: buscode.itemPriority),

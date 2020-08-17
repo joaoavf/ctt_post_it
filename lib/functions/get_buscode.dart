@@ -79,6 +79,6 @@ void getBuscode(image) {
   Buscode buscode = imageToBuscode(img);
 
   if (buscode.success) {
-    print(buscode.fullCode);
+    print(buscode.idTag);
   }
 }
