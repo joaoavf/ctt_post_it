@@ -31,7 +31,8 @@ List<String> readBuscode(imglib.Image buscodeImage, {bool primitive = true}) {
   var width = buscodeImage.width;
   var stride = 4;
 
-  var img_1d = toBinary(buscodeImage);
+  var img_1d = toBW(buscodeImage);
+  img_1d = toBinaryColor(img_1d);
 
   img_1d = conv2d(img_1d, stride, height, width);
   img_1d = toBinaryColor(img_1d);
@@ -160,7 +161,7 @@ List<String> from1dToBuscode(List fullList, List upperList) {
   return result;
 }
 
-List toBinary(imglib.Image img) {
+List toBW(imglib.Image img) {
   List newList = [];
 
   var colorized;
@@ -171,7 +172,7 @@ List toBinary(imglib.Image img) {
         colorized.blue * 0.1140);
   }
 
-  return toBinaryColor(newList);
+  return newList;
 }
 
 List toBinaryColor(List img_1d, {int buffer = 20}) {
