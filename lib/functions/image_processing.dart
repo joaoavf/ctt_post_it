@@ -57,8 +57,8 @@ List<List> extractBuscode(List<List> splitedList) {
     } else {
       if (counter > fullList.length / 75) {
         whiteSpacePosition.add(i);
-        counter = 0;
       }
+      counter = 0;
     }
   }
   int start = 0;
