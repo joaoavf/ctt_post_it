@@ -1,17 +1,24 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'dart:io';
+import 'package:camera_tutorial/functions/image_processing.dart';
+import 'package:image/image.dart' as imglib;
 
 void printFiles() {
-  print(Directory.current);
-  final dir = Directory('test/test_images');
-  final files = dir.listSync(recursive: false).toList();
-  files.forEach(print);
+  String folder = 'test/test_images';
+  final dir = Directory(folder);
+  final List files = dir.listSync(recursive: false).toList();
+  for (var i = 0; i < files.length; i++) {
+    String path = files[i].toString();
+    path = path.substring(7, path.length - 1).replaceAll('\\', '/');
+    String curDir = Directory.current.toString();
+    curDir = curDir.substring(12, curDir.length - 1).replaceAll('\\', '/');
+    path = curDir + '/' + path;
+    imglib.Image img = readImage(path);
+    //print(readBuscode(img));
+  }
+}
+
+imglib.Image readImage(path) {
+  return imglib.decodePng(File(path).readAsBytesSync());
 }
 
 void main() {
