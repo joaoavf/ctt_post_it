@@ -26,7 +26,7 @@ Buscode imageToBuscode(imglib.Image buscodeImage, {bool save = true}) {
   return buscode;
 }
 
-List<String> readBuscode(imglib.Image buscodeImage, {bool primitive = true}) {
+List<String> readBuscode(imglib.Image buscodeImage) {
   var height = buscodeImage.height;
   var width = buscodeImage.width;
   var stride = 4;
@@ -43,15 +43,6 @@ List<String> readBuscode(imglib.Image buscodeImage, {bool primitive = true}) {
   splitedList = extractBuscode(splitedList);
 
   List<String> code = from1dToBuscode(splitedList[0], splitedList[1]);
-
-  List rotations = [0.5, -0.5];
-
-  for (var i = 0; i < rotations.length; i++) {
-    if (code.length != 75 && primitive) {
-      code = readBuscode(imglib.copyRotate(buscodeImage, rotations[i]),
-          primitive: false);
-    }
-  }
 
   return code;
 }
