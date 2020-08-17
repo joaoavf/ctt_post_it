@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:camera_tutorial/functions/image_processing.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:developer';
+import 'dart:convert';
 
 List getFilesList(folder) {
   final dir = Directory(folder);
@@ -26,12 +27,12 @@ void printFiles() {
   }
 }
 
-Map firstBinaryMap = {};
-Map convMap = {};
-Map secondBinaryMap = {};
-Map reducedFullListMap = {};
-Map reducedUpperListMap = {};
-Map codeMap = {};
+Map firstBinaryMap = json.decode(File('test/maps/firstBinaryMap.json').readAsStringSync());
+Map convMap = json.decode(File('test/maps/convMap.json').readAsStringSync());
+Map secondBinaryMap = json.decode(File('test/maps/secondBinaryMap.json').readAsStringSync());
+Map reducedFullListMap = json.decode(File('test/maps/reducedFullListMap.json').readAsStringSync());
+Map reducedUpperListMap = json.decode(File('test/maps/reducedUpperListMap.json').readAsStringSync());
+Map codeMap = json.decode(File('test/maps/codeMap.json').readAsStringSync());
 
 void testReadBuscode(imglib.Image image, String path) {
   String rm = 'C:/Users/joaoa/AndroidStudioProjects/time_tracker_flutter_course/bus_code_reader/test/test_images/';
@@ -40,7 +41,7 @@ void testReadBuscode(imglib.Image image, String path) {
   var width = image.width;
   var stride = 4;
 
-  var img_1d = toBinary(image);
+  var img_1d = toBW(image);
 
   assert(img_1d == firstBinaryMap[path]);
 
@@ -64,13 +65,6 @@ void testReadBuscode(imglib.Image image, String path) {
 
   assert(code = codeMap[path]);
 
-//  List rotations = [0.5, -0.5];
-//
-////  for (var i = 0; i < rotations.length; i++) {
-//    if (code.length != 75 && primitive) {
-//      code = readBuscode(imglib.copyRotate(image, rotations[i]),
-//          primitive: false);
-//    }
 }
 
 imglib.Image readImage(path) {
