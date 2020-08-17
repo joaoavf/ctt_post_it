@@ -15,7 +15,7 @@ class ResultScreen extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(vertical: 40, horizontal: 8),
+              padding: EdgeInsets.only(top: 30, left: 8, right: 8, bottom: 20),
               child: Image.memory(imglib.encodeJpg(buscode.image)),
             ),
             Container(
@@ -59,6 +59,14 @@ class ResultScreen extends StatelessWidget {
                     buscodeInformation: buscode.trackingIndicator),
               ],
             ),
+            Container(
+              padding: EdgeInsets.only(right: 8),
+              alignment: Alignment.bottomRight,
+              child: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {},
+              ),
+            )
           ],
         ),
       ),
