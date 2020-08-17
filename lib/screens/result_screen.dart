@@ -28,7 +28,7 @@ class ResultScreen extends StatelessWidget {
             GridView.count(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              childAspectRatio: 5 / 3,
+              childAspectRatio: 9 / 5,
               crossAxisCount: 2,
               padding: const EdgeInsets.all(8),
               crossAxisSpacing: 8,
