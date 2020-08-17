@@ -3,10 +3,11 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:ffi/ffi.dart';
-import 'package:camera/camera.dart';
 import 'package:image/image.dart' as imglib;
-
 import '../models/buscode.dart';
+
+import 'package:flutter/material.dart';
+import 'package:camera_tutorial/screens/result_screen.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
@@ -15,43 +16,42 @@ typedef Convert = Pointer<Uint32> Function(
 
 imglib.Image img;
 
-Buscode getBuscode() {
-  CameraImage _savedImage;
+void getBuscode(image) {
   Convert conv;
 
   if (Platform.isAndroid) {
 // Allocate memory for the 3 planes of the image
-    Pointer<Uint8> p = allocate(count: _savedImage.planes[0].bytes.length);
-    Pointer<Uint8> p1 = allocate(count: _savedImage.planes[1].bytes.length);
-    Pointer<Uint8> p2 = allocate(count: _savedImage.planes[2].bytes.length);
+    Pointer<Uint8> p = allocate(count: image.planes[0].bytes.length);
+    Pointer<Uint8> p1 = allocate(count: image.planes[1].bytes.length);
+    Pointer<Uint8> p2 = allocate(count: image.planes[2].bytes.length);
 
 // Assign the planes data to the pointers of the image
-    Uint8List pointerList = p.asTypedList(_savedImage.planes[0].bytes.length);
-    Uint8List pointerList1 = p1.asTypedList(_savedImage.planes[1].bytes.length);
-    Uint8List pointerList2 = p2.asTypedList(_savedImage.planes[2].bytes.length);
+    Uint8List pointerList = p.asTypedList(image.planes[0].bytes.length);
+    Uint8List pointerList1 = p1.asTypedList(image.planes[1].bytes.length);
+    Uint8List pointerList2 = p2.asTypedList(image.planes[2].bytes.length);
     pointerList.setRange(
-        0, _savedImage.planes[0].bytes.length, _savedImage.planes[0].bytes);
+        0, image.planes[0].bytes.length, image.planes[0].bytes);
     pointerList1.setRange(
-        0, _savedImage.planes[1].bytes.length, _savedImage.planes[1].bytes);
+        0, image.planes[1].bytes.length, image.planes[1].bytes);
     pointerList2.setRange(
-        0, _savedImage.planes[2].bytes.length, _savedImage.planes[2].bytes);
+        0, image.planes[2].bytes.length, image.planes[2].bytes);
 
 // Call the convertImage function and convert the YUV to RGB
     Pointer<Uint32> imgP = conv(
         p,
         p1,
         p2,
-        _savedImage.planes[1].bytesPerRow,
-        _savedImage.planes[1].bytesPerPixel,
-        _savedImage.planes[0].bytesPerRow,
-        _savedImage.height);
+        image.planes[1].bytesPerRow,
+        image.planes[1].bytesPerPixel,
+        image.planes[0].bytesPerRow,
+        image.height);
 
 // Get the pointer of the data returned from the function to a List
-    List imgData = imgP
-        .asTypedList((_savedImage.planes[0].bytesPerRow * _savedImage.height));
+    List imgData =
+        imgP.asTypedList((image.planes[0].bytesPerRow * image.height));
 // Generate image from the converted data
     img = imglib.Image.fromBytes(
-        _savedImage.height, _savedImage.planes[0].bytesPerRow, imgData);
+        image.height, image.planes[0].bytesPerRow, imgData);
 
 // Free the memory space allocated
 // from the planes and the converted data
@@ -61,9 +61,9 @@ Buscode getBuscode() {
     free(imgP);
   } else if (Platform.isIOS) {
     img = imglib.Image.fromBytes(
-      _savedImage.planes[0].bytesPerRow,
-      _savedImage.height,
-      _savedImage.planes[0].bytes,
+      image.planes[0].bytesPerRow,
+      image.height,
+      image.planes[0].bytes,
       format: imglib.Format.bgra,
     );
   }
@@ -81,5 +81,7 @@ Buscode getBuscode() {
 
   Buscode buscode = Buscode(buscodeImage: img);
 
-  return buscode;
+  if (buscode.decoded.success) {
+    print(buscode.decoded.fullCode);
+  }
 }
