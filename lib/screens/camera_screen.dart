@@ -9,6 +9,7 @@ import 'package:ffi/ffi.dart';
 import 'package:camera_tutorial/models/buscode.dart';
 import 'package:camera_tutorial/widgets/bottom_navigation_bar.dart';
 import 'package:camera_tutorial/screens/result_screen.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
@@ -71,13 +72,16 @@ class _CameraScreenState extends State<CameraScreen> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          Positioned.fill(
+          Center(
               child: (_cameraInitialized)
                   ? AspectRatio(
                       aspectRatio: _camera.value.aspectRatio,
                       child: CameraPreview(_camera),
                     )
-                  : CircularProgressIndicator()),
+                  : SpinKitWave(
+                      color: Theme.of(context).primaryColor,
+                      size: 35,
+                    )),
           Positioned.fill(
             child: Opacity(
               opacity: 0.5,
