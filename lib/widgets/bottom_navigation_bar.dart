@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:camera_tutorial/screens/camera_screen.dart';
+import 'package:camera_tutorial/screens/library_screen.dart';
 
 class BottomNavigation extends StatefulWidget {
   @override
@@ -11,6 +13,20 @@ class _BottomNavigationState extends State<BottomNavigation> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+
+      if (_selectedIndex == 0) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CameraScreen(),
+            ));
+      } else {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LibraryScreen(),
+            ));
+      }
     });
   }
 

@@ -1,21 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
-
-import 'package:post_it/functions/image_processing.dart';
-
-void deleteBuscode() async {
-  try {
-    final file = File('$path/$fileName.jpg');
-    await file.delete();
-    imageCache.clear();
-  } catch (e) {
-    print(e);
-  }
-}
 
 class DeleteWarning extends StatelessWidget {
-  int count = 0;
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -52,8 +37,7 @@ class DeleteWarning extends StatelessWidget {
                 ],
               ),
               onPressed: () {
-                deleteBuscode();
-                Navigator.of(context);
+                print('Item deleted');
               },
             ),
           ],

@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:camera_tutorial/widgets/bottom_navigation_bar.dart';
 import 'package:camera_tutorial/widgets/result_card.dart';
 import 'package:image/image.dart' as imglib;
+import 'package:camera_tutorial/widgets/delete_warning.dart';
 
 class ResultScreen extends StatelessWidget {
   final Buscode buscode;
-  ResultScreen({Key key, @required this.buscode}) : super(key: key);
+  ResultScreen({Key key, this.buscode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +65,11 @@ class ResultScreen extends StatelessWidget {
               alignment: Alignment.bottomRight,
               child: IconButton(
                 icon: Icon(Icons.delete),
-                onPressed: () {},
+                onPressed: () => showDialog(
+                    context: context,
+                    builder: (context) {
+                      return DeleteWarning();
+                    }),
               ),
             )
           ],

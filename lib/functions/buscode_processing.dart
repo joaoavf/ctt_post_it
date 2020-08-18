@@ -79,8 +79,12 @@ List<String> rotateCode(List code) {
 }
 
 bool validateSyncs(code) {
+  print(code.sublist(48, 51));
   List<int> integers = busToIntegers(code);
-  String bin = integers.map(to6Bin).reduce((a, b) => a + b);
+  print(integers);
+  var bin2 = integers.map(to6Bin);
+  print(bin2);
+  String bin = bin2.reduce((a, b) => a + b);
 
   String leftSync = bin.substring(12, 18);
   String rightSync = bin.substring(bin.length - 18, bin.length - 12);
@@ -95,6 +99,7 @@ List<int> busToIntegers(buscode) {
   for (var i = 0; i < buscode.length ~/ 3; i++) {
     var triad = buscode[i * 3] + buscode[i * 3 + 1] + buscode[i * 3 + 2];
     output.add(decoder[triad]);
+    print(triad);
   }
   return output;
 }
