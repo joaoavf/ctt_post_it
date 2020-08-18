@@ -1,4 +1,5 @@
 import 'package:camera_tutorial/models/buscode.dart';
+import 'package:camera_tutorial/widgets/back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:camera_tutorial/widgets/bottom_navigation_bar.dart';
 import 'package:camera_tutorial/widgets/result_card.dart';
@@ -15,6 +16,7 @@ class ResultScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
+            CustomBackButton(),
             Container(
               padding: EdgeInsets.only(top: 30, left: 8, right: 8, bottom: 20),
               child: Image.memory(imglib.encodeJpg(buscode.image)),

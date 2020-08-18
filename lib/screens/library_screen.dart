@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:camera_tutorial/widgets/bottom_navigation_bar.dart';
 import 'package:camera_tutorial/widgets/buscode_card.dart';
+import 'package:camera_tutorial/widgets/back_button.dart';
 
 class LibraryScreen extends StatefulWidget {
   @override
@@ -15,8 +16,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
       body: SafeArea(
         child: Column(
           children: [
+            CustomBackButton(),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 26, horizontal: 20),
+              margin: EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 30),
               child: TextField(
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.search),

@@ -13,21 +13,20 @@ class _BottomNavigationState extends State<BottomNavigation> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-
-      if (_selectedIndex == 0) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CameraScreen(),
-            ));
-      } else {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LibraryScreen(),
-            ));
-      }
     });
+    if (_selectedIndex == 0) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CameraScreen(),
+          ));
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LibraryScreen(),
+          ));
+    }
   }
 
   @override
