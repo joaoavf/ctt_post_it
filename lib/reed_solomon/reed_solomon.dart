@@ -26,7 +26,7 @@ List<int> rsCorrectMessage(List<int> message_in, int nsym) {
  * Reed-Solomon main encoding function, using polynomial division (algorithm Extended Synthetic Division)
  */
 List<int> rsEncodeMessage(List<int> message_in, int nsym) {
-  List<int> gen = _rsGeneratorPolynomial(nsym);
+  List<int> gen = generatePolynomial(nsym);
   List<int> message_out =
   new List.filled(message_in.length + gen.length - 1, 0);
   message_out.setAll(0, message_in);
@@ -179,10 +179,16 @@ List<int> _rsGeneratorErrorPolynomial(List<int> synd) {
 /**
  * Computes the generator polynomial for a given number of error correction symbols
  */
-List<int> _rsGeneratorPolynomial(int nsym) {
+List<int> generatePolynomial(int nsym, {fcr=1, generator=2}) {
   List<int> g = [1];
   for (int i = 0; i < nsym; i++) {
-    g = gfPolynomialMultiply(g, [1, GF_EXP[i]]);
+    g = gfPolynomialMultiply(g, [1, gfPow(generator, i + fcr)]);
   }
   return g;
 }
+
+gfPow(x, power) {
+  final int field_charac = 63;
+  return GF_EXP[(GF_LOG[x] * power) % field_charac];
+}
+
