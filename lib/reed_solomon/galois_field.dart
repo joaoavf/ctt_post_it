@@ -98,31 +98,30 @@ List<int> gfPolynomialScale(List<int> p, int x) {
  * TODO(kleak): see how we can let the user choose
  * Possible value here (0x0, 0x3, 0x7, 0xB, 0x13, 0x25, 0x43, 0x83, 0x11D, 0x211, 0x409, 0x805, 0x1053, 0x201B, 0x402B, 0x8003, 0x1100B)
  */
-void initTables() => _initTables(0x11D);
+void initTables() => _initTables();
 
 /**
  * Precompute the logarithm and anti-log tables for faster computation later, using the provided primitive polynomial
  */
-void _initTables(int prim) {
-  List<int> prims = [
-    0x0, 0x3, 0x7, 0xB, 0x13, 0x25, 0x43, 0x83, 0x11D, 0x211, 0x409, 0x805, 0x1053, 0x201B, 0x402B, 0x8003, 0x1100B
-  ];
-  int pos = prims.indexOf(prim);
-  GF_LOG_SIZE = pow(2, pos);
-  GF_EXP_SIZE = GF_LOG_SIZE * 2;
-  GF_EXP = new List.filled(GF_EXP_SIZE, 1);
-  GF_LOG = new List.filled(GF_LOG_SIZE, 0);
-  int log_minus_one = GF_LOG_SIZE - 1;
+
+void _initTables({int prim = 67, int generator = 2, int c_exp = 6}) {
+  int field_charac = pow(2, c_exp).toInt() - 1;
+  GF_LOG_SIZE = 64;
+
+  GF_EXP = new List.filled(field_charac * 2, 1);
+  GF_LOG = new List.filled(field_charac + 1, 0);
+
   int x = 1;
-  for (int i = 1; i < log_minus_one; i++) {
+  for (int i = 0; i < field_charac; i++) {
+    GF_EXP[i] = x;
+    GF_LOG[x] = i;
+
     x <<= 1;
     if (x & GF_LOG_SIZE == GF_LOG_SIZE) {
       x ^= prim;
     }
-    GF_EXP[i] = x;
-    GF_LOG[x] = i;
   }
-  for (int i = log_minus_one; i < GF_EXP_SIZE; i++) {
-    GF_EXP[i] = GF_EXP[i - log_minus_one];
+  for (int i = field_charac; i < field_charac * 2; i++) {
+    GF_EXP[i] = GF_EXP[i - field_charac];
   }
 }
