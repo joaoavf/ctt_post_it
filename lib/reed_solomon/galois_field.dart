@@ -55,7 +55,7 @@ List<int> gfPolynomialDivide(List<int> dividend, List<int> divisor) {
       }
     }
   }
-  int separator = divisor.length - 1;
+  int separator = divisor.length ;
   return msg_out.sublist(msg_out.length - separator);
 }
 
