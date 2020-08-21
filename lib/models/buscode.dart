@@ -9,9 +9,9 @@ class Buscode {
   imglib.Image image;
   List<int> integers;
   String bin;
-  String main;
 
   Map data;
+
   operator [](index) => data[index];
 
   // Specific Data
@@ -45,19 +45,19 @@ class Buscode {
 
       success = true;
 
+      integers = integers.sublist(0, 2)
+        ..addAll(integers.sublist(3, 10))
+        ..addAll(integers.sublist(11, 13));
+
       bin = integers.map(to6Bin).reduce((a, b) => a + b);
 
-      main = bin.substring(0, 12) +
-          bin.substring(18, 60) +
-          bin.substring(66, 78);
-
-      formatId = decodeFormatId(main.substring(0, 4));
-      issuerCode = issuerCodeConversion(main.substring(4, 20));
-      equipmentId = decodeEquipmentId(main.substring(20, 32));
-      itemPriority = decodeItemPriority(main.substring(32, 34));
+      formatId = decodeFormatId(bin.substring(0, 4));
+      issuerCode = issuerCodeConversion(bin.substring(4, 20));
+      equipmentId = decodeEquipmentId(bin.substring(20, 32));
+      itemPriority = decodeItemPriority(bin.substring(32, 34));
 
       serialNumberMap =
-          processSerialNumber(main.substring(34, 54) + main.substring(56));
+          processSerialNumber(bin.substring(34, 54) + bin.substring(56));
 
       month = serialNumberMap['month'];
       day = serialNumberMap['day'];
@@ -65,7 +65,7 @@ class Buscode {
       minute = serialNumberMap['minute'];
       serialNumber = serialNumberMap['serial'];
 
-      trackingIndicator = decodeTrackingIndicator(main.substring(54, 56));
+      trackingIndicator = decodeTrackingIndicator(bin.substring(54, 56));
 
       idTag = formatId +
           issuerCode +
@@ -78,8 +78,10 @@ class Buscode {
           serialNumber +
           trackingIndicator;
 
-      photoDate = DateTime.now().toString().replaceAll('-',':').substring(0, 19);
-      buscodeDate = '2000:'+month+':'+day+' '+hour+':0'+minute+':00';
+      photoDate =
+          DateTime.now().toString().replaceAll('-', ':').substring(0, 19);
+      buscodeDate =
+          '2000:' + month + ':' + day + ' ' + hour + ':0' + minute + ':00';
 
       data = {
         'formatId': formatId,
