@@ -1,6 +1,6 @@
 import 'dart:math';
+import 'package:camera_tutorial/functions/galois_field.dart';
 
-import 'file:///C:/Users/joaoa/AndroidStudioProjects/time_tracker_flutter_course/bus_code_reader/lib/functions/galois_field.dart';
 
 List<int> rsCorrectMessage(List<int> message_in, int nsym) {
   List<int> message_out = new List.from(message_in);
