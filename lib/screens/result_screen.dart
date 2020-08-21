@@ -1,10 +1,10 @@
-import 'package:camera_tutorial/models/buscode.dart';
-import 'package:camera_tutorial/widgets/back_button.dart';
 import 'package:flutter/material.dart';
-import 'package:camera_tutorial/widgets/bottom_navigation_bar.dart';
-import 'package:camera_tutorial/widgets/result_card.dart';
 import 'package:image/image.dart' as imglib;
+
+import 'package:camera_tutorial/models/buscode.dart';
+import 'package:camera_tutorial/widgets/result_card.dart';
 import 'package:camera_tutorial/widgets/delete_warning.dart';
+import 'package:camera_tutorial/functions/image_processing.dart';
 
 class ResultScreen extends StatelessWidget {
   final Buscode buscode;
@@ -13,12 +13,19 @@ class ResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Column(
           children: [
-            CustomBackButton(),
+            AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.black54),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
             Container(
-              padding: EdgeInsets.only(top: 30, left: 8, right: 8, bottom: 20),
+              padding: EdgeInsets.only(left: 8, right: 8, bottom: 20),
               child: Image.memory(imglib.encodeJpg(buscode.image)),
             ),
             Container(
@@ -30,8 +37,9 @@ class ResultScreen extends StatelessWidget {
             ),
             GridView.count(
               scrollDirection: Axis.vertical,
+              physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              childAspectRatio: 9 / 5,
+              childAspectRatio: 9 / 4.7,
               crossAxisCount: 2,
               padding: const EdgeInsets.all(8),
               crossAxisSpacing: 8,
@@ -63,10 +71,14 @@ class ResultScreen extends StatelessWidget {
               ],
             ),
             Container(
+              padding: EdgeInsets.all(8),
+              child: Text(path, textAlign: TextAlign.right),
+            ),
+            Container(
               padding: EdgeInsets.only(right: 8),
               alignment: Alignment.bottomRight,
               child: IconButton(
-                icon: Icon(Icons.delete),
+                icon: Icon(Icons.delete, color: Theme.of(context).primaryColor),
                 onPressed: () => showDialog(
                     context: context,
                     builder: (context) {
@@ -77,7 +89,6 @@ class ResultScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigation(),
     );
   }
 }

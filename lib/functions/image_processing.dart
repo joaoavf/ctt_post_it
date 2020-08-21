@@ -5,15 +5,24 @@ import 'package:image/image.dart' as imglib;
 import 'dart:math';
 import 'package:path_provider/path_provider.dart';
 
-Future<String> get _localPath async {
+String path;
+String fileName;
+
+Future<String> get localPath async {
   final directory = await getExternalStorageDirectory();
-  return directory.path;
+  path = directory.path;
+  return path;
+}
+
+String _getFileName() {
+  String date = DateTime.now().toString();
+  fileName = DateTime.parse(date).toString().replaceAll(':', '-');
+  return fileName;
 }
 
 void saveImage(imglib.Image img) async {
-  String date = new DateTime.now().toString();
-  String dateParse = DateTime.parse(date).toString().replaceAll(':', '-');
-  final path = await _localPath;
+  String dateParse = _getFileName();
+  final path = await localPath;
   File('$path/$dateParse.jpg')..writeAsBytesSync(imglib.encodeJpg(img));
 }
 

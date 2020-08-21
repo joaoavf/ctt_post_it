@@ -1,9 +1,7 @@
-import 'package:camera_camera/camera_camera.dart';
-import 'package:camera_tutorial/screens/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'screens/camera_screen.dart';
-import 'screens/library_screen.dart';
+import 'widgets/navigator.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,7 +21,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor: Color(0xffF6F6F6),
       ),
-      home: LibraryScreen(),
+      home: CameraScreen(),
     );
   }
 }

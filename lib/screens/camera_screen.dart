@@ -2,14 +2,13 @@ import 'dart:ffi';
 import 'dart:io';
 import 'package:camera_tutorial/functions/image_processing.dart';
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
 import 'package:camera_tutorial/models/buscode.dart';
-import 'package:camera_tutorial/widgets/bottom_navigation_bar.dart';
 import 'package:camera_tutorial/screens/result_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_better_camera/camera.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
@@ -28,6 +27,9 @@ class _CameraScreenState extends State<CameraScreen> {
   CameraController _camera;
   bool _cameraInitialized = false;
   CameraImage _savedImage;
+  final FlashMode _flashOn = FlashMode.torch;
+  final FlashMode _flashOff = FlashMode.off;
+  bool _flashlightOn = true;
 
   final DynamicLibrary convertImageLib = Platform.isAndroid
       ? DynamicLibrary.open("libconvertImage.so")
@@ -56,7 +58,8 @@ class _CameraScreenState extends State<CameraScreen> {
       await _camera
           .startImageStream((CameraImage image) => _processCameraImage(image));
       setState(() {
-        _cameraInitialized = true;
+//        _cameraInitialized = true;
+//        _camera.setFlashMode(_flashOn);
       });
     });
   }
@@ -67,12 +70,25 @@ class _CameraScreenState extends State<CameraScreen> {
     });
   }
 
+  void _flashlightToggle(state) {
+    if (_flashlightOn == true) {
+      _camera.setFlashMode(_flashOn);
+    } else if (_flashlightOn == false) {
+      _camera.setFlashMode(_flashOff);
+    }
+  }
+
+  void dispose() {
+    _camera.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          Center(
+          Positioned.fill(
               child: (_cameraInitialized)
                   ? AspectRatio(
                       aspectRatio: _camera.value.aspectRatio,
@@ -80,7 +96,7 @@ class _CameraScreenState extends State<CameraScreen> {
                     )
                   : SpinKitWave(
                       color: Theme.of(context).primaryColor,
-                      size: 35,
+                      size: 30,
                     )),
           Positioned.fill(
             child: Opacity(
@@ -89,8 +105,23 @@ class _CameraScreenState extends State<CameraScreen> {
                 children: [
                   Expanded(
                     child: Container(
-                      color: Colors.black,
-                    ),
+                        alignment: Alignment.topLeft,
+                        color: Colors.black,
+                        child: RotatedBox(
+                          quarterTurns: -1,
+                          child: IconButton(
+                            padding: EdgeInsets.all(20),
+                            icon: _flashlightOn == false
+                                ? Icon(Icons.flash_on, color: Colors.white)
+                                : Icon(Icons.flash_off, color: Colors.white),
+                            onPressed: () {
+                              setState(() {
+                                _flashlightOn = !_flashlightOn;
+                              });
+                              _flashlightToggle(_flashlightOn);
+                            },
+                          ),
+                        )),
                   ),
                   Container(
                     color: Colors.transparent,
@@ -100,6 +131,15 @@ class _CameraScreenState extends State<CameraScreen> {
                   Expanded(
                     child: Container(
                       color: Colors.black,
+                      child: Center(
+                        child: RotatedBox(
+                          quarterTurns: -1,
+                          child: Text(
+                            'PLACE THE BUSCODE IN THE AREA ABOVE',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -187,11 +227,11 @@ class _CameraScreenState extends State<CameraScreen> {
                   builder: (context) => ResultScreen(buscode: buscode),
                 ));
           }
+          dispose();
         },
         tooltip: 'Increment',
         child: Icon(Icons.camera_alt),
       ),
-      bottomNavigationBar: BottomNavigation(),
     );
   }
 }
