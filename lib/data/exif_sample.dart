@@ -1,16 +1,5 @@
 import 'dart:typed_data';
 
-Map<String, Map> buscodeExifMap = {
-  'formatId': {'start': 42, 'length': 4},
-  'issuerCode': {'start': 102, 'length': 3},
-  'equipmentId': {'start': 79, 'length': 3},
-  'buscodeDate': {'start': 150, 'length': 19},
-  'photoDate': {'start': 130, 'length': 19},
-  'serialNumber': {'start': 170, 'length': 5},
-  'itemPriority': {'start': 90, 'length': 1},
-  'trackingIndicator': {'start': 126, 'length': 1},
-};
-
 final List<Uint8List> sampleExif = [Uint8List.fromList([
   69,
   120,
