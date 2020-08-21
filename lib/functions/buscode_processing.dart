@@ -83,7 +83,7 @@ Map evaluateCode(code, {isRotate = false}) {
   int leftSync = correctMsg[2];
   int rightSync = correctMsg[10];
   if (code.length == 75 && leftSync == 22 && rightSync == 38) {
-    return {'is_valid': true, 'is_rotate': isRotate, 'code': integers};
+    return {'is_valid': true, 'is_rotate': isRotate, 'code': correctMsg};
   } else {
     return {'is_valid': false};
   }
