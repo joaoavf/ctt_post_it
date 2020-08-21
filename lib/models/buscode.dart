@@ -11,6 +11,9 @@ class Buscode {
   String bin;
   String main;
 
+  Map data;
+  operator [](index) => data[index];
+
   // Specific Data
   String formatId;
   String issuerCode;
@@ -78,6 +81,17 @@ class Buscode {
 
       photoDate = DateTime.now().toString().replaceAll('-',':').substring(0, 19);
       buscodeDate = '2000:'+month+':'+day+' '+hour+':0'+minute+':00';
+
+      data = {
+        'formatId': formatId,
+        'issuerCode': issuerCode,
+        'equipmentId': equipmentId,
+        'buscodeDate': buscodeDate,
+        'photoDate': photoDate,
+        'serialNumber': serialNumber,
+        'itemPriority': itemPriority,
+        'trackingIndicator': trackingIndicator,
+      };
     }
   }
 }
