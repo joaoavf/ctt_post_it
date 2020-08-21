@@ -25,6 +25,9 @@ class Buscode {
   String minute;
   String serialNumber;
 
+  String photoDate;
+  String buscodeDate;
+
   // Other
   String trackingIndicator;
   bool valid;
@@ -72,6 +75,9 @@ class Buscode {
           minute +
           serialNumber +
           trackingIndicator;
+
+      photoDate = DateTime.now().toString().replaceAll('-',':').substring(0, 19);
+      buscodeDate = '2000:'+month+day+' '+hour+':0'+minute+':00';
     }
   }
 }
