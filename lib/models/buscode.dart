@@ -5,7 +5,7 @@ import 'package:image/image.dart' as imglib;
 
 class Buscode {
   // Broad data
-  List code;
+  List<String> code;
   imglib.Image image;
   List<int> integers;
   String bin;
@@ -40,17 +40,16 @@ class Buscode {
   Buscode({@required this.image}) {
     code = readBuscode(image);
     Map codeEval = evaluateCode(code);
-    if (codeEval['valid'] == true) {
-      code = codeEval['code'];
+    if (codeEval['is_valid'] == true) {
+      integers = codeEval['code'];
 
       success = true;
-      integers = busToIntegers(code);
 
       bin = integers.map(to6Bin).reduce((a, b) => a + b);
 
       main = bin.substring(0, 12) +
           bin.substring(18, 60) +
-          bin.substring(138, 150);
+          bin.substring(66, 78);
 
       formatId = decodeFormatId(main.substring(0, 4));
       issuerCode = issuerCodeConversion(main.substring(4, 20));

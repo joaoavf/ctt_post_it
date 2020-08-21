@@ -1,4 +1,12 @@
-import 'package:camera_tutorial/data/buscode_maps.dart'; // TODO change name
+import 'package:camera_tutorial/data/buscode_maps.dart';
+import 'package:camera_tutorial/functions/galois_field.dart';
+import 'package:camera_tutorial/functions/reed_solomon.dart';
+
+reorderRS(List<int> integers) {
+  return integers.sublist(0, 10)
+    ..addAll(integers.sublist(22))
+    ..addAll(integers.sublist(10, 22));
+}
 
 String to6Bin(int integerInput) {
   String binary = integerInput.toRadixString(2);
@@ -52,23 +60,6 @@ String decodeTrackingIndicator(String trackingIndicator) {
   return tracking_indicator_map[trackingIndicator];
 }
 
-Map evaluateCode(List code) {
-  if (code.length != 75) {
-    return {'valid': false};
-  } else {
-    if (validateSyncs(code)) {
-      return {'valid': true, 'code': code};
-    } else {
-      code = rotateCode(code);
-      if (validateSyncs(code)) {
-        return {'valid': true, 'code': code};
-      } else {
-        return {'valid': false};
-      }
-    }
-  }
-}
-
 List<String> rotateCode(List code) {
   Map charMap = {'A': 'D', 'D': 'A', 'T': 'T', 'F': 'F'};
   List<String> newCode = [];
@@ -78,20 +69,24 @@ List<String> rotateCode(List code) {
   return newCode;
 }
 
-bool validateSyncs(code) {
-  print(code.sublist(48, 51));
+Map evaluateCode(code, {isRotate = false}) {
   List<int> integers = busToIntegers(code);
-  print(integers);
-  var bin2 = integers.map(to6Bin);
-  print(bin2);
-  String bin = bin2.reduce((a, b) => a + b);
-
-  String leftSync = bin.substring(12, 18);
-  String rightSync = bin.substring(bin.length - 18, bin.length - 12);
-
-  int leftSyncInt = int.parse(leftSync, radix: 2);
-  int rightSyncInt = int.parse(rightSync, radix: 2);
-  return leftSyncInt == 22 && rightSyncInt == 38;
+  List<int> reedSolomonMsg = reorderRS(integers);
+  List<int> correctMsg = rsCorrectMessage(reedSolomonMsg);
+  if (correctMsg == null) {
+    if (!isRotate) {
+      return evaluateCode(rotateCode(code), isRotate: true);
+    } else {
+      return {'is_valid': false};
+    }
+  }
+  int leftSync = correctMsg[2];
+  int rightSync = correctMsg[10];
+  if (code.length == 75 && leftSync == 22 && rightSync == 38) {
+    return {'is_valid': true, 'is_rotate': isRotate, 'code': integers};
+  } else {
+    return {'is_valid': false};
+  }
 }
 
 List<int> busToIntegers(buscode) {
@@ -99,7 +94,6 @@ List<int> busToIntegers(buscode) {
   for (var i = 0; i < buscode.length ~/ 3; i++) {
     var triad = buscode[i * 3] + buscode[i * 3 + 1] + buscode[i * 3 + 2];
     output.add(decoder[triad]);
-    print(triad);
   }
   return output;
 }

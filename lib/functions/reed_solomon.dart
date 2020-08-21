@@ -2,7 +2,8 @@ import 'dart:math';
 import 'package:camera_tutorial/functions/galois_field.dart';
 
 
-List<int> rsCorrectMessage(List<int> message_in, int nsym) {
+List<int> rsCorrectMessage(List<int> message_in, {int nsym=12}) {
+  initTables();
   List<int> message_out = new List.from(message_in);
   List<int> erase_pos = [];
   for (int i = 0; i < message_out.length; i++) {
