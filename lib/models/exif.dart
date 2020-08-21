@@ -9,8 +9,11 @@ class Exif {
   final AsciiCodec codec = AsciiCodec();
 
   Exif({@required Buscode buscode}) {
-    buscodeExifMap.forEach((key, value) => setBytes(
-        string: buscode[key], start: value['start'], length: value['length']));
+    buscodeExifMap.forEach((key, value) =>
+        setBytes(
+            string: buscode[key],
+            start: value['start'],
+            length: value['length']));
   }
 
   void setBytes({String string, int start, int length}) {
@@ -20,4 +23,21 @@ class Exif {
       bytes[0][i] = numbers[i - start];
     }
   }
+}
+
+readExifFile(List<int> bytes) {
+  String decoded;
+  Map newMap = {};
+  buscodeExifMap.forEach((key, value) {
+    decoded = readBytes(
+        bytes: bytes, start: value['start'], length: value['length']);
+    newMap[key] = decoded;
+  });
+  return newMap;
+}
+
+
+readBytes({List<int> bytes, int start, int length}) {
+  final AsciiCodec codec = AsciiCodec();
+  return codec.decode(bytes.sublist(start, start + length));
 }
