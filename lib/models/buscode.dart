@@ -77,7 +77,7 @@ class Buscode {
           trackingIndicator;
 
       photoDate = DateTime.now().toString().replaceAll('-',':').substring(0, 19);
-      buscodeDate = '2000:'+month+day+' '+hour+':0'+minute+':00';
+      buscodeDate = '2000:'+month+':'+day+' '+hour+':0'+minute+':00';
     }
   }
 }
