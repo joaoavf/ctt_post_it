@@ -55,7 +55,7 @@ List<int> gfPolynomialDivide(List<int> dividend, List<int> divisor) {
       }
     }
   }
-  int separator = divisor.length;
+  int separator = divisor.length ;
   return msg_out.sublist(msg_out.length - separator);
 }
 
@@ -100,7 +100,9 @@ List<int> gfPolynomialScale(List<int> p, int x) {
  */
 void initTables() => _initTables();
 
-///Pre-compute the logarithm and anti-log tables for faster computation later, using the provided primitive polynomial
+/**
+ * Precompute the logarithm and anti-log tables for faster computation later, using the provided primitive polynomial
+ */
 
 void _initTables({int prim = 67, int generator = 2, int c_exp = 6}) {
   int field_charac = pow(2, c_exp).toInt() - 1;
