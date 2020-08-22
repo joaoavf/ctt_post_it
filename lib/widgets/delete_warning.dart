@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 
 import 'package:camera_tutorial/functions/image_processing.dart';
+import 'package:camera_tutorial/screens/library_screen.dart';
 
 void deleteBuscode() async {
   try {
@@ -51,6 +52,12 @@ class DeleteWarning extends StatelessWidget {
               ),
               onPressed: () {
                 deleteBuscode();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LibraryScreen(),
+                  ),
+                );
               },
             ),
           ],

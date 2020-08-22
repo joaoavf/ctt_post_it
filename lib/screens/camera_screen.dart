@@ -8,7 +8,8 @@ import 'package:ffi/ffi.dart';
 import 'package:camera_tutorial/models/buscode.dart';
 import 'package:camera_tutorial/screens/result_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_better_camera/camera.dart';
+import 'package:camera/camera.dart';
+//import 'package:flutter_better_camera/camera.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
@@ -27,8 +28,8 @@ class _CameraScreenState extends State<CameraScreen> {
   CameraController _camera;
   bool _cameraInitialized = false;
   CameraImage _savedImage;
-  final FlashMode _flashOn = FlashMode.torch;
-  final FlashMode _flashOff = FlashMode.off;
+//  final FlashMode _flashOn = FlashMode.torch;
+//  final FlashMode _flashOff = FlashMode.off;
   bool _flashlightOn = true;
 
   final DynamicLibrary convertImageLib = Platform.isAndroid
@@ -58,7 +59,7 @@ class _CameraScreenState extends State<CameraScreen> {
       await _camera
           .startImageStream((CameraImage image) => _processCameraImage(image));
       setState(() {
-//        _cameraInitialized = true;
+        _cameraInitialized = true;
 //        _camera.setFlashMode(_flashOn);
       });
     });
@@ -72,16 +73,16 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _flashlightToggle(state) {
     if (_flashlightOn == true) {
-      _camera.setFlashMode(_flashOn);
+//      _camera.setFlashMode(_flashOn);
     } else if (_flashlightOn == false) {
-      _camera.setFlashMode(_flashOff);
+//      _camera.setFlashMode(_flashOff);
     }
   }
 
-  void dispose() {
-    _camera.dispose();
-    super.dispose();
-  }
+//  void dispose() {
+//    _camera.dispose();
+//    super.dispose();
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -227,7 +228,6 @@ class _CameraScreenState extends State<CameraScreen> {
                   builder: (context) => ResultScreen(buscode: buscode),
                 ));
           }
-          dispose();
         },
         tooltip: 'Increment',
         child: Icon(Icons.camera_alt),

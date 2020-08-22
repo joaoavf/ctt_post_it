@@ -8,7 +8,7 @@ import 'package:camera_tutorial/functions/image_processing.dart';
 
 class ResultScreen extends StatelessWidget {
   final Buscode buscode;
-  ResultScreen({Key key, this.buscode}) : super(key: key);
+  ResultScreen({Key key, @required this.buscode}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

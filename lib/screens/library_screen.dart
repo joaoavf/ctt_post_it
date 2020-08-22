@@ -1,4 +1,7 @@
+import 'dart:io' as io;
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+
 import 'package:camera_tutorial/widgets/buscode_card.dart';
 
 class LibraryScreen extends StatefulWidget {
@@ -7,6 +10,22 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
+  String directory;
+  List file = new List();
+
+  void _getFiles() async {
+    directory = (await getExternalStorageDirectory()).path;
+    print(directory);
+    setState(() {
+      file = io.Directory("$directory").listSync();
+    });
+  }
+
+  void initState() {
+    super.initState();
+    _getFiles();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,16 +51,16 @@ class _LibraryScreenState extends State<LibraryScreen> {
             ),
           ),
           Expanded(
-            child: ListView(
-              children: [
-                BuscodeCard(),
-                BuscodeCard(),
-                BuscodeCard(),
-                BuscodeCard(),
-                BuscodeCard(),
-              ],
+            child: ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: file.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Text(
+                  file[index].toString(),
+                );
+              },
             ),
-          )
+          ),
         ],
       ),
     );

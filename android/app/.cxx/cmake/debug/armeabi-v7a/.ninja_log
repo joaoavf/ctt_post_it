@@ -1,3 +1,4 @@
 # ninja log v5
 0	79	0	CMakeFiles/convertImage.dir/Users/Juliana/AndroidStudioProjects/camera_tutorial/ios/Classes/converter.c.o	77abab9a15cde4f7
 79	115	0	/Users/Juliana/AndroidStudioProjects/camera_tutorial/build/app/intermediates/cmake/debug/obj/armeabi-v7a/libconvertImage.so	2e07c98dd2da88fb
+16	1008	0	/Users/Juliana/AndroidStudioProjects/camera_tutorial/build/app/intermediates/cmake/debug/obj/armeabi-v7a/libconvertImage.so	2e07c98dd2da88fb

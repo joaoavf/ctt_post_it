@@ -43,8 +43,6 @@ class Buscode {
     if (codeEval['is_valid'] == true) {
       integers = codeEval['code'];
 
-      success = true;
-
       integers = integers.sublist(0, 2)
         ..addAll(integers.sublist(3, 10))
         ..addAll(integers.sublist(11, 13));
@@ -93,6 +91,8 @@ class Buscode {
         'itemPriority': itemPriority,
         'trackingIndicator': trackingIndicator,
       };
+
+      success = true;
     }
   }
 }

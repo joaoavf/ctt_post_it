@@ -1,8 +1,7 @@
 import 'dart:math';
 import 'package:camera_tutorial/functions/galois_field.dart';
 
-
-List<int> rsCorrectMessage(List<int> message_in, {int nsym=12}) {
+List<int> rsCorrectMessage(List<int> message_in, {int nsym = 12}) {
   initTables();
   List<int> message_out = new List.from(message_in);
   List<int> erase_pos = [];
@@ -26,9 +25,8 @@ List<int> rsCorrectMessage(List<int> message_in, {int nsym=12}) {
   return message_out;
 }
 
-/**
- * Reed-Solomon main encoding function, using polynomial division (algorithm Extended Synthetic Division)
- */
+///Reed-Solomon main encoding function, using polynomial division (algorithm Extended Synthetic Division)
+
 List<int> rsEncodeMessage(List<int> message_in, int nsym) {
   List<int> gen = generatePolynomial(nsym);
   List<int> message_out =

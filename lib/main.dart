@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         scaffoldBackgroundColor: Color(0xffF6F6F6),
       ),
-      home: CameraScreen(),
+      home: MyHomePage(),
     );
   }
 }
