@@ -15,9 +15,6 @@ List getFilesList(folder) {
 
 String getPath(String path) {
   path = path.substring(7, path.length - 1).replaceAll('\\', '/');
-//  String curDir = Directory.current.toString();
-//  curDir = curDir.substring(12, curDir.length - 1).replaceAll('\\', '/');
-//  path = curDir + '/' + path;
   return path;
 }
 
