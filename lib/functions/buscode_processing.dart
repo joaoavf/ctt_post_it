@@ -1,6 +1,5 @@
-import 'package:camera_tutorial/data/buscode_maps.dart';
-import 'package:camera_tutorial/functions/galois_field.dart';
-import 'package:camera_tutorial/functions/reed_solomon.dart';
+import 'package:post_it/data/buscode_maps.dart';
+import 'package:post_it/functions/reed_solomon.dart';
 
 reorderRS(List<int> integers) {
   return integers.sublist(0, 10)

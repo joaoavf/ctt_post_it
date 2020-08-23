@@ -1,7 +1,7 @@
-import 'package:camera_tutorial/functions/image_processing.dart';
-import 'package:camera_tutorial/models/exif.dart';
+import 'package:post_it/functions/image_processing.dart';
+import 'package:post_it/models/exif.dart';
 import 'package:flutter/material.dart';
-import 'package:camera_tutorial/functions/buscode_processing.dart';
+import 'package:post_it/functions/buscode_processing.dart';
 import 'package:image/image.dart' as imglib;
 
 import 'buscode_view.dart';

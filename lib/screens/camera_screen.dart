@@ -1,16 +1,13 @@
 import 'dart:ffi';
 import 'dart:io';
-import 'package:camera_tutorial/functions/image_processing.dart';
-import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
-import 'package:camera_tutorial/models/buscode.dart';
-import 'package:camera_tutorial/screens/result_screen.dart';
+import 'package:post_it/models/buscode.dart';
+import 'package:post_it/screens/result_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:camera/camera.dart';
-//import 'package:flutter_better_camera/camera.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);

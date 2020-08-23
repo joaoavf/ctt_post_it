@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:camera_tutorial/functions/image_processing.dart';
-import 'package:camera_tutorial/models/buscode.dart';
-import 'package:camera_tutorial/models/exif.dart';
-import 'package:camera_tutorial/functions/galois_field.dart';
-import 'package:camera_tutorial/functions/reed_solomon.dart';
+import 'package:post_it/functions/image_processing.dart';
+import 'package:post_it/models/buscode.dart';
+import 'package:post_it/models/exif.dart';
+import 'package:post_it/functions/galois_field.dart';
+import 'package:post_it/functions/reed_solomon.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:convert';

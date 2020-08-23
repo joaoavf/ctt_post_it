@@ -1,9 +1,9 @@
-import 'package:camera_tutorial/models/buscode_view.dart';
+import 'package:post_it/models/buscode_view.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
-import 'package:camera_tutorial/widgets/result_card.dart';
-import 'package:camera_tutorial/widgets/delete_warning.dart';
-import 'package:camera_tutorial/functions/image_processing.dart';
+import 'package:post_it/widgets/result_card.dart';
+import 'package:post_it/widgets/delete_warning.dart';
+import 'package:post_it/functions/image_processing.dart';
 
 class ResultScreen extends StatelessWidget {
   final BuscodeView buscodeView;

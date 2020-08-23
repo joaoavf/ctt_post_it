@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:camera_tutorial/screens/camera_screen.dart';
-import 'package:camera_tutorial/screens/library_screen.dart';
+import 'package:post_it/screens/camera_screen.dart';
+import 'package:post_it/screens/library_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);

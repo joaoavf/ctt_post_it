@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:camera_tutorial/functions/galois_field.dart';
+import 'package:post_it/functions/galois_field.dart';
 
 List<int> rsCorrectMessage(List<int> message_in, {int nsym = 12}) {
   initTables();

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:camera_tutorial/data/exif_sample.dart';
-import 'package:camera_tutorial/models/buscode.dart';
-import 'package:camera_tutorial/models/buscode_view.dart';
+import 'package:post_it/data/exif_sample.dart';
+import 'package:post_it/models/buscode.dart';
+import 'package:post_it/models/buscode_view.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 

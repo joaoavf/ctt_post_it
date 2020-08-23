@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 
-import 'package:camera_tutorial/functions/image_processing.dart';
+import 'package:post_it/functions/image_processing.dart';
 
 void deleteBuscode() async {
   try {

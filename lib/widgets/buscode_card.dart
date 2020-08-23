@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:camera_tutorial/screens/result_screen.dart';
+import 'package:post_it/screens/result_screen.dart';
 
 class BuscodeCard extends StatefulWidget {
   @override
