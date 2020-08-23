@@ -1,8 +1,8 @@
-# Install script for directory: /Users/Juliana/AndroidStudioProjects/camera_tutorial/android
+# Install script for directory: C:/Users/joaoa/AndroidStudioProjects/ctt_post_it/android
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/usr/local")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/Project")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/Juliana/AndroidStudioProjects/camera_tutorial/android/app/.cxx/cmake/debug/x86_64/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/joaoa/AndroidStudioProjects/ctt_post_it/android/app/.cxx/cmake/debug/x86_64/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

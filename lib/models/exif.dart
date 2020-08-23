@@ -39,7 +39,7 @@ BuscodeView readExifFile(imglib.Image image) {
       buscodeDate: newMap['buscodeDate'],
       equipmentId: newMap['equipmentId'],
       issuerCode: newMap['issuerCode'],
-      formatId: newMap['formatID'],
+      formatId: newMap['formatId'],
       itemPriority: newMap['itemPriority'],
       serialNumber: newMap['serialNumber'],
       trackingIndicator: newMap['trackingIndicator']);

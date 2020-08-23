@@ -34,9 +34,9 @@ class _MyHomePageState extends State<MyHomePage> {
       items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.camera),
-          label: 'Scan',
+          title: Text('Scan'),
         ),
-        BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search')
+        BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('Search'))
       ],
       onTap: _onTap,
       currentIndex: _currentTabIndex,

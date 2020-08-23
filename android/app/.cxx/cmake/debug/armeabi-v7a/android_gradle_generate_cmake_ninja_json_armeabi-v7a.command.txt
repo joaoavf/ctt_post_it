@@ -1,14 +1,14 @@
-Executable : /Users/Juliana/Library/Android/sdk/cmake/3.6.4111459/bin/cmake
+Executable : C:\Users\joaoa\AppData\Local\Android\sdk\cmake\3.6.4111459\bin\cmake.exe
 arguments : 
--H/Users/Juliana/AndroidStudioProjects/camera_tutorial/android
--B/Users/Juliana/AndroidStudioProjects/camera_tutorial/android/app/.cxx/cmake/debug/armeabi-v7a
+-HC:\Users\joaoa\AndroidStudioProjects\ctt_post_it\android
+-BC:\Users\joaoa\AndroidStudioProjects\ctt_post_it\android\app\.cxx\cmake\debug\armeabi-v7a
 -DANDROID_ABI=armeabi-v7a
 -DANDROID_PLATFORM=android-21
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/Users/Juliana/AndroidStudioProjects/camera_tutorial/build/app/intermediates/cmake/debug/obj/armeabi-v7a
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Users\joaoa\AndroidStudioProjects\ctt_post_it\build\app\intermediates\cmake\debug\obj\armeabi-v7a
 -DCMAKE_BUILD_TYPE=Debug
--DANDROID_NDK=/Users/Juliana/Library/Android/sdk/ndk/21.3.6528147
--DCMAKE_TOOLCHAIN_FILE=/Users/Juliana/Library/Android/sdk/ndk/21.3.6528147/build/cmake/android.toolchain.cmake
--DCMAKE_MAKE_PROGRAM=/Users/Juliana/Library/Android/sdk/cmake/3.6.4111459/bin/ninja
+-DANDROID_NDK=C:\Users\joaoa\AppData\Local\Android\sdk\ndk\21.3.6528147
+-DCMAKE_TOOLCHAIN_FILE=C:\Users\joaoa\AppData\Local\Android\sdk\ndk\21.3.6528147\build\cmake\android.toolchain.cmake
+-DCMAKE_MAKE_PROGRAM=C:\Users\joaoa\AppData\Local\Android\sdk\cmake\3.6.4111459\bin\ninja.exe
 -GAndroid Gradle - Ninja
 jvmArgs : 
 
