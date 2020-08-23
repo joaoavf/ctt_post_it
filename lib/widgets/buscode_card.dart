@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:camera_tutorial/screens/result_screen.dart';
 
-class BuscodeCard extends StatefulWidget {
-  @override
-  _BuscodeCardState createState() => _BuscodeCardState();
-}
+class BuscodeCard extends StatelessWidget {
+  final BuscodeView buscode;
 
-class _BuscodeCardState extends State<BuscodeCard> {
+  BuscodeCard({Key key, @required this.buscode}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,7 +25,8 @@ class _BuscodeCardState extends State<BuscodeCard> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => (ResultScreen())),
+            MaterialPageRoute(
+                builder: (context) => (ResultScreen(buscodeView: buscode))),
           );
         },
         child: Card(
@@ -52,7 +53,7 @@ class _BuscodeCardState extends State<BuscodeCard> {
                           ),
                         ),
                         Text(
-                          '16/06 - 15h05',
+                          '${buscode.day}/${buscode.month} - ${buscode.hour}h${buscode.minute}',
                           style: TextStyle(
                               height: 1.3,
                               fontSize: 22,
@@ -70,7 +71,7 @@ class _BuscodeCardState extends State<BuscodeCard> {
                             style: TextStyle(
                                 fontSize: 13, color: Color(0xff656565))),
                         Text(
-                          '153',
+                          buscode.equipmentId,
                           style: TextStyle(
                               height: 1.3,
                               fontSize: 22,
@@ -90,7 +91,7 @@ class _BuscodeCardState extends State<BuscodeCard> {
                         style:
                             TextStyle(fontSize: 13, color: Color(0xff656565))),
                     Text(
-                      'F49DTPV1295330002830212F',
+                      buscode.idTag,
                       style: TextStyle(
                           height: 1.4,
                           fontSize: 15,

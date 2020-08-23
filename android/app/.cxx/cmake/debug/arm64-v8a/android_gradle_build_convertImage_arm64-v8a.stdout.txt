@@ -1,2 +1,1 @@
-[1/2] Building C object CMakeFiles/convertImage.dir/C_/Users/joaoa/AndroidStudioProjects/ctt_post_it/ios/Classes/converter.c.o
-[2/2] Linking C shared library C:\Users\joaoa\AndroidStudioProjects\ctt_post_it\build\app\intermediates\cmake\debug\obj\arm64-v8a\libconvertImage.so
+ninja: no work to do.

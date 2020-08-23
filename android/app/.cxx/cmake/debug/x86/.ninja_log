@@ -1,3 +1,3 @@
 # ninja log v5
-1	303	0	CMakeFiles/convertImage.dir/C_/Users/joaoa/AndroidStudioProjects/ctt_post_it/ios/Classes/converter.c.o	69c35344f684632c
-305	497	0	C:/Users/joaoa/AndroidStudioProjects/ctt_post_it/build/app/intermediates/cmake/debug/obj/x86/libconvertImage.so	619047dcff08de31
+0	63	0	CMakeFiles/convertImage.dir/Users/Juliana/AndroidStudioProjects/ctt_post_it/ios/Classes/converter.c.o	68731bb8c636ec7e
+63	96	0	/Users/Juliana/AndroidStudioProjects/ctt_post_it/build/app/intermediates/cmake/debug/obj/x86/libconvertImage.so	21945b9a22f9421d

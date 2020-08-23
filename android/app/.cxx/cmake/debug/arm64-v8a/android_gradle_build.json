@@ -2,12 +2,12 @@
 {
 	"buildFiles" : 
 	[
-		"C:/Users/joaoa/AndroidStudioProjects/ctt_post_it/android/CMakeLists.txt"
+		"/Users/Juliana/AndroidStudioProjects/ctt_post_it/android/CMakeLists.txt"
 	],
 	"cFileExtensions" : [ "c" ],
 	"cleanCommands" : 
 	[
-		"C:\\Users\\joaoa\\AppData\\Local\\Android\\sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\Users\\joaoa\\AndroidStudioProjects\\ctt_post_it\\android\\app\\.cxx\\cmake\\debug\\arm64-v8a --target clean"
+		"/Users/Juliana/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/Juliana/AndroidStudioProjects/ctt_post_it/android/app/.cxx/cmake/debug/arm64-v8a --target clean"
 	],
 	"libraries" : 
 	{
@@ -15,27 +15,27 @@
 		{
 			"abi" : "arm64-v8a",
 			"artifactName" : "convertImage",
-			"buildCommand" : "C:\\Users\\joaoa\\AppData\\Local\\Android\\sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\Users\\joaoa\\AndroidStudioProjects\\ctt_post_it\\android\\app\\.cxx\\cmake\\debug\\arm64-v8a --target convertImage",
+			"buildCommand" : "/Users/Juliana/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/Juliana/AndroidStudioProjects/ctt_post_it/android/app/.cxx/cmake/debug/arm64-v8a --target convertImage",
 			"buildType" : "debug",
 			"files" : 
 			[
 				
 				{
-					"flags" : "  --target=aarch64-none-linux-android21 --gcc-toolchain=C:/Users/joaoa/AppData/Local/Android/Sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=C:/Users/joaoa/AppData/Local/Android/Sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/windows-x86_64/sysroot -DconvertImage_EXPORTS  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -O0 -fno-limit-debug-info  -fPIC      -c ",
-					"src" : "C:/Users/joaoa/AndroidStudioProjects/ctt_post_it/ios/Classes/converter.c",
-					"workingDirectory" : "C:/Users/joaoa/AndroidStudioProjects/ctt_post_it/android/app/.cxx/cmake/debug/arm64-v8a"
+					"flags" : "  --target=aarch64-none-linux-android21 --gcc-toolchain=/Users/Juliana/Library/Android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/darwin-x86_64 --sysroot=/Users/Juliana/Library/Android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -DconvertImage_EXPORTS  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -O0 -fno-limit-debug-info  -fPIC      -c ",
+					"src" : "/Users/Juliana/AndroidStudioProjects/ctt_post_it/ios/Classes/converter.c",
+					"workingDirectory" : "/Users/Juliana/AndroidStudioProjects/ctt_post_it/android/app/.cxx/cmake/debug/arm64-v8a"
 				}
 			],
-			"output" : "C:/Users/joaoa/AndroidStudioProjects/ctt_post_it/build/app/intermediates/cmake/debug/obj/arm64-v8a/libconvertImage.so",
-			"toolchain" : "686703797"
+			"output" : "/Users/Juliana/AndroidStudioProjects/ctt_post_it/build/app/intermediates/cmake/debug/obj/arm64-v8a/libconvertImage.so",
+			"toolchain" : "13566462420013195578"
 		}
 	},
 	"toolchains" : 
 	{
-		"686703797" : 
+		"13566462420013195578" : 
 		{
-			"cCompilerExecutable" : "C:/Users/joaoa/AppData/Local/Android/Sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe",
-			"cppCompilerExecutable" : "C:/Users/joaoa/AppData/Local/Android/Sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe"
+			"cCompilerExecutable" : "/Users/Juliana/Library/Android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang",
+			"cppCompilerExecutable" : "/Users/Juliana/Library/Android/sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++"
 		}
 	}
 }

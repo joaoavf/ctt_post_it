@@ -44,7 +44,7 @@ class Buscode {
   Buscode({@required this.image}) {
     code = readBuscode(image);
     Map codeEval = evaluateCode(code);
-    if (codeEval['is_rotate']){
+    if (codeEval['is_rotate']) {
       image = imglib.copyRotate(image, 180);
     }
     if (codeEval['is_valid'] == true) {

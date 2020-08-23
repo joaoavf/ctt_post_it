@@ -1,7 +1,5 @@
-import 'dart:io' as io;
 import 'package:camera_tutorial/functions/file_management.dart';
 import 'package:camera_tutorial/models/buscode_view.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:camera_tutorial/widgets/buscode_card.dart';
@@ -21,6 +19,7 @@ class _LibraryScreenState extends State<LibraryScreen>
     setState(() {
       file = _tmp;
     });
+    print(file);
   }
 
   void initState() {
@@ -58,9 +57,12 @@ class _LibraryScreenState extends State<LibraryScreen>
               padding: EdgeInsets.zero,
               itemCount: file.length,
               itemBuilder: (BuildContext context, int index) {
-                return Text(
-                  file[index].idTag,
-                );
+                return Column(
+                    children: file
+                        .map((buscode) => BuscodeCard(
+                              buscode: buscode,
+                            ))
+                        .toList());
               },
             ),
           ),
