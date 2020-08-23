@@ -1,4 +1,6 @@
 import 'dart:io' as io;
+import 'package:camera_tutorial/functions/file_management.dart';
+import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -12,13 +14,12 @@ class LibraryScreen extends StatefulWidget {
 class _LibraryScreenState extends State<LibraryScreen>
     with AutomaticKeepAliveClientMixin {
   String directory;
-  List file = new List();
+  List<BuscodeView> file = new List();
 
   void _getFiles() async {
-    directory = (await getExternalStorageDirectory()).path;
-    print(directory);
+    List<BuscodeView> _tmp = await readStoredBuscodes();
     setState(() {
-      file = io.Directory("$directory").listSync();
+      file = _tmp;
     });
   }
 
@@ -58,7 +59,7 @@ class _LibraryScreenState extends State<LibraryScreen>
               itemCount: file.length,
               itemBuilder: (BuildContext context, int index) {
                 return Text(
-                  file[index].toString(),
+                  file[index].idTag,
                 );
               },
             ),

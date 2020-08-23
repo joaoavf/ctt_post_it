@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'package:post_it/models/buscode_view.dart';
-import 'package:post_it/models/exif.dart';
+
+import 'package:camera_tutorial/models/buscode_view.dart';
+import 'package:camera_tutorial/models/exif.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as imglib;
 
