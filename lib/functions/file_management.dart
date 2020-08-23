@@ -34,7 +34,7 @@ Future<List> _getFiles() async {
 
 Future<List<BuscodeView>> readStoredBuscodes() async {
   BuscodeView buscodeView;
-  List<BuscodeView> listBuscodeView;
+  List<BuscodeView> listBuscodeView = [];
   List files = await _getFiles();
   for (var i = 0; i < files.length; i++) {
     String path = getPath(files[i].toString());
