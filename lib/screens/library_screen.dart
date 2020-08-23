@@ -9,7 +9,8 @@ class LibraryScreen extends StatefulWidget {
   _LibraryScreenState createState() => _LibraryScreenState();
 }
 
-class _LibraryScreenState extends State<LibraryScreen> {
+class _LibraryScreenState extends State<LibraryScreen>
+    with AutomaticKeepAliveClientMixin {
   String directory;
   List file = new List();
 
@@ -28,6 +29,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: Column(
         children: [
@@ -65,4 +67,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

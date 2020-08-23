@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:post_it/screens/camera_screen.dart';
-import 'package:post_it/screens/library_screen.dart';
+import 'package:camera_tutorial/screens/camera_screen.dart';
+import 'package:camera_tutorial/screens/library_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -34,9 +34,9 @@ class _MyHomePageState extends State<MyHomePage> {
       items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.camera),
-          title: Text('Scan'),
+          label: 'Scan',
         ),
-        BottomNavigationBarItem(icon: Icon(Icons.search), title: Text('Search'))
+        BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search')
       ],
       onTap: _onTap,
       currentIndex: _currentTabIndex,

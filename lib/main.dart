@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'screens/camera_screen.dart';
-import 'widgets/navigator.dart';
+import 'widgets/home_page.dart';
 
 void main() {
   runApp(MyApp());

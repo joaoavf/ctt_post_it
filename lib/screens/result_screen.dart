@@ -72,7 +72,7 @@ class ResultScreen extends StatelessWidget {
             ),
             Container(
               padding: EdgeInsets.all(8),
-              child: Text(path, textAlign: TextAlign.right),
+              child: Text('$path/$fileName', textAlign: TextAlign.right),
             ),
             Container(
               padding: EdgeInsets.only(right: 8),
