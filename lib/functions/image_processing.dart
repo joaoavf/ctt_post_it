@@ -26,15 +26,6 @@ void saveImage(imglib.Image img) async {
   File('$path/$dateParse.jpg')..writeAsBytesSync(imglib.encodeJpg(img));
 }
 
-Buscode imageToBuscode(imglib.Image buscodeImage, {bool save = true}) {
-  if (save) {
-    saveImage(buscodeImage);
-  }
-  Buscode buscode = Buscode(image: buscodeImage);
-
-  return buscode;
-}
-
 List<String> readBuscode(imglib.Image buscodeImage) {
   var height = buscodeImage.height;
   var width = buscodeImage.width;
@@ -161,15 +152,20 @@ List<String> from1dToBuscode(List fullList, List upperList) {
   return result;
 }
 
-List toBW(imglib.Image img) {
+List toBW(
+  imglib.Image img, {
+  double redFilter = 0.2989,
+  double greenFilter = 0.5870,
+  double blueFilter = 0.1140,
+}) {
   List newList = [];
 
   var colorized;
   for (var i = 0; i < img.data.length; i++) {
     colorized = Color(img.data[i]);
-    newList.add(colorized.red * 0.2989 +
-        colorized.green * 0.5870 +
-        colorized.blue * 0.1140);
+    newList.add(colorized.red * redFilter +
+        colorized.green * greenFilter +
+        colorized.blue * blueFilter);
   }
 
   return newList;
