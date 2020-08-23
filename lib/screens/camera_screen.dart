@@ -1,6 +1,7 @@
 import 'dart:ffi';
 import 'dart:io';
 import 'package:camera_tutorial/functions/image_processing.dart';
+import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:typed_data';
@@ -220,12 +221,12 @@ class _CameraScreenState extends State<CameraScreen> {
 
           img = imglib.copyCrop(img, horizOffset, vertOffset, width, height);
 
-          Buscode buscode = imageToBuscode(img);
+          Buscode buscode = Buscode(image: img);
           if (buscode.success) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ResultScreen(buscode: buscode),
+                  builder: (context) => ResultScreen(buscodeView: buscode.view),
                 ));
           }
         },

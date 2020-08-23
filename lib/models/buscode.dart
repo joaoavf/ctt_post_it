@@ -1,7 +1,10 @@
 import 'package:camera_tutorial/functions/image_processing.dart';
+import 'package:camera_tutorial/models/exif.dart';
 import 'package:flutter/material.dart';
 import 'package:camera_tutorial/functions/buscode_processing.dart';
 import 'package:image/image.dart' as imglib;
+
+import 'buscode_view.dart';
 
 class Buscode {
   // Broad data
@@ -10,6 +13,7 @@ class Buscode {
   List<int> integers;
   String bin;
 
+  BuscodeView view;
   Map data;
 
   operator [](index) => data[index];
@@ -40,6 +44,9 @@ class Buscode {
   Buscode({@required this.image}) {
     code = readBuscode(image);
     Map codeEval = evaluateCode(code);
+    if (codeEval['is_rotate']){
+      image = imglib.copyRotate(image, 180);
+    }
     if (codeEval['is_valid'] == true) {
       integers = codeEval['code'];
 
@@ -92,7 +99,21 @@ class Buscode {
         'trackingIndicator': trackingIndicator,
       };
 
+      view = BuscodeView(
+          image: image,
+          formatId: formatId,
+          issuerCode: issuerCode,
+          equipmentId: equipmentId,
+          buscodeDate: buscodeDate,
+          serialNumber: serialNumber,
+          itemPriority: itemPriority,
+          trackingIndicator: trackingIndicator);
+
       success = true;
+    }
+    if (success) {
+      image.exif.rawData = Exif(buscode: this).bytes;
+      saveImage(image);
     }
   }
 }

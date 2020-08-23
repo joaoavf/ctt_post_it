@@ -2,18 +2,17 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:camera_tutorial/data/exif_sample.dart';
 import 'package:camera_tutorial/models/buscode.dart';
+import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as imglib;
 
 class Exif {
   final List<Uint8List> bytes = sampleExif;
   final AsciiCodec codec = AsciiCodec();
 
   Exif({@required Buscode buscode}) {
-    buscodeExifMap.forEach((key, value) =>
-        setBytes(
-            string: buscode[key],
-            start: value['start'],
-            length: value['length']));
+    buscodeExifMap.forEach((key, value) => setBytes(
+        string: buscode[key], start: value['start'], length: value['length']));
   }
 
   void setBytes({String string, int start, int length}) {
@@ -25,19 +24,29 @@ class Exif {
   }
 }
 
-readExifFile(List<int> bytes) {
+BuscodeView readExifFile(imglib.Image image) {
+  List<Uint8List> bytes = image.exif.rawData;
   String decoded;
   Map newMap = {};
   buscodeExifMap.forEach((key, value) {
-    decoded = readBytes(
-        bytes: bytes, start: value['start'], length: value['length']);
+    decoded =
+        readBytes(bytes: bytes, start: value['start'], length: value['length']);
     newMap[key] = decoded;
   });
-  return newMap;
+  BuscodeView buscodeCard;
+  buscodeCard = BuscodeView(
+      image: image,
+      buscodeDate: newMap['buscodeDate'],
+      equipmentId: newMap['equipmentId'],
+      issuerCode: newMap['issuerCode'],
+      formatId: newMap['formatID'],
+      itemPriority: newMap['itemPriority'],
+      serialNumber: newMap['serialNumber'],
+      trackingIndicator: newMap['trackingIndicator']);
+  return buscodeCard;
 }
 
-
-readBytes({List<int> bytes, int start, int length}) {
+readBytes({List<Uint8List> bytes, int start, int length}) {
   final AsciiCodec codec = AsciiCodec();
-  return codec.decode(bytes.sublist(start, start + length));
+  return codec.decode(bytes[0].sublist(start, start + length));
 }

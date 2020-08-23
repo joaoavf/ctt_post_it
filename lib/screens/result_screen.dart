@@ -1,14 +1,13 @@
+import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
-
-import 'package:camera_tutorial/models/buscode.dart';
 import 'package:camera_tutorial/widgets/result_card.dart';
 import 'package:camera_tutorial/widgets/delete_warning.dart';
 import 'package:camera_tutorial/functions/image_processing.dart';
 
 class ResultScreen extends StatelessWidget {
-  final Buscode buscode;
-  ResultScreen({Key key, @required this.buscode}) : super(key: key);
+  final BuscodeView buscodeView;
+  ResultScreen({Key key, @required this.buscodeView}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +25,12 @@ class ResultScreen extends StatelessWidget {
             ),
             Container(
               padding: EdgeInsets.only(left: 8, right: 8, bottom: 20),
-              child: Image.memory(imglib.encodeJpg(buscode.image)),
+              child: Image.memory(imglib.encodeJpg(buscodeView.image)),
             ),
             Container(
               padding: EdgeInsets.only(bottom: 15),
               child: Text(
-                buscode.idTag,
+                buscodeView.idTag,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
@@ -47,27 +46,27 @@ class ResultScreen extends StatelessWidget {
               children: [
                 ItemResultCard(
                     title: 'Date',
-                    buscodeInformation: buscode.day + '/' + buscode.month),
+                    buscodeInformation: buscodeView.day + '/' + buscodeView.month),
                 ItemResultCard(
                     title: 'Time',
-                    buscodeInformation: buscode.hour + 'h' + buscode.minute),
+                    buscodeInformation: buscodeView.hour + 'h' + buscodeView.minute),
                 ItemResultCard(
                     title: 'Equipment ID',
-                    buscodeInformation: buscode.equipmentId),
+                    buscodeInformation: buscodeView.equipmentId),
                 ItemResultCard(
                     title: 'Issuer code',
-                    buscodeInformation: buscode.issuerCode),
+                    buscodeInformation: buscodeView.issuerCode),
                 ItemResultCard(
-                    title: 'Format ID', buscodeInformation: buscode.formatId),
+                    title: 'Format ID', buscodeInformation: buscodeView.formatId),
                 ItemResultCard(
                     title: 'Item priority',
-                    buscodeInformation: buscode.itemPriority),
+                    buscodeInformation: buscodeView.itemPriority),
                 ItemResultCard(
                     title: 'Serial number',
-                    buscodeInformation: buscode.serialNumber),
+                    buscodeInformation: buscodeView.serialNumber),
                 ItemResultCard(
                     title: 'Tracking indicator',
-                    buscodeInformation: buscode.trackingIndicator),
+                    buscodeInformation: buscodeView.trackingIndicator),
               ],
             ),
             Container(
