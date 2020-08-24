@@ -17,13 +17,12 @@ Future<String> get localPath async {
 String _getFileName() {
   String date = DateTime.now().toString();
   fileName = DateTime.parse(date).toString().replaceAll(':', '-');
-  return fileName;
 }
 
 void saveImage(imglib.Image img) async {
-  String dateParse = _getFileName();
-  final path = await localPath;
-  File('$path/$dateParse.jpg')..writeAsBytesSync(imglib.encodeJpg(img));
+  _getFileName();
+  path = await localPath;
+  File('$path/$fileName.jpg')..writeAsBytesSync(imglib.encodeJpg(img));
 }
 
 List<String> readBuscode(imglib.Image buscodeImage) {
