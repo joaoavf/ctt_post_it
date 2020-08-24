@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 
 class BuscodeView {
+  String path;
   imglib.Image image;
   String day;
   String month;
@@ -18,6 +19,7 @@ class BuscodeView {
 
   BuscodeView(
       {@required this.image,
+      @required this.path,
       @required this.buscodeDate,
       @required this.equipmentId,
       @required this.issuerCode,

@@ -7,22 +7,8 @@ import 'package:path_provider/path_provider.dart';
 String path;
 String fileName;
 
-Future<String> get localPath async {
-  final directory = await getExternalStorageDirectory();
-  path = directory.path;
-  return path;
-}
-
-String _getFileName() {
-  String date = DateTime.now().toString();
-  fileName = DateTime.parse(date).toString().replaceAll(':', '-');
-  return fileName;
-}
-
-void saveImage(imglib.Image img) async {
-  String dateParse = _getFileName();
-  final path = await localPath;
-  File('$path/$dateParse.jpg')..writeAsBytesSync(imglib.encodeJpg(img));
+void saveImage(imglib.Image img, String path) async {
+  File(path)..writeAsBytesSync(imglib.encodeJpg(img));
 }
 
 List<String> readBuscode(imglib.Image buscodeImage) {

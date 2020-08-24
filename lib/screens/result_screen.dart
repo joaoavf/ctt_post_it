@@ -77,7 +77,7 @@ class ResultScreen extends StatelessWidget {
             ),
             Container(
               padding: EdgeInsets.all(8),
-              child: Text('buscodepath/filename', textAlign: TextAlign.right),
+              child: Text(buscodeView.path, textAlign: TextAlign.right),
             ),
             Container(
               padding: EdgeInsets.only(right: 8),

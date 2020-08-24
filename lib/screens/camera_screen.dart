@@ -1,12 +1,11 @@
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:camera_tutorial/functions/file_management.dart';
 import 'package:ffi/ffi.dart';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
-
 import 'package:camera_tutorial/models/buscode.dart';
 import 'package:camera_tutorial/screens/result_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -29,6 +28,8 @@ class _CameraScreenState extends State<CameraScreen> {
   CameraController _camera;
   bool _cameraInitialized = false;
   CameraImage _savedImage;
+  String _path;
+
 //  final FlashMode _flashOn = FlashMode.torch;
 //  final FlashMode _flashOff = FlashMode.off;
   bool _flashlightOn = true;
@@ -41,12 +42,17 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   void initState() {
     super.initState();
+    _initializePath();
     _initializeCamera();
 
     // Load the convertImage() function from the library
     conv = convertImageLib
         .lookup<NativeFunction<convert_func>>('convertImage')
         .asFunction<Convert>();
+  }
+
+  void _initializePath() async {
+    _path = await localPath;
   }
 
   void _initializeCamera() async {
@@ -227,7 +233,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
           img = imglib.copyCrop(img, horizOffset, vertOffset, width, height);
 
-          Buscode buscode = Buscode(image: img);
+          Buscode buscode = Buscode(image: img, path: _path);
           if (buscode.success) {
             pushNewScreen(
               context,

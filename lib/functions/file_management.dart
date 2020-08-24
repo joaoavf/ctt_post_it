@@ -13,7 +13,7 @@ List getFilesList(folder) {
   return dir.listSync(recursive: false).toList();
 }
 
-String getPath(String path) {
+String cleanPath(String path) {
   path = path.substring(7, path.length - 1).replaceAll('\\', '/');
   return path;
 }
@@ -22,9 +22,15 @@ imglib.Image readImage(path) {
   return imglib.readJpg(File(path).readAsBytesSync());
 }
 
+Future<String> get localPath async {
+  final directory = await getExternalStorageDirectory();
+  final String path = directory.path;
+  return path;
+}
+
 Future<List> _getFiles() async {
-  directory = (await getExternalStorageDirectory()).path;
-  return Directory("$directory").listSync();
+  String path = await localPath;
+  return Directory("$path").listSync();
 }
 
 Future<List<BuscodeView>> readStoredBuscodes() async {
@@ -32,9 +38,11 @@ Future<List<BuscodeView>> readStoredBuscodes() async {
   List<BuscodeView> listBuscodeView = [];
   List files = await _getFiles();
   for (var i = 0; i < files.length; i++) {
-    String path = getPath(files[i].toString());
+    String path = cleanPath(files[i].toString());
+    print('path');
+    print(path);
     imglib.Image image = readImage(path);
-    buscodeView = readExifFile(image);
+    buscodeView = readExifFile(image, path);
     listBuscodeView.add(buscodeView);
   }
   return listBuscodeView;

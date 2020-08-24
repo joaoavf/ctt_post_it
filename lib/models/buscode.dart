@@ -12,6 +12,7 @@ class Buscode {
   imglib.Image image;
   List<int> integers;
   String bin;
+  String path;
 
   BuscodeView view;
   Map data;
@@ -41,7 +42,7 @@ class Buscode {
   String idTag;
   bool success = false;
 
-  Buscode({@required this.image}) {
+  Buscode({@required this.image, @required this.path}) {
     code = readBuscode(image);
     Map codeEval = evaluateCode(code);
     if (codeEval['is_rotate']) {
@@ -99,7 +100,10 @@ class Buscode {
         'trackingIndicator': trackingIndicator,
       };
 
+      path = '$path/$idTag.jpg';
+
       view = BuscodeView(
+          path: path,
           image: image,
           formatId: formatId,
           issuerCode: issuerCode,
@@ -113,7 +117,8 @@ class Buscode {
     }
     if (success) {
       image.exif.rawData = Exif(buscode: this).bytes;
-      saveImage(image);
+      saveImage(image, path);
     }
+
   }
 }

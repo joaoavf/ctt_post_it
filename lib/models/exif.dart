@@ -24,7 +24,7 @@ class Exif {
   }
 }
 
-BuscodeView readExifFile(imglib.Image image) {
+BuscodeView readExifFile(imglib.Image image, String path) {
   List<Uint8List> bytes = image.exif.rawData;
   String decoded;
   Map newMap = {};
@@ -35,6 +35,7 @@ BuscodeView readExifFile(imglib.Image image) {
   });
   BuscodeView buscodeCard;
   buscodeCard = BuscodeView(
+      path: path,
       image: image,
       buscodeDate: newMap['buscodeDate'],
       equipmentId: newMap['equipmentId'],
