@@ -24,8 +24,6 @@ imglib.Image readImage(path) {
 
 Future<List> _getFiles() async {
   directory = (await getExternalStorageDirectory()).path;
-  print('directory');
-  print(directory);
   return Directory("$directory").listSync();
 }
 
@@ -35,8 +33,6 @@ Future<List<BuscodeView>> readStoredBuscodes() async {
   List files = await _getFiles();
   for (var i = 0; i < files.length; i++) {
     String path = getPath(files[i].toString());
-    print('path');
-    print(path);
     imglib.Image image = readImage(path);
     buscodeView = readExifFile(image);
     listBuscodeView.add(buscodeView);

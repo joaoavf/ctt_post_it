@@ -35,8 +35,7 @@ dependencies:
   image: ^2.1.12
   path_provider: ^1.6.11
   flutter_spinkit: ^4.1.2
-  get: ^3.4.6
-
+  persistent_bottom_nav_bar: ^2.0.5
 
 dev_dependencies:
   flutter_test:

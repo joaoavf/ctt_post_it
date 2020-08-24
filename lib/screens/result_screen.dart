@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:camera_tutorial/widgets/result_card.dart';
 import 'package:camera_tutorial/widgets/delete_warning.dart';
-import 'package:camera_tutorial/functions/image_processing.dart';
 
 class ResultScreen extends StatelessWidget {
   final BuscodeView buscodeView;
@@ -20,7 +19,7 @@ class ResultScreen extends StatelessWidget {
               elevation: 0,
               leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: Colors.black54),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => Navigator.of(context).maybePop(),
               ),
             ),
             Container(
@@ -46,10 +45,12 @@ class ResultScreen extends StatelessWidget {
               children: [
                 ItemResultCard(
                     title: 'Date',
-                    buscodeInformation: buscodeView.day + '/' + buscodeView.month),
+                    buscodeInformation:
+                        '${buscodeView.day}/${buscodeView.month}'),
                 ItemResultCard(
                     title: 'Time',
-                    buscodeInformation: buscodeView.hour + 'h' + buscodeView.minute),
+                    buscodeInformation:
+                        '${buscodeView.hour}h${buscodeView.minute}'),
                 ItemResultCard(
                     title: 'Equipment ID',
                     buscodeInformation: buscodeView.equipmentId),
@@ -57,7 +58,8 @@ class ResultScreen extends StatelessWidget {
                     title: 'Issuer code',
                     buscodeInformation: buscodeView.issuerCode),
                 ItemResultCard(
-                    title: 'Format ID', buscodeInformation: buscodeView.formatId),
+                    title: 'Format ID',
+                    buscodeInformation: buscodeView.formatId),
                 ItemResultCard(
                     title: 'Item priority',
                     buscodeInformation: buscodeView.itemPriority),
@@ -71,7 +73,7 @@ class ResultScreen extends StatelessWidget {
             ),
             Container(
               padding: EdgeInsets.all(8),
-              child: Text('$path/$fileName', textAlign: TextAlign.right),
+              child: Text('buscodepath/filename', textAlign: TextAlign.right),
             ),
             Container(
               padding: EdgeInsets.only(right: 8),

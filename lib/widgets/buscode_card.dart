@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:camera_tutorial/screens/result_screen.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class BuscodeCard extends StatelessWidget {
   final BuscodeView buscode;
@@ -23,10 +24,13 @@ class BuscodeCard extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
+          pushNewScreen(
             context,
-            MaterialPageRoute(
-                builder: (context) => (ResultScreen(buscodeView: buscode))),
+            screen: ResultScreen(
+              buscodeView: buscode,
+            ),
+            withNavBar: true,
+            pageTransitionAnimation: PageTransitionAnimation.cupertino,
           );
         },
         child: Card(
@@ -61,9 +65,6 @@ class BuscodeCard extends StatelessWidget {
                         ),
                       ],
                     ),
-//                SizedBox(
-//                  width: 66,
-//                ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

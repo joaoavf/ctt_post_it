@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 
 import 'package:camera_tutorial/functions/image_processing.dart';
 
@@ -14,8 +15,6 @@ void deleteBuscode() async {
 }
 
 class DeleteWarning extends StatelessWidget {
-  int count = 0;
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -37,25 +36,23 @@ class DeleteWarning extends StatelessWidget {
                 ],
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pop(context);
               },
             ),
             FlatButton(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  Icon(Icons.delete, color: Theme.of(context).primaryColor),
-                  Text(
-                    'Delete',
-                    style: TextStyle(color: Theme.of(context).primaryColor),
-                  )
-                ],
-              ),
-              onPressed: () {
-                deleteBuscode();
-                Navigator.of(context);
-              },
-            ),
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Icon(Icons.delete, color: Theme.of(context).primaryColor),
+                    Text(
+                      'Delete',
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                    )
+                  ],
+                ),
+                onPressed: () {
+                  deleteBuscode();
+                }),
           ],
         ),
       ],

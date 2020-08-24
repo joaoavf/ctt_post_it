@@ -9,17 +9,15 @@ class LibraryScreen extends StatefulWidget {
   _LibraryScreenState createState() => _LibraryScreenState();
 }
 
-class _LibraryScreenState extends State<LibraryScreen>
-    with AutomaticKeepAliveClientMixin {
+class _LibraryScreenState extends State<LibraryScreen> {
   String directory;
-  List<BuscodeView> file = new List();
+  List<BuscodeView> _files = new List();
 
   void _getFiles() async {
     List<BuscodeView> _tmp = await readStoredBuscodes();
     setState(() {
-      file = _tmp;
+      _files = _tmp;
     });
-    print(file);
   }
 
   void initState() {
@@ -29,7 +27,6 @@ class _LibraryScreenState extends State<LibraryScreen>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Scaffold(
       body: Column(
         children: [
@@ -38,7 +35,7 @@ class _LibraryScreenState extends State<LibraryScreen>
             elevation: 0,
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.black54),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.of(context).maybePop(),
             ),
           ),
           Container(
@@ -54,15 +51,14 @@ class _LibraryScreenState extends State<LibraryScreen>
           ),
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.zero,
-              itemCount: file.length,
+              padding: EdgeInsets.only(bottom: 20),
+              itemCount: _files.isEmpty == true ? 1 : _files.length,
               itemBuilder: (BuildContext context, int index) {
-                return Column(
-                    children: file
-                        .map((buscode) => BuscodeCard(
-                              buscode: buscode,
-                            ))
-                        .toList());
+                return _files.isEmpty == true
+                    ? Center(child: Text('Your library is empty.'))
+                    : BuscodeCard(
+                        buscode: _files[index],
+                      );
               },
             ),
           ),
@@ -70,7 +66,4 @@ class _LibraryScreenState extends State<LibraryScreen>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

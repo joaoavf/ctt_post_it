@@ -1,16 +1,16 @@
 import 'dart:ffi';
 import 'dart:io';
-import 'package:camera_tutorial/functions/image_processing.dart';
-import 'package:camera_tutorial/models/buscode_view.dart';
-import 'package:flutter/material.dart';
-import 'package:image/image.dart' as imglib;
 import 'dart:typed_data';
 import 'package:ffi/ffi.dart';
+
+import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+import 'package:image/image.dart' as imglib;
+
 import 'package:camera_tutorial/models/buscode.dart';
 import 'package:camera_tutorial/screens/result_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:camera/camera.dart';
-//import 'package:flutter_better_camera/camera.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
@@ -80,75 +80,78 @@ class _CameraScreenState extends State<CameraScreen> {
     }
   }
 
-//  void dispose() {
-//    _camera.dispose();
-//    super.dispose();
-//  }
+  @override
+  void dispose() {
+    _camera.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Positioned.fill(
-              child: (_cameraInitialized)
-                  ? AspectRatio(
-                      aspectRatio: _camera.value.aspectRatio,
-                      child: CameraPreview(_camera),
-                    )
-                  : SpinKitWave(
-                      color: Theme.of(context).primaryColor,
-                      size: 30,
-                    )),
-          Positioned.fill(
-            child: Opacity(
-              opacity: 0.5,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                        alignment: Alignment.topLeft,
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            Positioned.fill(
+                child: (_cameraInitialized)
+                    ? AspectRatio(
+                        aspectRatio: _camera.value.aspectRatio,
+                        child: CameraPreview(_camera),
+                      )
+                    : SpinKitWave(
+                        color: Theme.of(context).primaryColor,
+                        size: 30,
+                      )),
+            Positioned.fill(
+              child: Opacity(
+                opacity: 0.5,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                          alignment: Alignment.topLeft,
+                          color: Colors.black,
+                          child: RotatedBox(
+                            quarterTurns: -1,
+                            child: IconButton(
+                              padding: EdgeInsets.all(20),
+                              icon: _flashlightOn == false
+                                  ? Icon(Icons.flash_on, color: Colors.white)
+                                  : Icon(Icons.flash_off, color: Colors.white),
+                              onPressed: () {
+                                setState(() {
+                                  _flashlightOn = !_flashlightOn;
+                                });
+                                _flashlightToggle(_flashlightOn);
+                              },
+                            ),
+                          )),
+                    ),
+                    Container(
+                      color: Colors.transparent,
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.height * 0.12,
+                    ),
+                    Expanded(
+                      child: Container(
                         color: Colors.black,
-                        child: RotatedBox(
-                          quarterTurns: -1,
-                          child: IconButton(
-                            padding: EdgeInsets.all(20),
-                            icon: _flashlightOn == false
-                                ? Icon(Icons.flash_on, color: Colors.white)
-                                : Icon(Icons.flash_off, color: Colors.white),
-                            onPressed: () {
-                              setState(() {
-                                _flashlightOn = !_flashlightOn;
-                              });
-                              _flashlightToggle(_flashlightOn);
-                            },
-                          ),
-                        )),
-                  ),
-                  Container(
-                    color: Colors.transparent,
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.height * 0.12,
-                  ),
-                  Expanded(
-                    child: Container(
-                      color: Colors.black,
-                      child: Center(
-                        child: RotatedBox(
-                          quarterTurns: -1,
-                          child: Text(
-                            'PLACE THE BUSCODE IN THE AREA ABOVE',
-                            style: TextStyle(color: Colors.white),
+                        child: Center(
+                          child: RotatedBox(
+                            quarterTurns: -1,
+                            child: Text(
+                              'PLACE THE BUSCODE IN THE AREA ABOVE',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xffCE2B2F),
@@ -223,11 +226,14 @@ class _CameraScreenState extends State<CameraScreen> {
 
           Buscode buscode = Buscode(image: img);
           if (buscode.success) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ResultScreen(buscodeView: buscode.view),
-                ));
+            pushNewScreen(
+              context,
+              screen: ResultScreen(
+                buscodeView: buscode.view,
+              ),
+              withNavBar: true,
+              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+            );
           }
         },
         tooltip: 'Increment',

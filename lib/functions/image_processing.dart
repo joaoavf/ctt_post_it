@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:camera_tutorial/models/buscode.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:math';
