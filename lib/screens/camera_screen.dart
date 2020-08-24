@@ -1,13 +1,11 @@
 import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:camera_tutorial/functions/file_management.dart';
 import 'package:ffi/ffi.dart';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
-import 'dart:typed_data';
-import 'package:ffi/ffi.dart';
 import 'package:camera_tutorial/models/buscode.dart';
 import 'package:camera_tutorial/screens/result_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
