@@ -51,19 +51,22 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _initializeCamera() async {
     // Get list of cameras of the device
-    List<CameraDescription> cameras = await availableCameras();
-
-    // Create the CameraController
-    _camera = new CameraController(cameras[0], ResolutionPreset.veryHigh);
-    _camera.initialize().then((_) async {
-      // Start ImageStream
-      await _camera
-          .startImageStream((CameraImage image) => _processCameraImage(image));
-      setState(() {
-        _cameraInitialized = true;
+    try {
+      List<CameraDescription> cameras = await availableCameras();
+      // Create the CameraController
+      _camera = new CameraController(cameras[0], ResolutionPreset.veryHigh);
+      _camera.initialize().then((_) async {
+        // Start ImageStream
+        await _camera.startImageStream(
+            (CameraImage image) => _processCameraImage(image));
+        setState(() {
+          _cameraInitialized = true;
 //        _camera.setFlashMode(_flashOn);
+        });
       });
-    });
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _processCameraImage(CameraImage image) async {

@@ -11,19 +11,23 @@ class ResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.3,
+        title: Text(
+          'Buscode Information',
+          style: TextStyle(color: Colors.black54),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black54),
+          onPressed: () => Navigator.of(context).maybePop(),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.black54),
-                onPressed: () => Navigator.of(context).maybePop(),
-              ),
-            ),
             Container(
-              padding: EdgeInsets.only(left: 8, right: 8, bottom: 20),
+              padding: EdgeInsets.only(left: 8, right: 8, bottom: 30, top: 30),
               child: Image.memory(imglib.encodeJpg(buscodeView.image)),
             ),
             Container(

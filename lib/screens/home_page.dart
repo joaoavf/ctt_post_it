@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:camera_tutorial/screens/camera_screen.dart';
 import 'package:camera_tutorial/screens/library_screen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:camera_tutorial/screens/result_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -22,7 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
       stateManagement: true,
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,
-      navBarStyle: NavBarStyle.style1,
+      navBarStyle: NavBarStyle.style3,
       popAllScreensOnTapOfSelectedTab: true,
     );
   }
