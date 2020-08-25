@@ -4,8 +4,8 @@ import 'package:camera_tutorial/functions/file_management.dart';
 import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 import 'package:camera_tutorial/widgets/buscode_card.dart';
+import 'package:watcher/watcher.dart';
 
 class LibraryScreen extends StatefulWidget {
   @override
@@ -13,7 +13,7 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
-  Stream<FileSystemEvent> _stream;
+  Stream<WatchEvent> _stream;
   bool _filesFetched;
   String directory;
   List<BuscodeView> _files = new List();
@@ -31,16 +31,19 @@ class _LibraryScreenState extends State<LibraryScreen> {
   }
 
   void initState() {
-    _initStream();
     super.initState();
     _getFiles();
+    _initStream();
   }
 
   _initStream() async {
     _stream = await fileEventStream();
     _stream.listen((fileEvent) {
-      print(fileEvent.type);
-      print(fileEvent.path);
+      setState(() {
+        print('stream');
+        print(fileEvent.type);
+        print(fileEvent.path);
+      });
     });
   }
 

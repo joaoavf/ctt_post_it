@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:camera_tutorial/models/exif.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:watcher/watcher.dart';
 import 'package:image/image.dart' as imglib;
 
 String directory;
@@ -48,7 +49,8 @@ Future<List<BuscodeView>> readStoredBuscodes() async {
   return listBuscodeView;
 }
 
-Future<Stream<FileSystemEvent>> fileEventStream() async {
+Future<Stream<WatchEvent>> fileEventStream() async {
   final Directory directory = await getExternalStorageDirectory();
-  return directory.watch();
+  PollingDirectoryWatcher watcher = DirectoryWatcher(directory.path);
+  return watcher.events;
 }
