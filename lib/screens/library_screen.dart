@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'package:camera_tutorial/functions/file_management.dart';
 import 'package:camera_tutorial/models/buscode_view.dart';
+import 'package:camera_tutorial/models/exif.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:camera_tutorial/widgets/buscode_card.dart';
 import 'package:watcher/watcher.dart';
+import 'package:image/image.dart' as imglib;
 
 class LibraryScreen extends StatefulWidget {
   @override
@@ -40,10 +42,26 @@ class _LibraryScreenState extends State<LibraryScreen> {
     _stream = await fileEventStream();
     _stream.listen((fileEvent) {
       setState(() {
-        print('stream');
-        print(fileEvent.type);
-        print(fileEvent.path);
-      });
+        if (fileEvent.type.toString() == 'remove') {
+          for (var i = 0; i < _files.length; i++) {
+            if (_files[i].path == fileEvent.path) {
+              _files.removeAt(i);
+            }
+          }
+        } else if (fileEvent.type.toString() == 'add') {
+          imglib.Image image = readImage(fileEvent.path);
+          BuscodeView view = readExifFile(image, fileEvent.path);
+          _files.add(view);
+        } else if (fileEvent.type.toString() == 'modify') {
+          imglib.Image image = readImage(fileEvent.path);
+          BuscodeView view = readExifFile(image, fileEvent.path);
+          for (var i = 0; i < _files.length; i++) {
+            if (_files[i].path == fileEvent.path) {
+              _files[i] = view;
+            }
+          }
+        }
+        });
     });
   }
 
