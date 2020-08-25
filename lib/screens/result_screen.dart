@@ -2,11 +2,21 @@ import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:camera_tutorial/widgets/result_card.dart';
-import 'package:camera_tutorial/widgets/delete_warning.dart';
+import 'dart:io';
 
 class ResultScreen extends StatelessWidget {
   final BuscodeView buscodeView;
   ResultScreen({Key key, @required this.buscodeView}) : super(key: key);
+
+  void deleteBuscode() async {
+    try {
+      final file = File(buscodeView.path);
+      await file.delete();
+      imageCache.clear();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +97,51 @@ class ResultScreen extends StatelessWidget {
                 onPressed: () => showDialog(
                     context: context,
                     builder: (context) {
-                      return DeleteWarning();
+                      return AlertDialog(
+                        title: Text('Delete this item?'),
+                        content:
+                            Text('This is permanent and cannot be undone.'),
+                        actions: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              FlatButton(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.close, color: Colors.black54),
+                                    Text(
+                                      'Cancel',
+                                      style: TextStyle(color: Colors.black54),
+                                    )
+                                  ],
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              FlatButton(
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.delete,
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                      Text(
+                                        'Delete',
+                                        style: TextStyle(
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                      )
+                                    ],
+                                  ),
+                                  onPressed: () {
+                                    deleteBuscode();
+                                  }),
+                            ],
+                          ),
+                        ],
+                      );
                     }),
               ),
             )
