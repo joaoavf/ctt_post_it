@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'dart:async';
 import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:camera_tutorial/models/exif.dart';
 import 'package:path_provider/path_provider.dart';
@@ -46,4 +46,9 @@ Future<List<BuscodeView>> readStoredBuscodes() async {
     listBuscodeView.add(buscodeView);
   }
   return listBuscodeView;
+}
+
+Future<Stream<FileSystemEvent>> fileEventStream() async {
+  final Directory directory = await getExternalStorageDirectory();
+  return directory.watch();
 }

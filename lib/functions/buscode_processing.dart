@@ -1,5 +1,4 @@
 import 'package:camera_tutorial/data/buscode_maps.dart';
-import 'package:camera_tutorial/functions/galois_field.dart';
 import 'package:camera_tutorial/functions/reed_solomon.dart';
 
 reorderRS(List<int> integers) {
