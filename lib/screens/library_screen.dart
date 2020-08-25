@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:camera_tutorial/functions/file_management.dart';
 import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ class LibraryScreen extends StatefulWidget {
 }
 
 class _LibraryScreenState extends State<LibraryScreen> {
+  Stream<FileSystemEvent> _stream;
   bool _filesFetched;
   String directory;
   List<BuscodeView> _files = new List();
@@ -28,8 +31,17 @@ class _LibraryScreenState extends State<LibraryScreen> {
   }
 
   void initState() {
+    _initStream();
     super.initState();
     _getFiles();
+  }
+
+  _initStream() async {
+    _stream = await fileEventStream();
+    _stream.listen((fileEvent) {
+      print(fileEvent.type);
+      print(fileEvent.path);
+    });
   }
 
   @override
