@@ -24,14 +24,70 @@ class ResultScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.3,
-        title: Text(
-          'Buscode Information',
-          style: TextStyle(color: Colors.black54),
-        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black54),
           onPressed: () => Navigator.of(context).maybePop(),
         ),
+        title: Text(
+          'Buscode Information',
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.normal,
+              color: Colors.black87),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.delete, color: Theme.of(context).primaryColor),
+            onPressed: () => showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('Delete this item?'),
+                    content: Text('This is permanent and cannot be undone.'),
+                    actions: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          FlatButton(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: Row(
+                              children: [
+                                Icon(Icons.close, color: Colors.black54),
+                                Text(
+                                  'Cancel',
+                                  style: TextStyle(color: Colors.black54),
+                                )
+                              ],
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          FlatButton(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.delete,
+                                      color: Theme.of(context).primaryColor),
+                                  Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor),
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                deleteBuscode();
+                                Navigator.of(context)
+                                    .popUntil((route) => route.isFirst);
+                              }),
+                        ],
+                      ),
+                    ],
+                  );
+                }),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -89,62 +145,6 @@ class ResultScreen extends StatelessWidget {
               padding: EdgeInsets.all(8),
               child: Text(buscodeView.path, textAlign: TextAlign.right),
             ),
-            Container(
-              padding: EdgeInsets.only(right: 8),
-              alignment: Alignment.bottomRight,
-              child: IconButton(
-                icon: Icon(Icons.delete, color: Theme.of(context).primaryColor),
-                onPressed: () => showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('Delete this item?'),
-                        content:
-                            Text('This is permanent and cannot be undone.'),
-                        actions: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              FlatButton(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.close, color: Colors.black54),
-                                    Text(
-                                      'Cancel',
-                                      style: TextStyle(color: Colors.black54),
-                                    )
-                                  ],
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              FlatButton(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.delete,
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                      Text(
-                                        'Delete',
-                                        style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor),
-                                      )
-                                    ],
-                                  ),
-                                  onPressed: () {
-                                    deleteBuscode();
-                                  }),
-                            ],
-                          ),
-                        ],
-                      );
-                    }),
-              ),
-            )
           ],
         ),
       ),

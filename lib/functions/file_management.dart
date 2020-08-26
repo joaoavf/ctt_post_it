@@ -23,17 +23,20 @@ imglib.Image readImage(path) {
   return imglib.readJpg(File(path).readAsBytesSync());
 }
 
+//Get the path to the directory where the images are saved.
 Future<String> get localPath async {
   final directory = await getExternalStorageDirectory();
   final String path = directory.path;
   return path;
 }
 
+//Returns a list of Files contained in the directory where the images are saved.
 Future<List> _getFiles() async {
   String path = await localPath;
   return Directory("$path").listSync();
 }
 
+//Reads and decodes the images metadata and returns a list of BuscodeViews.
 Future<List<BuscodeView>> readStoredBuscodes() async {
   BuscodeView buscodeView;
   List<BuscodeView> listBuscodeView = [];
@@ -49,6 +52,7 @@ Future<List<BuscodeView>> readStoredBuscodes() async {
   return listBuscodeView;
 }
 
+//Creates an Stream to watch for changes in the directory where the images are saved.
 Future<Stream<WatchEvent>> fileEventStream() async {
   final Directory directory = await getExternalStorageDirectory();
   PollingDirectoryWatcher watcher = DirectoryWatcher(directory.path);

@@ -62,7 +62,7 @@ void printFiles() {
     imglib.Image image = readImage(path);
     print(path);
     print(testReadBuscode(image, path));
-    Buscode(image: image);
+    Buscode(image: image, path: path);
   }
 }
 
@@ -135,7 +135,7 @@ void syncExif() async {
   final Uint8List imageData2 =
       File('test/test_images/photo_2020-08-14_20-02-06.jpg').readAsBytesSync();
 
-  Buscode buscode = Buscode(image: imglib.readJpg(imageData2));
+  Buscode buscode = Buscode(image: imglib.readJpg(imageData2), path: path);
   print(buscode.serialNumber);
   print(buscode.serialNumberMap);
   Exif exifObject = Exif(buscode: buscode);
@@ -154,7 +154,6 @@ void syncExif() async {
       .readJpg(File('test/output_images/sioux.jpg').readAsBytesSync())
       .exif
       .data);
-
 }
 
 printBlock(message_in, message) {

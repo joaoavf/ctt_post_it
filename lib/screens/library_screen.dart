@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:camera_tutorial/functions/file_management.dart';
 import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:camera_tutorial/models/exif.dart';
@@ -61,27 +60,33 @@ class _LibraryScreenState extends State<LibraryScreen> {
             }
           }
         }
-        });
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.3,
+        title: Text(
+          'Buscode Library',
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.normal,
+              color: Colors.black87),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        child: Icon(Icons.camera),
+        onPressed: () {
+          Navigator.pushNamed(context, '/second');
+        },
+      ),
       body: Column(
         children: [
-          AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0.3,
-            title: Text(
-              'Buscode Library',
-              style: TextStyle(color: Colors.black54),
-            ),
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.black54),
-              onPressed: () => Navigator.of(context).maybePop(),
-            ),
-          ),
           Expanded(
             child: _filesFetched == true
                 ? ListView.builder(
@@ -91,7 +96,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       return _files.isEmpty == true
                           ? Center(child: Text('Your library is empty.'))
                           : BuscodeCard(
-                              buscode: _files[index],
+                              buscodeView: _files[index],
                             );
                     },
                   )

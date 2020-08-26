@@ -3,13 +3,12 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:camera_tutorial/functions/file_management.dart';
 import 'package:ffi/ffi.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:camera_tutorial/models/buscode.dart';
-import 'package:camera_tutorial/screens/result_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:flutter_better_camera/camera.dart';
+import 'package:camera_tutorial/screens/result_screen.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
@@ -29,9 +28,8 @@ class _CameraScreenState extends State<CameraScreen> {
   bool _cameraInitialized = false;
   CameraImage _savedImage;
   String _path;
-
-//  final FlashMode _flashOn = FlashMode.torch;
-//  final FlashMode _flashOff = FlashMode.off;
+  final FlashMode _flashOn = FlashMode.torch;
+  final FlashMode _flashOff = FlashMode.off;
   bool _flashlightOn = true;
 
   final DynamicLibrary convertImageLib = Platform.isAndroid
@@ -67,7 +65,7 @@ class _CameraScreenState extends State<CameraScreen> {
             (CameraImage image) => _processCameraImage(image));
         setState(() {
           _cameraInitialized = true;
-//        _camera.setFlashMode(_flashOn);
+          _camera.setFlashMode(_flashOn);
         });
       });
     } catch (e) {
@@ -83,9 +81,9 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _flashlightToggle(state) {
     if (_flashlightOn == true) {
-//      _camera.setFlashMode(_flashOn);
+      _camera.setFlashMode(_flashOn);
     } else if (_flashlightOn == false) {
-//      _camera.setFlashMode(_flashOff);
+      _camera.setFlashMode(_flashOff);
     }
   }
 
@@ -112,51 +110,55 @@ class _CameraScreenState extends State<CameraScreen> {
                         size: 30,
                       )),
             Positioned.fill(
-              child: Opacity(
-                opacity: 0.5,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                          alignment: Alignment.topLeft,
-                          color: Colors.black,
-                          child: RotatedBox(
-                            quarterTurns: -1,
-                            child: IconButton(
-                              padding: EdgeInsets.all(20),
-                              icon: _flashlightOn == false
-                                  ? Icon(Icons.flash_on, color: Colors.white)
-                                  : Icon(Icons.flash_off, color: Colors.white),
-                              onPressed: () {
-                                setState(() {
-                                  _flashlightOn = !_flashlightOn;
-                                });
-                                _flashlightToggle(_flashlightOn);
-                              },
-                            ),
-                          )),
-                    ),
-                    Container(
-                      color: Colors.transparent,
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.height * 0.12,
-                    ),
-                    Expanded(
-                      child: Container(
-                        color: Colors.black,
-                        child: Center(
-                          child: RotatedBox(
-                            quarterTurns: -1,
-                            child: Text(
-                              'PLACE THE BUSCODE IN THE AREA ABOVE',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.topLeft,
+                      color: Colors.black.withOpacity(0.5),
+                      child: IconButton(
+                        padding: EdgeInsets.all(20),
+                        icon: _flashlightOn == false
+                            ? Icon(
+                                Icons.flash_on,
+                                color: Colors.white,
+                              )
+                            : Icon(
+                                Icons.flash_off,
+                                color: Colors.white,
+                              ),
+                        onPressed: () {
+                          setState(() {
+                            _flashlightOn = !_flashlightOn;
+                          });
+                          _flashlightToggle(_flashlightOn);
+                        },
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Container(
+                    color: Colors.transparent,
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.height * 0.12,
+                  ),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.topRight,
+                      color: Colors.black.withOpacity(0.5),
+                      child: IconButton(
+                        padding: EdgeInsets.all(20),
+                        icon: Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _camera.dispose();
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -207,8 +209,7 @@ class _CameraScreenState extends State<CameraScreen> {
             img = imglib.Image.fromBytes(
                 _savedImage.height, _savedImage.planes[0].bytesPerRow, imgData);
 
-            // Free the memory space allocated
-            // from the planes and the converted data
+            // Free the memory space allocated from the planes and the converted data
             free(p);
             free(p1);
             free(p2);
@@ -235,13 +236,11 @@ class _CameraScreenState extends State<CameraScreen> {
 
           Buscode buscode = Buscode(image: img, path: _path);
           if (buscode.success) {
-            pushNewScreen(
+            Navigator.push(
               context,
-              screen: ResultScreen(
-                buscodeView: buscode.view,
+              MaterialPageRoute(
+                builder: (context) => ResultScreen(buscodeView: buscode.view),
               ),
-              withNavBar: true,
-              pageTransitionAnimation: PageTransitionAnimation.cupertino,
             );
           }
         },

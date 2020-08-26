@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:camera_tutorial/screens/result_screen.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class BuscodeCard extends StatelessWidget {
-  final BuscodeView buscode;
+  final BuscodeView buscodeView;
 
-  BuscodeCard({Key key, @required this.buscode}) : super(key: key);
+  BuscodeCard({Key key, @required this.buscodeView}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +24,15 @@ class BuscodeCard extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
-          pushNewScreen(
+          Navigator.push(
             context,
-            screen: ResultScreen(
-              buscodeView: buscode,
+            MaterialPageRoute(
+              builder: (context) => ResultScreen(buscodeView: buscodeView),
             ),
-            withNavBar: true,
-            pageTransitionAnimation: PageTransitionAnimation.cupertino,
           );
         },
         child: Card(
           elevation: 0,
-//        margin: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
           child: Padding(
             padding: const EdgeInsets.all(25.0),
             child: Column(
@@ -57,7 +54,7 @@ class BuscodeCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '${buscode.day}/${buscode.month} - ${buscode.hour}h${buscode.minute}',
+                          '${buscodeView.day}/${buscodeView.month} - ${buscodeView.hour}h${buscodeView.minute}',
                           style: TextStyle(
                               height: 1.3,
                               fontSize: 22,
@@ -72,7 +69,7 @@ class BuscodeCard extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 13, color: Color(0xff656565))),
                         Text(
-                          buscode.equipmentId,
+                          buscodeView.equipmentId,
                           style: TextStyle(
                               height: 1.3,
                               fontSize: 22,
@@ -92,7 +89,7 @@ class BuscodeCard extends StatelessWidget {
                         style:
                             TextStyle(fontSize: 13, color: Color(0xff656565))),
                     Text(
-                      buscode.idTag,
+                      buscodeView.idTag,
                       style: TextStyle(
                           height: 1.4,
                           fontSize: 15,
