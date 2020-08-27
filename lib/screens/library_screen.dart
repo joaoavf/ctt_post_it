@@ -94,7 +94,19 @@ class _LibraryScreenState extends State<LibraryScreen> {
                     itemCount: _files.isEmpty == true ? 1 : _files.length,
                     itemBuilder: (BuildContext context, int index) {
                       return _files.isEmpty == true
-                          ? Center(child: Text('Your library is empty.'))
+                          ? Center(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    child: Image(
+                                      image: AssetImage(
+                                          'lib/assets/cardboard.png'),
+                                    ),
+                                  ),
+                                  Text('Your library is empty.'),
+                                ],
+                              ),
+                            )
                           : BuscodeCard(
                               buscodeView: _files[index],
                             );
