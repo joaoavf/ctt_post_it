@@ -114,21 +114,27 @@ List generateThresholds(List entryList) {
   return [75, 145, 215];
 }
 
-List<int> adaptativeThresholds(List<int> inputList, {buckets = 10}) {
+List<int> adaptativeThresholds(List<int> inputList, height, width,
+    {buckets = 10}) {
   List<int> partialList;
   List<int> outputList = [];
-  int bucketSize = inputList.length ~/ 10;
-  for (int i = 0; i < buckets; i++) {
-    if (i == buckets - 1) {
-      partialList = inputList.sublist(i * bucketSize);
+  int maxLen;
+  int bucketSize = width ~/ 10;
+  for (int f = 0; f < buckets; f++) {
+    if (f == buckets - 1) {
+      maxLen = width;
     } else {
-      partialList = inputList.sublist(i * bucketSize, (i + 1) * bucketSize);
+      maxLen = bucketSize * (f + 1);
     }
-    partialList = toBinaryColor(partialList, buffer: 10);
-    outputList.addAll(partialList);
+    for (var i = bucketSize * f; i < maxLen; i++) {
+      for (var j = 0; j < height; j++) {
+        inputList[i + (width * j)];
+      }
+      partialList = toBinaryColor(partialList, buffer: 10);
+      outputList.addAll(partialList);
+    }
+    return outputList;
   }
-
-  return outputList;
 }
 
 List<int> extractBlue(imglib.Image image) {
