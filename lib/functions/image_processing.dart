@@ -79,6 +79,23 @@ List generateThresholds(List entryList) {
   return [75, 145, 215];
 }
 
+List<int> adaptativeThresholds(List<int> inputList, {buckets = 10}) {
+  List<int> partialList;
+  List<int> outputList = [];
+  int bucketSize = inputList.length ~/ 10;
+  for (int i = 0; i < buckets; i++) {
+    if (i == buckets - 1) {
+      partialList = inputList.sublist(i * bucketSize);
+    } else {
+      partialList = inputList.sublist(i * bucketSize, (i + 1) * bucketSize);
+    }
+    partialList = toBinaryColor(partialList, buffer: 10);
+    outputList.addAll(partialList);
+  }
+
+  return outputList;
+}
+
 List<String> from1dToBuscode(List fullList, List upperList) {
   var w;
   var up;
