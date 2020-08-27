@@ -1,15 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:math';
-import 'package:path_provider/path_provider.dart';
-
-String path;
-String fileName;
-
-void saveImage(imglib.Image img, String path) async {
-  File(path)..writeAsBytesSync(imglib.encodeJpg(img));
-}
 
 List<String> readBuscode(imglib.Image buscodeImage) {
   var height = buscodeImage.height;
@@ -156,13 +147,13 @@ List toBW(
   return newList;
 }
 
-List toBinaryColor(List img_1d, {int buffer = 20}) {
-  List thresholdList = [];
+List<int> toBinaryColor(List<int> img_1d, {int buffer = 20}) {
+  List<int> thresholdList = [];
   thresholdList = img_1d.sublist(0);
   thresholdList.sort();
   var threshold = thresholdList[(thresholdList.length ~/ 6)] + buffer;
 
-  List newList = [];
+  List<int> newList = [];
   for (var i = 0; i < img_1d.length; i++) {
     if (img_1d[i] <= threshold) {
       newList.add(0);
