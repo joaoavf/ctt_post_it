@@ -25,7 +25,12 @@ imglib.Image readImage(path) {
 
 //Get the path to the directory where the images are saved.
 Future<String> get localPath async {
-  final directory = await getExternalStorageDirectory();
+  Directory directory;
+  if (Platform.isAndroid) {
+    directory = await getExternalStorageDirectory();
+  } else {
+    directory = await getApplicationDocumentsDirectory();
+  }
   final String path = directory.path;
   return path;
 }
