@@ -96,6 +96,17 @@ List<int> adaptativeThresholds(List<int> inputList, {buckets = 10}) {
   return outputList;
 }
 
+List<int> extractBlue(imglib.Image image) {
+  List<int> blueVector = [];
+
+  for (int i = 0; i < image.data.length; i++) {
+    Color b = Color(image.data[i]);
+    blueVector.add(b.blue);
+  }
+
+  return blueVector;
+}
+
 List<String> from1dToBuscode(List fullList, List upperList) {
   var w;
   var up;
