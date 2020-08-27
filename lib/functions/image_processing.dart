@@ -7,7 +7,7 @@ List<String> readBuscode(imglib.Image buscodeImage) {
   var width = buscodeImage.width;
   var stride = 4;
 
-  List<int> img_1d = toBW(buscodeImage);
+  List<num> img_1d = toBW(buscodeImage);
   img_1d = toBinaryColor(img_1d);
 
   img_1d = conv2d(img_1d, stride, height, width);
@@ -88,7 +88,7 @@ List<List> extractBuscode(List<List> splitedList) {
   ];
 }
 
-List<List> splitList(List<int> img_1d, int height, int width) {
+List<List> splitList(img_1d, int height, int width) {
   List fullCalc = [];
   List upperCalc = [];
   List upperList = [];
@@ -198,13 +198,13 @@ List<String> from1dToBuscode(List fullList, List upperList) {
   return result;
 }
 
-List<int> toBW(
+List toBW(
   imglib.Image img, {
   double redFilter = 0.2989,
   double greenFilter = 0.5870,
   double blueFilter = 0.1140,
 }) {
-  List<int> newList = [];
+  List newList = [];
 
   var colorized;
   for (var i = 0; i < img.data.length; i++) {
@@ -217,13 +217,14 @@ List<int> toBW(
   return newList;
 }
 
-List<int> toBinaryColor(List<int> img_1d, {int buffer = 20}) {
-  List<int> thresholdList = [];
+List<int> toBinaryColor(List<num> img_1d, {int buffer = 20}) {
+  List<num> thresholdList = [];
   thresholdList = img_1d.sublist(0);
   thresholdList.sort();
   var threshold = thresholdList[(thresholdList.length ~/ 6)] + buffer;
 
   List<int> newList = [];
+
   for (var i = 0; i < img_1d.length; i++) {
     if (img_1d[i] <= threshold) {
       newList.add(0);
