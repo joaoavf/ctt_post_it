@@ -98,7 +98,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
                               child: Column(
                                 children: [
                                   Container(
+                                    padding:
+                                        EdgeInsets.only(top: 40, bottom: 7),
                                     child: Image(
+                                      height: 40,
                                       image: AssetImage(
                                           'lib/assets/cardboard.png'),
                                     ),

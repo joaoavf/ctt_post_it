@@ -69,6 +69,9 @@ List<String> rotateCode(List code) {
 }
 
 Map evaluateCode(code, {isRotate = false}) {
+  if (code.length != 75) {
+    return {'is_valid': false};
+  }
   List<int> integers = busToIntegers(code);
   List<int> reedSolomonMsg = reorderRS(integers);
   List<int> correctMsg = rsCorrectMessage(reedSolomonMsg);
@@ -81,7 +84,7 @@ Map evaluateCode(code, {isRotate = false}) {
   }
   int leftSync = correctMsg[2];
   int rightSync = correctMsg[10];
-  if (code.length == 75 && leftSync == 22 && rightSync == 38) {
+  if (leftSync == 22 && rightSync == 38) {
     return {'is_valid': true, 'is_rotate': isRotate, 'code': correctMsg};
   } else {
     return {'is_valid': false};
