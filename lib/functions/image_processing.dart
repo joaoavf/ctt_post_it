@@ -23,6 +23,41 @@ List<String> readBuscode(imglib.Image buscodeImage) {
   return code;
 }
 
+List<int> preProcessImage(imglib.Image buscodeImage) {
+  var height = buscodeImage.height;
+  var width = buscodeImage.width;
+  var stride = 4;
+
+  List<int> img_1d;
+
+  imglib.normalize(buscodeImage, 100, 255);
+  imglib.adjustColor(buscodeImage, hue: 0.1);
+
+  img_1d = extractBlue(buscodeImage);
+  img_1d = adaptativeThresholds(img_1d);
+  img_1d = conv2d(img_1d, stride, height, width);
+  img_1d = toBinaryColor(img_1d);
+
+  return img_1d;
+}
+
+List<String> altReadBuscode(imglib.Image buscodeImage) {
+  var height = buscodeImage.height;
+  var width = buscodeImage.width;
+  var stride = 4;
+
+  List<int> img_1d = preProcessImage(buscodeImage);
+
+  List<List> splitedList =
+      splitList(img_1d, height - stride + 1, width - stride + 1);
+
+  splitedList = extractBuscode(splitedList);
+
+  List<String> code = from1dToBuscode(splitedList[0], splitedList[1]);
+
+  return code;
+}
+
 List<List> extractBuscode(List<List> splitedList) {
   List fullList = splitedList[0];
   List<int> whiteSpacePosition = [];
