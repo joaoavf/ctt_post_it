@@ -34,7 +34,7 @@ List<int> preProcessImage(imglib.Image buscodeImage) {
   imglib.adjustColor(buscodeImage, hue: 0.1);
 
   img_1d = extractBlue(buscodeImage);
-  img_1d = adaptativeThresholds(img_1d);
+  img_1d = adaptativeThresholds(img_1d, height, width);
   img_1d = conv2d(img_1d, stride, height, width);
   img_1d = toBinaryColor(img_1d);
 
@@ -126,15 +126,16 @@ List<int> adaptativeThresholds(List<int> inputList, height, width,
     } else {
       maxLen = bucketSize * (f + 1);
     }
+    partialList = [];
     for (var i = bucketSize * f; i < maxLen; i++) {
       for (var j = 0; j < height; j++) {
-        inputList[i + (width * j)];
+        partialList.add(inputList[i + (width * j)]);
       }
-      partialList = toBinaryColor(partialList, buffer: 10);
-      outputList.addAll(partialList);
     }
-    return outputList;
+    partialList = toBinaryColor(partialList, buffer: 10);
+    outputList.addAll(partialList);
   }
+  return outputList;
 }
 
 List<int> extractBlue(imglib.Image image) {
