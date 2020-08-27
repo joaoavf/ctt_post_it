@@ -1,15 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:math';
-import 'package:path_provider/path_provider.dart';
-
-String path;
-String fileName;
-
-void saveImage(imglib.Image img, String path) async {
-  File(path)..writeAsBytesSync(imglib.encodeJpg(img));
-}
 
 List<String> readBuscode(imglib.Image buscodeImage) {
   var height = buscodeImage.height;
@@ -21,6 +12,41 @@ List<String> readBuscode(imglib.Image buscodeImage) {
 
   img_1d = conv2d(img_1d, stride, height, width);
   img_1d = toBinaryColor(img_1d);
+
+  List<List> splitedList =
+      splitList(img_1d, height - stride + 1, width - stride + 1);
+
+  splitedList = extractBuscode(splitedList);
+
+  List<String> code = from1dToBuscode(splitedList[0], splitedList[1]);
+
+  return code;
+}
+
+List<int> preProcessImage(imglib.Image buscodeImage) {
+  var height = buscodeImage.height;
+  var width = buscodeImage.width;
+  var stride = 4;
+
+  List<int> img_1d;
+
+  imglib.normalize(buscodeImage, 100, 255);
+  imglib.adjustColor(buscodeImage, hue: 0.1);
+
+  img_1d = extractBlue(buscodeImage);
+  img_1d = adaptativeThresholds(img_1d, height, width);
+  img_1d = conv2d(img_1d, stride, height, width);
+  img_1d = toBinaryColor(img_1d);
+
+  return img_1d;
+}
+
+List<String> altReadBuscode(imglib.Image buscodeImage) {
+  var height = buscodeImage.height;
+  var width = buscodeImage.width;
+  var stride = 4;
+
+  List<int> img_1d = preProcessImage(buscodeImage);
 
   List<List> splitedList =
       splitList(img_1d, height - stride + 1, width - stride + 1);
@@ -86,6 +112,41 @@ List<List> splitList(img_1d, int height, int width) {
 
 List generateThresholds(List entryList) {
   return [75, 145, 215];
+}
+
+List<int> adaptativeThresholds(List<int> inputList, height, width,
+    {buckets = 10}) {
+  List<int> partialList;
+  List<int> outputList = [];
+  int maxLen;
+  int bucketSize = width ~/ 10;
+  for (int f = 0; f < buckets; f++) {
+    if (f == buckets - 1) {
+      maxLen = width;
+    } else {
+      maxLen = bucketSize * (f + 1);
+    }
+    partialList = [];
+    for (var i = bucketSize * f; i < maxLen; i++) {
+      for (var j = 0; j < height; j++) {
+        partialList.add(inputList[i + (width * j)]);
+      }
+    }
+    partialList = toBinaryColor(partialList, buffer: 10);
+    outputList.addAll(partialList);
+  }
+  return outputList;
+}
+
+List<int> extractBlue(imglib.Image image) {
+  List<int> blueVector = [];
+
+  for (int i = 0; i < image.data.length; i++) {
+    Color b = Color(image.data[i]);
+    blueVector.add(b.blue);
+  }
+
+  return blueVector;
 }
 
 List<String> from1dToBuscode(List fullList, List upperList) {
@@ -156,13 +217,13 @@ List toBW(
   return newList;
 }
 
-List toBinaryColor(List img_1d, {int buffer = 20}) {
-  List thresholdList = [];
+List<int> toBinaryColor(List<int> img_1d, {int buffer = 20}) {
+  List<int> thresholdList = [];
   thresholdList = img_1d.sublist(0);
   thresholdList.sort();
   var threshold = thresholdList[(thresholdList.length ~/ 6)] + buffer;
 
-  List newList = [];
+  List<int> newList = [];
   for (var i = 0; i < img_1d.length; i++) {
     if (img_1d[i] <= threshold) {
       newList.add(0);

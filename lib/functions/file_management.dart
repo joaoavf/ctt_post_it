@@ -63,3 +63,7 @@ Future<Stream<WatchEvent>> fileEventStream() async {
   PollingDirectoryWatcher watcher = DirectoryWatcher(directory.path);
   return watcher.events;
 }
+
+void saveImage(imglib.Image img, String path) async {
+  File(path)..writeAsBytesSync(imglib.encodeJpg(img));
+}
