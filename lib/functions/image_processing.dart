@@ -7,7 +7,7 @@ List<String> readBuscode(imglib.Image buscodeImage) {
   var width = buscodeImage.width;
   var stride = 4;
 
-  var img_1d = toBW(buscodeImage);
+  List<int> img_1d = toBW(buscodeImage);
   img_1d = toBinaryColor(img_1d);
 
   img_1d = conv2d(img_1d, stride, height, width);
@@ -88,7 +88,7 @@ List<List> extractBuscode(List<List> splitedList) {
   ];
 }
 
-List<List> splitList(img_1d, int height, int width) {
+List<List> splitList(List<int> img_1d, int height, int width) {
   List fullCalc = [];
   List upperCalc = [];
   List upperList = [];
@@ -198,13 +198,13 @@ List<String> from1dToBuscode(List fullList, List upperList) {
   return result;
 }
 
-List toBW(
+List<int> toBW(
   imglib.Image img, {
   double redFilter = 0.2989,
   double greenFilter = 0.5870,
   double blueFilter = 0.1140,
 }) {
-  List newList = [];
+  List<int> newList = [];
 
   var colorized;
   for (var i = 0; i < img.data.length; i++) {

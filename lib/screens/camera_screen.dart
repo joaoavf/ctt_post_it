@@ -32,6 +32,7 @@ class _CameraScreenState extends State<CameraScreen> {
   final FlashMode _flashOn = FlashMode.torch;
   final FlashMode _flashOff = FlashMode.off;
   bool _flashlightOn = true;
+  bool _isProcessing = false;
 
   final DynamicLibrary convertImageLib = Platform.isAndroid
       ? DynamicLibrary.open("libconvertImage.so")
