@@ -9,6 +9,7 @@ import 'package:camera_tutorial/models/buscode.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_better_camera/camera.dart';
 import 'package:camera_tutorial/screens/result_screen.dart';
+import 'package:lamp/lamp.dart';
 
 typedef convert_func = Pointer<Uint32> Function(
     Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
@@ -65,7 +66,11 @@ class _CameraScreenState extends State<CameraScreen> {
             (CameraImage image) => _processCameraImage(image));
         setState(() {
           _cameraInitialized = true;
-          _camera.setFlashMode(_flashOn);
+          if (Platform.isAndroid) {
+            _camera.setFlashMode(_flashOn);
+          } else {
+            Lamp.turnOn();
+          }
         });
       });
     } catch (e) {
@@ -81,9 +86,17 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _flashlightToggle(state) {
     if (_flashlightOn == true) {
-      _camera.setFlashMode(_flashOn);
+      if (Platform.isAndroid) {
+        _camera.setFlashMode(_flashOn);
+      } else {
+        Lamp.turnOn();
+      }
     } else if (_flashlightOn == false) {
-      _camera.setFlashMode(_flashOff);
+      if (Platform.isAndroid) {
+        _camera.setFlashMode(_flashOff);
+      } else {
+        Lamp.turnOff();
+      }
     }
   }
 
