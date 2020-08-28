@@ -3,7 +3,7 @@ import 'package:image/image.dart' as imglib;
 import 'dart:math';
 import 'dart:developer' as d;
 
-List<int> preProcessImage(imglib.Image buscodeImage) {
+List<num> preProcessImage(imglib.Image buscodeImage) {
   var height = buscodeImage.height;
   var width = buscodeImage.width;
   var stride = 4;
@@ -27,7 +27,9 @@ List<String> altReadBuscode(imglib.Image buscodeImage) {
   var width = buscodeImage.width;
   var stride = 4;
 
-  List<int> img_1d = preProcessImage(buscodeImage);
+  List<num> img_1d = preProcessImage(buscodeImage);
+
+  img_1d = invertColor(img_1d);
 
   List<List<num>> splitedList =
       splitList(img_1d, height - stride + 1, width - stride + 1);
@@ -39,12 +41,20 @@ List<String> altReadBuscode(imglib.Image buscodeImage) {
   int start = tmp[0];
   int finish = tmp[1];
 
-  splitedList[0] = splitedList[0].sublist(start, finish);
-  splitedList[1] = splitedList[1].sublist(start, finish);
+  fullList = fullList.sublist(start, finish);
+  List<num> upperList = splitedList[1].sublist(start, finish);
 
-  List<String> code = newFrom1dToBuscode(splitedList[0], splitedList[1]);
+  List<String> code = newFrom1dToBuscode(fullList, upperList);
 
   return code;
+}
+
+List<num> invertColor(List<num> img_1d) {
+  List<num> outputList = [];
+  for (int element in img_1d) {
+    outputList.add(255 - element);
+  }
+  return outputList;
 }
 
 List<num> adaptativeThresholds(List<num> inputList, height, width,
