@@ -235,9 +235,9 @@ List<int> toBinaryColor(List<num> img_1d, {int buffer = 20}) {
   return newList;
 }
 
-List conv2d(List img_1d, int stride, int height, int width) {
-  List newList = [];
-  List strideList;
+List<num> conv2d(List img_1d, int stride, int height, int width) {
+  List<num> newList = [];
+  List<num> strideList;
   for (var i = 0; i < (height - stride + 1); i++) {
     for (var j = 0; j < (width - stride + 1); j++) {
       strideList = [];
