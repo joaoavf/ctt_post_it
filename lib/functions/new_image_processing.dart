@@ -7,7 +7,7 @@ List<int> preProcessImage(imglib.Image buscodeImage) {
   var width = buscodeImage.width;
   var stride = 4;
 
-  List<int> img_1d;
+  List<num> img_1d;
 
   imglib.normalize(buscodeImage, 100, 255);
   imglib.adjustColor(buscodeImage, hue: 0.1);
@@ -45,10 +45,10 @@ List<String> altReadBuscode(imglib.Image buscodeImage) {
   return code;
 }
 
-List<int> adaptativeThresholds(List<int> inputList, height, width,
+List<num> adaptativeThresholds(List<num> inputList, height, width,
     {buckets = 10}) {
   List<int> partialList;
-  List<int> outputList = [];
+  List<num> outputList = [];
   int maxLen;
   int bucketSize = width ~/ 10;
   for (int f = 0; f < buckets; f++) {
@@ -69,8 +69,8 @@ List<int> adaptativeThresholds(List<int> inputList, height, width,
   return outputList;
 }
 
-List<int> extractBlue(imglib.Image image) {
-  List<int> blueVector = [];
+List<num> extractBlue(imglib.Image image) {
+  List<num> blueVector = [];
 
   for (int i = 0; i < image.data.length; i++) {
     Color b = Color(image.data[i]);
@@ -80,12 +80,12 @@ List<int> extractBlue(imglib.Image image) {
   return blueVector;
 }
 
-List newFrom1dToBuscode(List fullList, List upperList) {
+List<String> newFrom1dToBuscode(List<num> fullList, List<num> upperList) {
   double umin = 255;
   double wmin = 255;
   int counter = 0;
-  List results = [];
-  List positions = [];
+  List<int> results = [];
+  List<int> positions = [];
 
   List<int> _ = newExtractBuscode(fullList);
   int start = _[0];
@@ -115,7 +115,8 @@ List newFrom1dToBuscode(List fullList, List upperList) {
   return processCollections(start, unit, fullList, results, positions);
 }
 
-processCollections(start, num unit, fullList, List<int> results, positions) {
+List<String> processCollections(int start, num unit, List<num> fullList,
+    List<int> results, List<int> positions) {
   unit = unit.toInt();
   List<String> outputList = [];
 
@@ -160,7 +161,7 @@ String calc(double t) {
   }
 }
 
-List<int> toBinaryColor(List<num> img_1d, {int buffer = 20}) {
+List<num> toBinaryColor(List<num> img_1d, {int buffer = 20}) {
   List<num> thresholdList = [];
   thresholdList = img_1d.sublist(0);
   thresholdList.sort();
@@ -178,7 +179,7 @@ List<int> toBinaryColor(List<num> img_1d, {int buffer = 20}) {
   return newList;
 }
 
-List<num> conv2d(List img_1d, int stride, int height, int width) {
+List<num> conv2d(List<num> img_1d, int stride, int height, int width) {
   List<num> newList = [];
   List<num> strideList;
   for (var i = 0; i < (height - stride + 1); i++) {
@@ -196,11 +197,11 @@ List<num> conv2d(List img_1d, int stride, int height, int width) {
   return newList;
 }
 
-List<List> splitList(img_1d, int height, int width) {
+List<List<num>> splitList(img_1d, int height, int width) {
   List fullCalc = [];
   List upperCalc = [];
-  List upperList = [];
-  List fullList = [];
+  List<num> upperList = [];
+  List<num> fullList = [];
 
   for (var i = 0; i < width; i++) {
     fullCalc = [];
