@@ -68,7 +68,7 @@ List<int> newExtractBuscode(List<num> fullList) {
 
     else if (counter > fullList.length / 100) {
       outputList.add([counter, i]);
-      counter = 0
+      counter = 0;
     }
   if (counter > fullList.length / 100) {
     outputList.add([counter, i]);
