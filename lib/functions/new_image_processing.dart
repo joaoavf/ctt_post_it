@@ -80,7 +80,7 @@ List<int> extractBlue(imglib.Image image) {
   return blueVector;
 }
 
-List newFrom1dToBuscode(List img_1d, List fullList, List upperList) {
+List newFrom1dToBuscode(List fullList, List upperList) {
   double umin = 255;
   double wmin = 255;
   int counter = 0;
@@ -112,7 +112,7 @@ List newFrom1dToBuscode(List img_1d, List fullList, List upperList) {
 
   num unit = (fullList.length - counter) / 74;
 
-  return processCollections(start, unit, img_1d, results, positions);
+  return processCollections(start, unit, fullList, results, positions);
 }
 
 processCollections(start, num unit, fullList, List<int> results, positions) {
