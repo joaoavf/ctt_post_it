@@ -46,10 +46,10 @@ class Buscode {
   Buscode({@required this.image, @required this.path}) {
     code = readBuscode(image);
     Map codeEval = evaluateCode(code);
-    if (codeEval['is_rotate']) {
-      image = imglib.copyRotate(image, 180);
-    }
     if (codeEval['is_valid'] == true) {
+      if (codeEval['is_rotate']) {
+        image = imglib.copyRotate(image, 180);
+      }
       integers = codeEval['code'];
 
       integers = integers.sublist(0, 2)
