@@ -38,10 +38,6 @@ dependencies:
   watcher: ^0.9.7+15
   lamp: ^0.0.6
 
-  opencv:
-      git:
-        url: https://github.com/joaoavf/flutter_opencv
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
