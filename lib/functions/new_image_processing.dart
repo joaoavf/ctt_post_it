@@ -15,6 +15,7 @@ List<int> preProcessImage(imglib.Image buscodeImage) {
 
   img_1d = extractBlue(buscodeImage);
   img_1d = adaptativeThresholds(img_1d, height, width);
+
   img_1d = conv2d(img_1d, stride: stride, height: width, width: height);
   img_1d = toBinaryColor(img_1d);
 
@@ -209,9 +210,9 @@ List<List<num>> splitList(img_1d, int height, int width) {
     upperCalc = [];
     for (var j = 0; j < height; j++) {
       if (j < height / 2) {
-        upperCalc.add(img_1d[i + (width * j)]);
+        upperCalc.add(img_1d[j + (height * i)]);
       }
-      fullCalc.add(img_1d[i + (width * j)]);
+      fullCalc.add(img_1d[j + (height * i)]);
     }
     fullList.add(fullCalc.reduce((a, b) => a + b) / fullCalc.length);
     upperList.add(upperCalc.reduce((a, b) => a + b) / upperCalc.length);
