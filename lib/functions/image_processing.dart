@@ -244,7 +244,7 @@ processCollections(start, num unit, filtered, List<int> results, positions) {
     _.add(calc(t));
   }
 
-  return _
+  return _;
 }
 
 calc(double t) {
