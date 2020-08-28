@@ -13,7 +13,7 @@ List<String> readBuscode(imglib.Image buscodeImage) {
   img_1d = toBinaryColor(img_1d);
 
   List<List> splitedList =
-      splitList(img_1d, height - stride + 1, width - stride + 1);
+  splitList(img_1d, height - stride + 1, width - stride + 1);
 
   splitedList = extractBuscode(splitedList);
 
@@ -48,7 +48,7 @@ List<String> altReadBuscode(imglib.Image buscodeImage) {
   List<int> img_1d = preProcessImage(buscodeImage);
 
   List<List> splitedList =
-      splitList(img_1d, height - stride + 1, width - stride + 1);
+  splitList(img_1d, height - stride + 1, width - stride + 1);
 
   splitedList = extractBuscode(splitedList);
 
@@ -213,6 +213,45 @@ List newFrom1dToBuscode(List fullList, List upperList) {
   //return processCollections(start, unit, filtered, results, positions);
 }
 
+processCollections(start, num unit, filtered, List<int> results, positions) {
+  double size = unit * 1.6;
+
+  unit = unit.toInt();
+
+  List _ = [];
+
+  int max_items = 75 - results.length;
+  int cmax;
+
+  while (results.length < 75) {
+    cmax = results.indexOf(results.reduce(max));
+
+    results = results.sublist(0, cmax) + [results[cmax] - unit, unit] +
+        results.sublist(cmax + 1);
+    positions =
+        positions.sublist(0, cmax) + [positions[cmax] - unit, positions[cmax]] +
+            positions.sublist(cmax + 1);
+  }
+  int e;
+  int s;
+  double t;
+  for (int i = 0; i < 75; i++) {
+    e = positions[i];
+    s = e - results[i];
+
+    t = filtered; //filtered[:, s:e].min(axis=1).mean(); //TODO create formula
+
+    _.add(calc(t));
+  }
+
+  return _
+}
+
+calc(double t) {
+  return 0; // TODO fix formula
+}
+
+
 List<String> from1dToBuscode(List fullList, List upperList) {
   var w;
   var up;
@@ -262,8 +301,7 @@ List<String> from1dToBuscode(List fullList, List upperList) {
   return result;
 }
 
-List<num> toBW(
-  imglib.Image img, {
+List<num> toBW(imglib.Image img, {
   double redFilter = 0.2989,
   double greenFilter = 0.5870,
   double blueFilter = 0.1140,
