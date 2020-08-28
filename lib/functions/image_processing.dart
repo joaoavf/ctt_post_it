@@ -9,12 +9,11 @@ List<String> readBuscode(imglib.Image buscodeImage) {
 
   List<num> img_1d = toBW(buscodeImage);
   img_1d = toBinaryColor(img_1d);
-
   img_1d = conv2d(img_1d, stride, height, width);
   img_1d = toBinaryColor(img_1d);
 
   List<List> splitedList =
-      splitList(img_1d, height - stride + 1, width - stride + 1);
+  splitList(img_1d, height - stride + 1, width - stride + 1);
 
   splitedList = extractBuscode(splitedList);
 
@@ -49,13 +48,44 @@ List<String> altReadBuscode(imglib.Image buscodeImage) {
   List<int> img_1d = preProcessImage(buscodeImage);
 
   List<List> splitedList =
-      splitList(img_1d, height - stride + 1, width - stride + 1);
+  splitList(img_1d, height - stride + 1, width - stride + 1);
 
   splitedList = extractBuscode(splitedList);
 
   List<String> code = from1dToBuscode(splitedList[0], splitedList[1]);
 
   return code;
+}
+
+List<int> newExtractBuscode(List<num> fullList) {
+  List outputList = [];
+  int counter = 0;
+  int i;
+  for (i = 0; i < fullList.length; i++)
+    if (fullList[i] > 240) {
+      counter++;
+    }
+
+    else if (counter > fullList.length / 100) {
+      outputList.add([counter, i]);
+      counter = 0
+    }
+  if (counter > fullList.length / 100) {
+    outputList.add([counter, i]);
+  }
+
+  int start = 0;
+  int finish = fullList.length;
+
+  for (List element in outputList) {
+    if (element[1] < fullList.length / 2) {
+      start = element[1];
+    } else {
+      finish = element[1] - element[0];
+      break;
+    }
+  }
+  return [start, finish];
 }
 
 List<List> extractBuscode(List<List> splitedList) {
@@ -198,8 +228,7 @@ List<String> from1dToBuscode(List fullList, List upperList) {
   return result;
 }
 
-List<num> toBW(
-  imglib.Image img, {
+List<num> toBW(imglib.Image img, {
   double redFilter = 0.2989,
   double greenFilter = 0.5870,
   double blueFilter = 0.1140,
