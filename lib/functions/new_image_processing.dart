@@ -220,28 +220,32 @@ List<List> splitList(img_1d, int height, int width) {
 }
 
 List<int> newExtractBuscode(List<num> fullList) {
-  List outputList = [];
+  List<int> counters = [];
+  List<int> positions = [];
   int counter = 0;
-  int i;
-  for (i = 0; i < fullList.length; i++)
-    if (fullList[i] > 240) {
+
+  int pos;
+  for (pos = 0; pos < fullList.length; pos++)
+    if (fullList[pos] > 240) {
       counter++;
     } else if (counter > fullList.length / 100) {
-      outputList.add([counter, i]);
+      counters.add(counter);
+      positions.add(pos);
       counter = 0;
     }
   if (counter > fullList.length / 100) {
-    outputList.add([counter, i]);
+    counters.add(counter);
+    positions.add(pos);
   }
 
   int start = 0;
   int finish = fullList.length;
 
-  for (List element in outputList) {
-    if (element[1] < fullList.length / 2) {
-      start = element[1];
+  for (int i = 0; i < counters.length; i++) {
+    if (positions[i] < fullList.length / 2) {
+      start = positions[i];
     } else {
-      finish = element[1] - element[0];
+      finish = positions[i] - counters[i];
       break;
     }
   }
