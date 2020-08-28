@@ -13,7 +13,7 @@ List<String> readBuscode(imglib.Image buscodeImage) {
   img_1d = toBinaryColor(img_1d);
 
   List<List> splitedList =
-  splitList(img_1d, height - stride + 1, width - stride + 1);
+      splitList(img_1d, height - stride + 1, width - stride + 1);
 
   splitedList = extractBuscode(splitedList);
 
@@ -48,7 +48,7 @@ List<String> altReadBuscode(imglib.Image buscodeImage) {
   List<int> img_1d = preProcessImage(buscodeImage);
 
   List<List> splitedList =
-  splitList(img_1d, height - stride + 1, width - stride + 1);
+      splitList(img_1d, height - stride + 1, width - stride + 1);
 
   splitedList = extractBuscode(splitedList);
 
@@ -218,7 +218,7 @@ processCollections(start, num unit, filtered, List<int> results, positions) {
 
   unit = unit.toInt();
 
-  List _ = [];
+  List<String> outputList = [];
 
   int max_items = 75 - results.length;
   int cmax;
@@ -226,11 +226,12 @@ processCollections(start, num unit, filtered, List<int> results, positions) {
   while (results.length < 75) {
     cmax = results.indexOf(results.reduce(max));
 
-    results = results.sublist(0, cmax) + [results[cmax] - unit, unit] +
+    results = results.sublist(0, cmax) +
+        [results[cmax] - unit, unit] +
         results.sublist(cmax + 1);
-    positions =
-        positions.sublist(0, cmax) + [positions[cmax] - unit, positions[cmax]] +
-            positions.sublist(cmax + 1);
+    positions = positions.sublist(0, cmax) +
+        [positions[cmax] - unit, positions[cmax]] +
+        positions.sublist(cmax + 1);
   }
   int e;
   int s;
@@ -241,16 +242,21 @@ processCollections(start, num unit, filtered, List<int> results, positions) {
 
     t = filtered; //filtered[:, s:e].min(axis=1).mean(); //TODO create formula
 
-    _.add(calc(t));
+    outputList.add(calc(t));
   }
 
-  return _;
+  return outputList;
 }
 
-calc(double t) {
-  return 0; // TODO fix formula
+String calc(double t) {
+  if (t < 100) {
+    return 'F';
+  } else if (t < 160) {
+    return 'AD';
+  } else {
+    return 'T';
+  }
 }
-
 
 List<String> from1dToBuscode(List fullList, List upperList) {
   var w;
@@ -301,7 +307,8 @@ List<String> from1dToBuscode(List fullList, List upperList) {
   return result;
 }
 
-List<num> toBW(imglib.Image img, {
+List<num> toBW(
+  imglib.Image img, {
   double redFilter = 0.2989,
   double greenFilter = 0.5870,
   double blueFilter = 0.1140,
