@@ -80,7 +80,7 @@ List<int> extractBlue(imglib.Image image) {
   return blueVector;
 }
 
-List newFrom1dToBuscode(List fullList, List upperList) {
+List newFrom1dToBuscode(List img_1d, List fullList, List upperList) {
   double umin = 255;
   double wmin = 255;
   int counter = 0;
@@ -91,8 +91,8 @@ List newFrom1dToBuscode(List fullList, List upperList) {
   int start = _[0];
   int finish = _[1];
 
-  fullList = fullList.sublist(start);
-  upperList = upperList.sublist(start);
+  fullList = fullList.sublist(start, finish); // TODO is finish OK?
+  upperList = upperList.sublist(start, finish);
 
   for (var i = 0; i < fullList.length; i++) {
     wmin = min(wmin, fullList[i]);
@@ -101,7 +101,7 @@ List newFrom1dToBuscode(List fullList, List upperList) {
     if (fullList[i] > 230) {
       if (fullList[i] < 230) {
         results.add(counter);
-        positions.add(i + start);
+        positions.add(i);
         counter = 0;
       }
       wmin = 255;
@@ -112,29 +112,27 @@ List newFrom1dToBuscode(List fullList, List upperList) {
 
   num unit = (fullList.length - counter) / 74;
 
-  return []; // TODO finish implementation
-  //return processCollections(start, unit, filtered, results, positions);
+  return processCollections(start, unit, img_1d, results, positions);
 }
 
-processCollections(start, num unit, filtered, List<int> results, positions) {
-  double size = unit * 1.6;
-
+processCollections(start, num unit, fullList, List<int> results, positions) {
   unit = unit.toInt();
-
   List<String> outputList = [];
 
-  int max_items = 75 - results.length;
-  int cmax;
+  int cMax;
+  if (results.length < 60) {
+    return [];
+  }
 
   while (results.length < 75) {
-    cmax = results.indexOf(results.reduce(max));
+    cMax = results.indexOf(results.reduce(max));
 
-    results = results.sublist(0, cmax) +
-        [results[cmax] - unit, unit] +
-        results.sublist(cmax + 1);
-    positions = positions.sublist(0, cmax) +
-        [positions[cmax] - unit, positions[cmax]] +
-        positions.sublist(cmax + 1);
+    results = results.sublist(0, cMax) +
+        [results[cMax] - unit, unit] +
+        results.sublist(cMax + 1);
+    positions = positions.sublist(0, cMax) +
+        [positions[cMax] - unit, positions[cMax]] +
+        positions.sublist(cMax + 1);
   }
   int e;
   int s;
@@ -143,7 +141,8 @@ processCollections(start, num unit, filtered, List<int> results, positions) {
     e = positions[i];
     s = e - results[i];
 
-    t = filtered; //filtered[:, s:e].min(axis=1).mean(); //TODO create formula
+    t = fullList.sublist(s, e).reduce((a, b) => a + b) / fullList.length;
+    // TODO more sophisticated implementation
 
     outputList.add(calc(t));
   }
