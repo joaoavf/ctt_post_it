@@ -198,13 +198,13 @@ List<String> from1dToBuscode(List fullList, List upperList) {
   return result;
 }
 
-List toBW(
+List<num> toBW(
   imglib.Image img, {
   double redFilter = 0.2989,
   double greenFilter = 0.5870,
   double blueFilter = 0.1140,
 }) {
-  List newList = [];
+  List<num> newList = [];
 
   var colorized;
   for (var i = 0; i < img.data.length; i++) {
