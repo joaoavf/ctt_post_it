@@ -231,7 +231,7 @@ List<List<num>> splitList(img_1d, int height, int width) {
   return [fullList, upperList];
 }
 
-List<int> newExtractBuscode(List<num> fullList) {
+List<int> newExtractBuscode(List<num> fullList, {threshold=75}) {
   List<int> counters = [];
   List<int> positions = [];
   int counter = 0;
@@ -240,12 +240,14 @@ List<int> newExtractBuscode(List<num> fullList) {
   for (pos = 0; pos < fullList.length; pos++)
     if (fullList[pos] > 240) {
       counter++;
-    } else if (counter > fullList.length / 100) {
-      counters.add(counter);
-      positions.add(pos);
+    } else {
+      if (counter > fullList.length / threshold) {
+        counters.add(counter);
+        positions.add(pos);
+      }
       counter = 0;
     }
-  if (counter > fullList.length / 100) {
+  if (counter > fullList.length / threshold) {
     counters.add(counter);
     positions.add(pos);
   }
