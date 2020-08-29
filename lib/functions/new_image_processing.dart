@@ -36,7 +36,7 @@ List<String> altReadBuscode(imglib.Image buscodeImage) {
 
   List<num> fullList = splitedList[0];
 
-  List<int> tmp = newExtractBuscode(fullList); // TODO fix extractBuscode
+  List<int> tmp = newExtractBuscode(fullList);
 
   int start = tmp[0];
   int finish = tmp[1];
@@ -180,9 +180,9 @@ List<String> processCollections(num unit, List<num> upperList,
 }
 
 String calc(double t) {
-  if (t < 100) {
+  if (t < 120) {
     return 'F';
-  } else if (t < 160) {
+  } else if (t < 170) {
     return 'AD';
   } else {
     return 'T';
@@ -247,17 +247,17 @@ List<List<num>> splitList(img_1d, int height, int width) {
   return [fullList, upperList];
 }
 
-List<int> newExtractBuscode(List<num> fullList, {threshold = 75}) {
+List<int> newExtractBuscode(List<num> fullList, {threshold = 100}) {
   List<int> counters = [];
   List<int> positions = [];
   int counter = 0;
 
   int pos;
   for (pos = 0; pos < fullList.length; pos++)
-    if (fullList[pos] > 240) {
+    if (fullList[pos] > 230) {
       counter++;
     } else {
-      if (counter > fullList.length / threshold) {
+      if (counter > fullList.length / threshold || counters.length == 0) {
         counters.add(counter);
         positions.add(pos);
       }
