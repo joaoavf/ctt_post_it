@@ -126,11 +126,12 @@ List<String> newFrom1dToBuscode(List<num> fullList, List<num> upperList) {
   print('vector length');
   print(positions.length);
 
-  return processCollections(start, unit, fullList, results, positions);
+  return processCollections(
+      start, unit, upperList, fullList, results, positions);
 }
 
-List<String> processCollections(int start, num unit, List<num> fullList,
-    List<int> results, List<int> positions) {
+List<String> processCollections(int start, num unit, List<num> upperList,
+    List<num> fullList, List<int> results, List<int> positions) {
   unit = unit.toInt();
   List<String> outputList = [];
 
@@ -152,14 +153,35 @@ List<String> processCollections(int start, num unit, List<num> fullList,
   int e;
   int s;
   double t;
+  double u;
+
+  List<num> adList = [];
+  List<num> adPos = [];
   for (int i = 0; i < 75; i++) {
     e = positions[i];
     s = e - results[i];
 
     t = fullList.sublist(s, e).reduce(min);
+    u = upperList.sublist(s, e).reduce(min);
     // TODO more sophisticated implementation
 
-    outputList.add(calc(t));
+    String temp = calc(t);
+    if (temp == 'AD') {
+      adList.add(u);
+      adPos.add(i);
+    }
+
+    outputList.add(temp);
+  }
+
+  var threshold =
+      (adList.reduce(max) - adList.reduce(min)) / 2 + adList.reduce(min);
+  for (var i = 0; i < adPos.length; i++) {
+    if (adList[i] > threshold) {
+      outputList[adPos[i]] = 'D';
+    } else {
+      outputList[adPos[i]] = 'A';
+    }
   }
 
   return outputList;
@@ -233,7 +255,7 @@ List<List<num>> splitList(img_1d, int height, int width) {
   return [fullList, upperList];
 }
 
-List<int> newExtractBuscode(List<num> fullList, {threshold=75}) {
+List<int> newExtractBuscode(List<num> fullList, {threshold = 75}) {
   List<int> counters = [];
   List<int> positions = [];
   int counter = 0;
