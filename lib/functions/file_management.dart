@@ -59,8 +59,8 @@ Future<List<BuscodeView>> readStoredBuscodes() async {
 
 //Creates an Stream to watch for changes in the directory where the images are saved.
 Future<Stream<WatchEvent>> fileEventStream() async {
-  final Directory directory = await getExternalStorageDirectory();
-  PollingDirectoryWatcher watcher = DirectoryWatcher(directory.path);
+  final String path = await localPath;
+  PollingDirectoryWatcher watcher = DirectoryWatcher(path);
   return watcher.events;
 }
 
