@@ -29,6 +29,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  camera:
+    dependency: "direct main"
+    description:
+      path: "packages/camera/"
+      ref: HEAD
+      resolved-ref: f5fcd73c086d3ca0b8065f87522715e393451569
+      url: "git://github.com/julianakemi/plugins.git"
+    source: git
+    version: "0.5.9"
   characters:
     dependency: transitive
     description:
@@ -104,13 +113,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_better_camera:
-    dependency: "direct main"
-    description:
-      name: flutter_better_camera
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.1"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -137,13 +139,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.1"
-  lamp:
-    dependency: "direct main"
-    description:
-      name: lamp
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.6"
   matcher:
     dependency: transitive
     description:
@@ -158,15 +153,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.8"
-  opencv:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: e91eb6411abe950c7684e3cd42c964d6573f09c9
-      url: "https://github.com/joaoavf/flutter_opencv"
-    source: git
-    version: "1.0.2"
   path:
     dependency: transitive
     description:

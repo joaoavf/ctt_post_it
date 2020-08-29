@@ -7,8 +7,8 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="Post it"
-        android:icon="@mipmap/ic_launcher">
+        android:label="post_it"
+        android:icon="@mipmap/post_it_icon">
 
         <activity
             android:name=".MainActivity"

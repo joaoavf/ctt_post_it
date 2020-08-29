@@ -7,14 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:camera_tutorial/models/buscode.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_better_camera/camera.dart';
+import 'package:camera/camera.dart';
 import 'package:camera_tutorial/screens/result_screen.dart';
-import 'package:lamp/lamp.dart';
 
-typedef convert_func = Pointer<Uint32> Function(
-    Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
-typedef Convert = Pointer<Uint32> Function(
-    Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, int, int, int, int);
+//typedef convert_func = Pointer<Uint32> Function(
+//    Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
+//typedef Convert = Pointer<Uint32> Function(
+//    Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, int, int, int, int);
 
 class CameraScreen extends StatefulWidget {
   CameraScreen({Key key, this.title}) : super(key: key);
@@ -29,15 +28,12 @@ class _CameraScreenState extends State<CameraScreen> {
   bool _cameraInitialized = false;
   CameraImage _savedImage;
   String _path;
-  final FlashMode _flashOn = FlashMode.torch;
-  final FlashMode _flashOff = FlashMode.off;
   bool _flashlightOn = true;
-  bool _isProcessing = false;
 
-  final DynamicLibrary convertImageLib = Platform.isAndroid
-      ? DynamicLibrary.open("libconvertImage.so")
-      : DynamicLibrary.process();
-  Convert conv;
+//  final DynamicLibrary convertImageLib = Platform.isAndroid
+//      ? DynamicLibrary.open("libconvertImage.so")
+//      : DynamicLibrary.process();
+//  Convert conv;
 
   @override
   void initState() {
@@ -46,9 +42,9 @@ class _CameraScreenState extends State<CameraScreen> {
     _initializeCamera();
 
     // Load the convertImage() function from the library
-    conv = convertImageLib
-        .lookup<NativeFunction<convert_func>>('convertImage')
-        .asFunction<Convert>();
+//    conv = convertImageLib
+//        .lookup<NativeFunction<convert_func>>('convertImage')
+//        .asFunction<Convert>();
   }
 
   void _initializePath() async {
@@ -60,18 +56,15 @@ class _CameraScreenState extends State<CameraScreen> {
     try {
       List<CameraDescription> cameras = await availableCameras();
       // Create the CameraController
-      _camera = new CameraController(cameras[0], ResolutionPreset.veryHigh);
+      _camera = CameraController(cameras[0], ResolutionPreset.medium,
+          androidFormatCode: 256);
       _camera.initialize().then((_) async {
         // Start ImageStream
         await _camera.startImageStream(
             (CameraImage image) => _processCameraImage(image));
         setState(() {
           _cameraInitialized = true;
-          if (Platform.isAndroid) {
-            _camera.setFlashMode(_flashOn);
-          } else {
-            Lamp.turnOn();
-          }
+          _camera.enableTorch();
         });
       });
     } catch (e) {
@@ -81,30 +74,18 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _processCameraImage(CameraImage image) async {
     setState(() {
+      print(image.format.raw);
+      print(image.format.group);
       _savedImage = image;
     });
   }
 
   void _flashlightToggle(state) {
     if (_flashlightOn == true) {
-      if (Platform.isAndroid) {
-        _camera.setFlashMode(_flashOn);
-      } else {
-        Lamp.turnOn();
-      }
+      _camera.enableTorch();
     } else if (_flashlightOn == false) {
-      if (Platform.isAndroid) {
-        _camera.setFlashMode(_flashOff);
-      } else {
-        Lamp.turnOff();
-      }
+      _camera.disableTorch();
     }
-  }
-
-  @override
-  void dispose() {
-    _camera.dispose();
-    super.dispose();
   }
 
   @override
@@ -184,51 +165,53 @@ class _CameraScreenState extends State<CameraScreen> {
           imglib.Image img;
 
           if (Platform.isAndroid) {
-            // Allocate memory for the 3 planes of the image
-            Pointer<Uint8> p =
-                allocate(count: _savedImage.planes[0].bytes.length);
-            Pointer<Uint8> p1 =
-                allocate(count: _savedImage.planes[1].bytes.length);
-            Pointer<Uint8> p2 =
-                allocate(count: _savedImage.planes[2].bytes.length);
-
-            // Assign the planes data to the pointers of the image
-            Uint8List pointerList =
-                p.asTypedList(_savedImage.planes[0].bytes.length);
-            Uint8List pointerList1 =
-                p1.asTypedList(_savedImage.planes[1].bytes.length);
-            Uint8List pointerList2 =
-                p2.asTypedList(_savedImage.planes[2].bytes.length);
-            pointerList.setRange(0, _savedImage.planes[0].bytes.length,
-                _savedImage.planes[0].bytes);
-            pointerList1.setRange(0, _savedImage.planes[1].bytes.length,
-                _savedImage.planes[1].bytes);
-            pointerList2.setRange(0, _savedImage.planes[2].bytes.length,
-                _savedImage.planes[2].bytes);
-
-            // Call the convertImage function and convert the YUV to RGB
-            Pointer<Uint32> imgP = conv(
-                p,
-                p1,
-                p2,
-                _savedImage.planes[1].bytesPerRow,
-                _savedImage.planes[1].bytesPerPixel,
-                _savedImage.planes[0].bytesPerRow,
-                _savedImage.height);
-
-            // Get the pointer of the data returned from the function to a List
-            List imgData = imgP.asTypedList(
-                (_savedImage.planes[0].bytesPerRow * _savedImage.height));
-            // Generate image from the converted data
-            img = imglib.Image.fromBytes(
-                _savedImage.height, _savedImage.planes[0].bytesPerRow, imgData);
-
-            // Free the memory space allocated from the planes and the converted data
-            free(p);
-            free(p1);
-            free(p2);
-            free(imgP);
-          } else if (Platform.isIOS) {
+            print(_savedImage.format.raw);
+          }
+//            // Allocate memory for the 3 planes of the image
+//            Pointer<Uint8> p =
+//                allocate(count: _savedImage.planes[0].bytes.length);
+//            Pointer<Uint8> p1 =
+//                allocate(count: _savedImage.planes[1].bytes.length);
+//            Pointer<Uint8> p2 =
+//                allocate(count: _savedImage.planes[2].bytes.length);
+//
+//            // Assign the planes data to the pointers of the image
+//            Uint8List pointerList =
+//                p.asTypedList(_savedImage.planes[0].bytes.length);
+//            Uint8List pointerList1 =
+//                p1.asTypedList(_savedImage.planes[1].bytes.length);
+//            Uint8List pointerList2 =
+//                p2.asTypedList(_savedImage.planes[2].bytes.length);
+//            pointerList.setRange(0, _savedImage.planes[0].bytes.length,
+//                _savedImage.planes[0].bytes);
+//            pointerList1.setRange(0, _savedImage.planes[1].bytes.length,
+//                _savedImage.planes[1].bytes);
+//            pointerList2.setRange(0, _savedImage.planes[2].bytes.length,
+//                _savedImage.planes[2].bytes);
+//
+//            // Call the convertImage function and convert the YUV to RGB
+//            Pointer<Uint32> imgP = conv(
+//                p,
+//                p1,
+//                p2,
+//                _savedImage.planes[1].bytesPerRow,
+//                _savedImage.planes[1].bytesPerPixel,
+//                _savedImage.planes[0].bytesPerRow,
+//                _savedImage.height);
+//
+//            // Get the pointer of the data returned from the function to a List
+//            List imgData = imgP.asTypedList(
+//                (_savedImage.planes[0].bytesPerRow * _savedImage.height));
+//            // Generate image from the converted data
+//            img = imglib.Image.fromBytes(
+//                _savedImage.height, _savedImage.planes[0].bytesPerRow, imgData);
+//
+//            // Free the memory space allocated from the planes and the converted data
+//            free(p);
+//            free(p1);
+//            free(p2);
+//            free(imgP);
+          else if (Platform.isIOS) {
             img = imglib.Image.fromBytes(
               _savedImage.planes[0].bytesPerRow,
               _savedImage.height,

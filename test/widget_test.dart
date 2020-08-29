@@ -120,42 +120,6 @@ void saveImage(imglib.Image img) async {
   File('$path/sample.jpg')..writeAsBytesSync(imglib.encodeJpg(img));
 }
 
-void syncExif() async {
-  print('1');
-  AsciiCodec codec = AsciiCodec();
-  print(codec.encode('J18C'));
-
-  TestWidgetsFlutterBinding.ensureInitialized();
-  print('2');
-  final Uint8List imageData =
-      File('test/output_images/flower.jpg').readAsBytesSync();
-
-  var raw = imglib.readJpg(imageData).exif.rawData;
-
-  final Uint8List imageData2 =
-      File('test/test_images/photo_2020-08-14_20-02-06.jpg').readAsBytesSync();
-
-  Buscode buscode = Buscode(image: imglib.readJpg(imageData2), path: path);
-  print(buscode.serialNumber);
-  print(buscode.serialNumberMap);
-  Exif exifObject = Exif(buscode: buscode);
-
-  var jpg = imglib.readJpg(imageData2);
-  jpg.exif.rawData = exifObject.bytes;
-  var w = raw[0];
-  var y = w[0];
-  var yy = w[1];
-  File('test/output_images/sioux.jpg')..writeAsBytesSync(imglib.encodeJpg(jpg));
-
-  //log(raw.toList().toString());
-
-  print('sioux');
-  print(imglib
-      .readJpg(File('test/output_images/sioux.jpg').readAsBytesSync())
-      .exif
-      .data);
-}
-
 printBlock(message_in, message) {
   bool isCode = false;
   for (int i = 0; i < message.length; i++) {
@@ -201,7 +165,6 @@ void main() {
   for (var i = 0; i < files.length; i++) {
     String path = getPath(files[i].toString());
     imglib.Image image = readImage(path);
-    syncExif();
 
     imglib.Image transformedImage = readImage('test/output_images/sample.jpg');
   }
