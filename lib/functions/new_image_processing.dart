@@ -38,8 +38,8 @@ List<String> altReadBuscode(imglib.Image buscodeImage) {
 
   List<int> tmp = newExtractBuscode(fullList);
 
-  int start = 0;
-  int finish = fullList.length;
+  int start = tmp[0];
+  int finish = tmp[1];
 
   fullList = fullList.sublist(start, finish);
   List<num> upperList = splitedList[1].sublist(start, finish);
@@ -99,13 +99,6 @@ List<String> newFrom1dToBuscode(List<num> fullList, List<num> upperList) {
   List<int> results = [];
   List<int> positions = [];
 
-  List<int> _ = newExtractBuscode(fullList);
-  int start = _[0];
-  int finish = _[1];
-
-  //fullList = fullList.sublist(start, finish); // TODO is finish OK?
-  //upperList = upperList.sublist(start, finish);
-
   for (var i = 0; i < fullList.length; i++) {
     wmin = min(wmin, fullList[i]);
     umin = min(umin, upperList[i]);
@@ -126,11 +119,10 @@ List<String> newFrom1dToBuscode(List<num> fullList, List<num> upperList) {
   print('vector length');
   print(positions.length);
 
-  return processCollections(
-      start, unit, upperList, fullList, results, positions);
+  return processCollections(unit, upperList, fullList, results, positions);
 }
 
-List<String> processCollections(int start, num unit, List<num> upperList,
+List<String> processCollections(num unit, List<num> upperList,
     List<num> fullList, List<int> results, List<int> positions) {
   unit = unit.toInt();
   List<String> outputList = [];
@@ -188,9 +180,9 @@ List<String> processCollections(int start, num unit, List<num> upperList,
 }
 
 String calc(double t) {
-  if (t < 100) {
+  if (t < 120) {
     return 'F';
-  } else if (t < 160) {
+  } else if (t < 170) {
     return 'AD';
   } else {
     return 'T';
@@ -255,17 +247,17 @@ List<List<num>> splitList(img_1d, int height, int width) {
   return [fullList, upperList];
 }
 
-List<int> newExtractBuscode(List<num> fullList, {threshold = 75}) {
+List<int> newExtractBuscode(List<num> fullList, {threshold = 100}) {
   List<int> counters = [];
   List<int> positions = [];
   int counter = 0;
 
   int pos;
   for (pos = 0; pos < fullList.length; pos++)
-    if (fullList[pos] > 240) {
+    if (fullList[pos] > 230) {
       counter++;
     } else {
-      if (counter > fullList.length / threshold) {
+      if (counter > fullList.length / threshold || counters.length == 0) {
         counters.add(counter);
         positions.add(pos);
       }
