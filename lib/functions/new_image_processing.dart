@@ -135,7 +135,7 @@ List<String> processCollections(int start, num unit, List<num> fullList,
   List<String> outputList = [];
 
   int cMax;
-  if (results.length < 60) {
+  if (results.length < 50) {
     return [];
   }
 
@@ -156,7 +156,7 @@ List<String> processCollections(int start, num unit, List<num> fullList,
     e = positions[i];
     s = e - results[i];
 
-    t = fullList.sublist(s, e).reduce((a, b) => a + b) / fullList.length;
+    t = fullList.sublist(s, e).reduce(min);
     // TODO more sophisticated implementation
 
     outputList.add(calc(t));
