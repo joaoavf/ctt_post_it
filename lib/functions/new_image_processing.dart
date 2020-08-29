@@ -36,10 +36,10 @@ List<String> altReadBuscode(imglib.Image buscodeImage) {
 
   List<num> fullList = splitedList[0];
 
-  List<int> tmp = newExtractBuscode(fullList);
+  List<int> tmp = newExtractBuscode(fullList); // TODO fix extractBuscode
 
-  int start = 0;
-  int finish = fullList.length;
+  int start = tmp[0];
+  int finish = tmp[1];
 
   fullList = fullList.sublist(start, finish);
   List<num> upperList = splitedList[1].sublist(start, finish);
@@ -99,13 +99,6 @@ List<String> newFrom1dToBuscode(List<num> fullList, List<num> upperList) {
   List<int> results = [];
   List<int> positions = [];
 
-  List<int> _ = newExtractBuscode(fullList);
-  int start = _[0];
-  int finish = _[1];
-
-  //fullList = fullList.sublist(start, finish); // TODO is finish OK?
-  //upperList = upperList.sublist(start, finish);
-
   for (var i = 0; i < fullList.length; i++) {
     wmin = min(wmin, fullList[i]);
     umin = min(umin, upperList[i]);
@@ -126,11 +119,10 @@ List<String> newFrom1dToBuscode(List<num> fullList, List<num> upperList) {
   print('vector length');
   print(positions.length);
 
-  return processCollections(
-      start, unit, upperList, fullList, results, positions);
+  return processCollections(unit, upperList, fullList, results, positions);
 }
 
-List<String> processCollections(int start, num unit, List<num> upperList,
+List<String> processCollections(num unit, List<num> upperList,
     List<num> fullList, List<int> results, List<int> positions) {
   unit = unit.toInt();
   List<String> outputList = [];
