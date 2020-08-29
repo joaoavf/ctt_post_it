@@ -38,8 +38,8 @@ List<String> altReadBuscode(imglib.Image buscodeImage) {
 
   List<int> tmp = newExtractBuscode(fullList);
 
-  int start = tmp[0];
-  int finish = tmp[1];
+  int start = 0;
+  int finish = fullList.length;
 
   fullList = fullList.sublist(start, finish);
   List<num> upperList = splitedList[1].sublist(start, finish);
@@ -103,15 +103,15 @@ List<String> newFrom1dToBuscode(List<num> fullList, List<num> upperList) {
   int start = _[0];
   int finish = _[1];
 
-  fullList = fullList.sublist(start, finish); // TODO is finish OK?
-  upperList = upperList.sublist(start, finish);
+  //fullList = fullList.sublist(start, finish); // TODO is finish OK?
+  //upperList = upperList.sublist(start, finish);
 
   for (var i = 0; i < fullList.length; i++) {
     wmin = min(wmin, fullList[i]);
     umin = min(umin, upperList[i]);
 
     if (fullList[i] > 230) {
-      if (fullList[i] < 230) {
+      if (wmin < 230) {
         results.add(counter);
         positions.add(i);
         counter = 0;
@@ -123,6 +123,8 @@ List<String> newFrom1dToBuscode(List<num> fullList, List<num> upperList) {
   }
 
   num unit = (fullList.length - counter) / 74;
+  print('vector length');
+  print(positions.length);
 
   return processCollections(start, unit, fullList, results, positions);
 }
