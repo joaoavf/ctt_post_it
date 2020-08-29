@@ -120,6 +120,5 @@ class Buscode {
       image.exif.rawData = Exif(buscode: this).bytes;
       saveImage(image, path);
     }
-
   }
 }

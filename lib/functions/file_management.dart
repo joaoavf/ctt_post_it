@@ -28,7 +28,7 @@ Future<String> get localPath async {
   Directory directory;
   if (Platform.isAndroid) {
     directory = await getExternalStorageDirectory();
-  } else {
+  } else if (Platform.isIOS) {
     directory = await getApplicationDocumentsDirectory();
   }
   final String path = directory.path;
