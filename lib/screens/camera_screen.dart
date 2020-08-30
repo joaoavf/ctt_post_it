@@ -36,23 +36,8 @@ class _CameraScreenState extends State<CameraScreen> {
     customTimer.streamController.stream.listen((data) {
       if (!_isProcessing && _cameraInitialized && _savedImage != null) {
         _isProcessing = true;
-        var planes = _savedImage.planes.sublist(0);
-        print(_savedImage.planes[0].bytes.length);
-        print(_savedImage.planes[0].bytes.length);
-        print(_savedImage.planes[0].bytes.length);
-        int height = _savedImage.height;
-        int width = _savedImage.width;
-        Map parameterMap = {
-          'planes': planes,
-          'height': height,
-          'width': width,
-          'isAndroid': Platform.isAndroid,
-          'isIOS': Platform.isIOS,
-          'path': _path
-        };
-        print(planes[0].bytes.length);
-        print(height * width);
-        Future<Buscode> buscode = compute(pushScreen, parameterMap);
+        Map params = {'savedImage': _savedImage, 'path': _path};
+        Future<Buscode> buscode = compute(pushScreen, params);
         evaluateFutureBuscode(buscode);
       }
     });
@@ -174,6 +159,7 @@ class _CameraScreenState extends State<CameraScreen> {
   void evaluateFutureBuscode(Future<Buscode> futureBuscode) async {
     Buscode buscode = await futureBuscode;
     _isProcessing = false;
+    print('ooooooooooooooooo');
     if (buscode.success) {
       _flashlightToggle(false);
       Navigator.push(

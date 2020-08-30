@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
+import 'package:camera/camera.dart';
 import 'package:camera_tutorial/models/buscode.dart';
 import 'package:ffi/ffi.dart';
 import 'package:image/image.dart' as imglib;
@@ -40,56 +41,55 @@ Convert conv = convertImageLib
     .lookup<NativeFunction<convert_func>>('convertImage')
     .asFunction<Convert>();
 
-Buscode pushScreen(mapVariables) {
-  print('pushScreen');
-  var planes = mapVariables['planes'];
-  int height = mapVariables['height'];
-  int width = mapVariables['width'];
-  bool isAndroid = mapVariables['isAndroid'];
-  bool isIOS = mapVariables['isIOS'];
-  String path = mapVariables['path'];
-
+Buscode pushScreen(Map params) {
+  CameraImage _savedImage = params['savedImage'];
+  String _path = params['path'];
   imglib.Image img;
-
-  if (planes == null) {
-    return null;
-  }
-
-  if (isAndroid) {
+  if (Platform.isAndroid) {
     // Allocate memory for the 3 planes of the image
-    Pointer<Uint8> p = allocate(count: planes[0].bytes.length);
-    Pointer<Uint8> p1 = allocate(count: planes[1].bytes.length);
-    Pointer<Uint8> p2 = allocate(count: planes[2].bytes.length);
+    Pointer<Uint8> p = allocate(count: _savedImage.planes[0].bytes.length);
+    Pointer<Uint8> p1 = allocate(count: _savedImage.planes[1].bytes.length);
+    Pointer<Uint8> p2 = allocate(count: _savedImage.planes[2].bytes.length);
 
     // Assign the planes data to the pointers of the image
-    Uint8List pointerList = p.asTypedList(planes[0].bytes.length);
-    Uint8List pointerList1 = p1.asTypedList(planes[1].bytes.length);
-    Uint8List pointerList2 = p2.asTypedList(planes[2].bytes.length);
-    pointerList.setRange(0, planes[0].bytes.length,
-        planes[0].bytes.sublist(0, planes[0].bytes.length));
-    pointerList1.setRange(0, planes[1].bytes.length,
-        planes[1].bytes.sublist(0, planes[1].bytes.length));
-    pointerList2.setRange(0, planes[2].bytes.length,
-        planes[2].bytes.sublist(0, planes[2].bytes.length));
+    Uint8List pointerList = p.asTypedList(_savedImage.planes[0].bytes.length);
+    Uint8List pointerList1 = p1.asTypedList(_savedImage.planes[1].bytes.length);
+    Uint8List pointerList2 = p2.asTypedList(_savedImage.planes[2].bytes.length);
+    pointerList.setRange(
+        0, _savedImage.planes[0].bytes.length, _savedImage.planes[0].bytes);
+    pointerList1.setRange(
+        0, _savedImage.planes[1].bytes.length, _savedImage.planes[1].bytes);
+    pointerList2.setRange(
+        0, _savedImage.planes[2].bytes.length, _savedImage.planes[2].bytes);
 
     // Call the convertImage function and convert the YUV to RGB
-    Pointer<Uint32> imgP = conv(p, p1, p2, planes[1].bytesPerRow,
-        planes[1].bytesPerPixel, planes[0].bytesPerRow, height);
+    Pointer<Uint32> imgP = conv(
+        p,
+        p1,
+        p2,
+        _savedImage.planes[1].bytesPerRow,
+        _savedImage.planes[1].bytesPerPixel,
+        _savedImage.planes[0].bytesPerRow,
+        _savedImage.height);
 
     // Get the pointer of the data returned from the function to a List
-    List imgData = imgP.asTypedList((planes[0].bytesPerRow * height));
+    List imgData = imgP
+        .asTypedList((_savedImage.planes[0].bytesPerRow * _savedImage.height));
     // Generate image from the converted data
-    img = imglib.Image.fromBytes(height, planes[0].bytesPerRow, imgData);
-    // Free the memory space allocated from the planes and the converted data
+    img = imglib.Image.fromBytes(
+        _savedImage.height, _savedImage.planes[0].bytesPerRow, imgData);
+
+    // Free the memory space allocated
+    // from the planes and the converted data
     free(p);
     free(p1);
     free(p2);
     free(imgP);
-  } else if (isIOS) {
+  } else if (Platform.isIOS) {
     img = imglib.Image.fromBytes(
-      width,
-      height,
-      planes[0].bytes,
+      _savedImage.planes[0].bytesPerRow,
+      _savedImage.height,
+      _savedImage.planes[0].bytes,
       format: imglib.Format.bgra,
     );
   }
@@ -98,14 +98,15 @@ Buscode pushScreen(mapVariables) {
     img = imglib.copyRotate(img, 90);
   }
 
-  var horizOffset = 0;
-  var vertOffset = (img.height) * 0.40 ~/ 1;
-  width = img.width;
-  height = (img.width) * 0.12 ~/ 1;
+  int horizOffset = 0;
+  int vertOffset = (img.height) * 0.40 ~/ 1;
+  int width = img.width;
+  int height = (img.width) * 0.12 ~/ 1;
 
   img = imglib.copyCrop(img, horizOffset, vertOffset, width, height);
+  print('i');
 
-  Buscode buscode = Buscode(image: img, path: path);
+  Buscode buscode = Buscode(image: img, path: _path);
 
   return buscode;
 }
