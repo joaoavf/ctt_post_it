@@ -12,6 +12,8 @@ List<int> rsCorrectMessage(List<int> message_in, {int nsym = 12}) {
     }
   }
   if (erase_pos.length > nsym) return null;
+  print(message_out);
+  print(nsym);
   List<int> synd = _rsCalculateSyndrome(message_out, nsym);
   if (_max(synd) == 0) return message_out;
   List<int> fsynd = _rsForneySyndrome(synd, erase_pos, message_out.length);
@@ -63,7 +65,7 @@ List<int> _rsCalculateSyndrome(List<int> msg, int nsym,
   for (int i = 0; i < nsym; i++) {
     synd[i] = gfPolynomialEval(msg, gfPow(generator, i + fcr));
   }
-  return synd;
+  return [0]..addAll(synd);
 }
 
 /**
@@ -75,9 +77,7 @@ List<int> _rsCorrectErrata(List<int> message, List<int> synd, List<int> err_pos,
   err_pos.forEach((int value) => coef_pos.add(message.length - 1 - value));
   List<int> err_loc = _rsFindErrataLocator(coef_pos);
   List<int> reversed = new List.from(synd.sublist(0).reversed);
-  List<int> err_eval =
-      _rsFindErrorEvaluator(reversed, err_loc, err_pos.length - 1);
-  err_eval = err_eval.reversed.toList();
+  List<int> err_eval = _rsFindErrorEvaluator(reversed, err_loc, err_pos.length - 1);
 
   List<int> X = []; // will store the position of the errors
   coef_pos.forEach((element) {
@@ -110,7 +110,7 @@ List<int> _rsCorrectErrata(List<int> message, List<int> synd, List<int> err_pos,
     y = gfMultiply(gfPow(Xi, 1 - fcr), y);
 
     int magnitude = gfDivide(y, err_loc_prime);
-    message[i] ^= magnitude;
+    message[err_pos[i]] ^= magnitude;
   }
   return message;
 }
