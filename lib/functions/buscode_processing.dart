@@ -3,7 +3,7 @@ import 'package:camera_tutorial/functions/reed_solomon.dart';
 
 reorderRS(List<int> integers) {
   return integers.sublist(0, 10)
-    ..addAll(integers.sublist(22))
+    ..addAll(integers.sublist(22, 25))
     ..addAll(integers.sublist(10, 22));
 }
 
@@ -74,20 +74,19 @@ Map evaluateCode(code, {isRotate = false}) {
   }
   List<int> integers = busToIntegers(code);
   List<int> reedSolomonMsg = reorderRS(integers);
+  
+  reedSolomonMsg[2] = 22; // Attribute Syncs
+  reedSolomonMsg[10] = 38;
   List<int> correctMsg = rsCorrectMessage(reedSolomonMsg);
+
   if (correctMsg == null) {
     if (!isRotate) {
       return evaluateCode(rotateCode(code), isRotate: true);
     } else {
       return {'is_valid': false};
     }
-  }
-  int leftSync = correctMsg[2];
-  int rightSync = correctMsg[10];
-  if (leftSync == 22 && rightSync == 38) {
-    return {'is_valid': true, 'is_rotate': isRotate, 'code': correctMsg};
   } else {
-    return {'is_valid': false};
+    return {'is_valid': true, 'is_rotate': isRotate, 'code': correctMsg};
   }
 }
 
