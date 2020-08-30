@@ -18,6 +18,7 @@ List<int> rsCorrectMessage(List<int> message_in, {int nsym = 12}) {
   if (_max(synd) == 0) return message_out;
   List<int> fsynd = _rsForneySyndrome(synd, erase_pos, message_out.length);
   List<int> err_polynomial = _rsGeneratorErrorPolynomial(fsynd);
+  if (err_polynomial == null) return null;
   List<int> err_pos =
       _rsFindErrors(err_polynomial.reversed.toList(), message_out.length);
   if (err_pos == null) return null;
