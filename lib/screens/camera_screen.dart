@@ -78,6 +78,9 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   void _flashlightToggle(state) {
+    setState(() {
+      _flashlightOn = state;
+    });
     if (_flashlightOn == true) {
       _camera.enableTorch();
     } else if (_flashlightOn == false) {
@@ -120,10 +123,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                 color: Colors.white,
                               ),
                         onPressed: () {
-                          setState(() {
-                            _flashlightOn = !_flashlightOn;
-                          });
-                          _flashlightToggle(_flashlightOn);
+                          _flashlightToggle(!_flashlightOn);
                         },
                       ),
                     ),
@@ -242,6 +242,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
           Buscode buscode = Buscode(image: img, path: _path);
           if (buscode.success) {
+            _flashlightToggle(false);
             Navigator.push(
               context,
               MaterialPageRoute(

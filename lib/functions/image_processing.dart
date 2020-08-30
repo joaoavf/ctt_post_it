@@ -18,7 +18,8 @@ List<String> readBuscode(imglib.Image buscodeImage) {
   splitedList = extractBuscode(splitedList);
 
   List<String> code = from1dToBuscode(splitedList[0], splitedList[1]);
-
+  print('readBuscode');
+  print(code);
   return code;
 }
 
@@ -46,6 +47,7 @@ List<List> extractBuscode(List<List> splitedList) {
       break;
     }
   }
+  print('extractBuscode');
   return [
     fullList.sublist(start, finish),
     splitedList[1].sublist(start, finish)
@@ -70,7 +72,7 @@ List<List> splitList(img_1d, int height, int width) {
     fullList.add(fullCalc.reduce((a, b) => a + b) / fullCalc.length);
     upperList.add(upperCalc.reduce((a, b) => a + b) / upperCalc.length);
   }
-
+  print('splitList');
   return [fullList, upperList];
 }
 
@@ -124,6 +126,7 @@ List<String> from1dToBuscode(List fullList, List upperList) {
       }
     }
   }
+  print('from1dToBuscode');
   return result;
 }
 
@@ -142,7 +145,7 @@ List<num> toBW(
         colorized.green * greenFilter +
         colorized.blue * blueFilter);
   }
-
+  print('toBW');
   return newList;
 }
 
@@ -161,6 +164,7 @@ List<int> toBinaryColor(List<num> img_1d, {int buffer = 20}) {
       newList.add(255);
     }
   }
+  print('toBinaryColor');
   return newList;
 }
 
@@ -179,5 +183,6 @@ List<num> conv2d(List img_1d, int stride, int height, int width) {
       newList.add(strideList.reduce((a, b) => a + b));
     }
   }
+  print('conv2d');
   return newList;
 }
