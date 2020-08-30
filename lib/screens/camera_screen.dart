@@ -63,7 +63,7 @@ class _CameraScreenState extends State<CameraScreen> {
             (CameraImage image) => _processCameraImage(image));
         setState(() {
           _cameraInitialized = true;
-          // _camera.enableTorch();
+          _camera.enableTorch();
         });
       });
     } catch (e) {
@@ -79,9 +79,9 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _flashlightToggle(state) {
     if (_flashlightOn == true) {
-      // _camera.enableTorch();
+      _camera.enableTorch();
     } else if (_flashlightOn == false) {
-      // _camera.disableTorch();
+      _camera.disableTorch();
     }
   }
 
@@ -112,11 +112,11 @@ class _CameraScreenState extends State<CameraScreen> {
                         padding: EdgeInsets.all(20),
                         icon: _flashlightOn == false
                             ? Icon(
-                                Icons.flash_on,
+                                Icons.flash_off,
                                 color: Colors.white,
                               )
                             : Icon(
-                                Icons.flash_off,
+                                Icons.flash_on,
                                 color: Colors.white,
                               ),
                         onPressed: () {
@@ -164,40 +164,40 @@ class _CameraScreenState extends State<CameraScreen> {
           if (Platform.isAndroid) {
             // Allocate memory for the 3 planes of the image
             Pointer<Uint8> p =
-                allocate(count: _savedImage.planes[0].bytes.length ~/ 2);
+                allocate(count: _savedImage.planes[0].bytes.length);
             print('0');
             print(_savedImage.planes[0].bytes.length);
             Pointer<Uint8> p1 =
-                allocate(count: _savedImage.planes[1].bytes.length ~/ 2);
+                allocate(count: _savedImage.planes[1].bytes.length);
             print('1');
             print(_savedImage.planes[1].bytes.length);
             Pointer<Uint8> p2 =
-                allocate(count: _savedImage.planes[2].bytes.length ~/ 2);
+                allocate(count: _savedImage.planes[2].bytes.length);
             print('2');
             print(_savedImage.planes[2].bytes.length);
 
             // Assign the planes data to the pointers of the image
             Uint8List pointerList =
-                p.asTypedList(_savedImage.planes[0].bytes.length ~/ 2);
+                p.asTypedList(_savedImage.planes[0].bytes.length);
             Uint8List pointerList1 =
-                p1.asTypedList(_savedImage.planes[1].bytes.length ~/ 2);
+                p1.asTypedList(_savedImage.planes[1].bytes.length);
             Uint8List pointerList2 =
-                p2.asTypedList(_savedImage.planes[2].bytes.length ~/ 2);
+                p2.asTypedList(_savedImage.planes[2].bytes.length);
             pointerList.setRange(
                 0,
-                _savedImage.planes[0].bytes.length ~/ 2,
+                _savedImage.planes[0].bytes.length,
                 _savedImage.planes[0].bytes
-                    .sublist(0, _savedImage.planes[0].bytes.length ~/ 2));
+                    .sublist(0, _savedImage.planes[0].bytes.length));
             pointerList1.setRange(
                 0,
-                _savedImage.planes[1].bytes.length ~/ 2,
+                _savedImage.planes[1].bytes.length,
                 _savedImage.planes[1].bytes
-                    .sublist(0, _savedImage.planes[1].bytes.length ~/ 2));
+                    .sublist(0, _savedImage.planes[1].bytes.length));
             pointerList2.setRange(
                 0,
-                _savedImage.planes[2].bytes.length ~/ 2,
+                _savedImage.planes[2].bytes.length,
                 _savedImage.planes[2].bytes
-                    .sublist(0, _savedImage.planes[2].bytes.length ~/ 2));
+                    .sublist(0, _savedImage.planes[2].bytes.length));
 
             // Call the convertImage function and convert the YUV to RGB
             Pointer<Uint32> imgP = conv(
