@@ -38,7 +38,7 @@ final DynamicLibrary convertImageLib = Platform.isAndroid
 
 Convert conv = convertImageLib
     .lookup<NativeFunction<convert_func>>('convertImage')
-.asFunction<Convert>();
+    .asFunction<Convert>();
 
 Buscode pushScreen(mapVariables) {
   print('pushScreen');
@@ -46,6 +46,7 @@ Buscode pushScreen(mapVariables) {
   int height = mapVariables['height'];
   int width = mapVariables['width'];
   bool isAndroid = mapVariables['isAndroid'];
+  bool isIOS = mapVariables['isIOS'];
   String path = mapVariables['path'];
 
   imglib.Image img;
@@ -76,8 +77,7 @@ Buscode pushScreen(mapVariables) {
         planes[1].bytesPerPixel, planes[0].bytesPerRow, height);
 
     // Get the pointer of the data returned from the function to a List
-    List imgData =
-        imgP.asTypedList((planes[0].bytesPerRow * height));
+    List imgData = imgP.asTypedList((planes[0].bytesPerRow * height));
     // Generate image from the converted data
     img = imglib.Image.fromBytes(height, planes[0].bytesPerRow, imgData);
     // Free the memory space allocated from the planes and the converted data
@@ -85,7 +85,7 @@ Buscode pushScreen(mapVariables) {
     free(p1);
     free(p2);
     free(imgP);
-  } else {
+  } else if (isIOS) {
     img = imglib.Image.fromBytes(
       width,
       height,
