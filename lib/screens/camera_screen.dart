@@ -37,6 +37,9 @@ class _CameraScreenState extends State<CameraScreen> {
       if (!_isProcessing && _cameraInitialized && _savedImage != null) {
         _isProcessing = true;
         var planes = _savedImage.planes.sublist(0);
+        print(_savedImage.planes[0].bytes.length);
+        print(_savedImage.planes[0].bytes.length);
+        print(_savedImage.planes[0].bytes.length);
         int height = _savedImage.height;
         int width = _savedImage.width;
         Map parameterMap = {
@@ -44,12 +47,14 @@ class _CameraScreenState extends State<CameraScreen> {
           'height': height,
           'width': width,
           'isAndroid': Platform.isAndroid,
+          'isIOS': Platform.isIOS,
           'path': _path
         };
+        print(planes[0].bytes.length);
+        print(height * width);
         Future<Buscode> buscode = compute(pushScreen, parameterMap);
         evaluateFutureBuscode(buscode);
       }
-      //pushScreen(planes, height, width);
     });
   }
 
@@ -62,8 +67,7 @@ class _CameraScreenState extends State<CameraScreen> {
     try {
       List<CameraDescription> cameras = await availableCameras();
       // Create the CameraController
-      _camera = CameraController(cameras[0], ResolutionPreset.veryHigh,
-          androidFormatCode: 256);
+      _camera = CameraController(cameras[0], ResolutionPreset.veryHigh);
       _camera.initialize().then((_) async {
         // Start ImageStream
         await _camera.startImageStream(
