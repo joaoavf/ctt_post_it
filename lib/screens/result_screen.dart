@@ -32,7 +32,7 @@ class ResultScreen extends StatelessWidget {
           'Buscode Information',
           style: TextStyle(
               fontSize: 18,
-              fontWeight: FontWeight.normal,
+              fontWeight: FontWeight.w500,
               color: Colors.black87),
         ),
         actions: <Widget>[

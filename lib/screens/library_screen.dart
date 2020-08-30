@@ -73,9 +73,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
         title: Text(
           'Buscode Library',
           style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.black87),
+              fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black87),
         ),
       ),
       floatingActionButton: FloatingActionButton(
