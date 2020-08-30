@@ -19,17 +19,20 @@ List<num> preProcessImage(imglib.Image buscodeImage) {
   img_1d = conv2d(img_1d, stride: stride, height: width, width: height);
   img_1d = toBinaryColor(img_1d);
 
+  img_1d = invertColor(img_1d);
+
+  img_1d = conv2d(img_1d, stride: stride, height: width - 3, width: height - 3);
+  img_1d = toBinaryColor(img_1d, buffer: -10);
+
   return img_1d;
 }
 
 List<String> altReadBuscode(imglib.Image buscodeImage) {
   var height = buscodeImage.height;
   var width = buscodeImage.width;
-  var stride = 4;
+  var stride = 7;
 
   List<num> img_1d = preProcessImage(buscodeImage);
-
-  img_1d = invertColor(img_1d);
 
   List<List<num>> splitedList =
       splitList(img_1d, height - stride + 1, width - stride + 1);
@@ -99,7 +102,9 @@ List<String> newFrom1dToBuscode(List<num> fullList, List<num> upperList) {
   List<int> results = [];
   List<int> positions = [];
 
-  for (var i = 0; i < fullList.length; i++) {
+  int i;
+
+  for (i = 0; i < fullList.length; i++) {
     wmin = min(wmin, fullList[i]);
     umin = min(umin, upperList[i]);
 
@@ -114,6 +119,9 @@ List<String> newFrom1dToBuscode(List<num> fullList, List<num> upperList) {
     }
     counter++;
   }
+
+  results.add(counter);
+  positions.add(i);
 
   num unit = (fullList.length - counter) / 74;
   print('vector length');
@@ -180,9 +188,9 @@ List<String> processCollections(num unit, List<num> upperList,
 }
 
 String calc(double t) {
-  if (t < 120) {
+  if (t < 140) {
     return 'F';
-  } else if (t < 170) {
+  } else if (t < 190) {
     return 'AD';
   } else {
     return 'T';
