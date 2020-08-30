@@ -29,8 +29,8 @@ class BuscodeView {
       @required this.trackingIndicator}) {
     month = buscodeDate.substring(5, 7);
     day = buscodeDate.substring(8, 10);
-    hour = buscodeDate.substring(11, 12);
-    minute = buscodeDate.substring(14, 15);
+    hour = buscodeDate.substring(11, 13);
+    minute = buscodeDate.substring(15, 16);
 
     idTag = formatId +
         issuerCode +
