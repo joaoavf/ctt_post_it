@@ -1,13 +1,19 @@
+import 'dart:ffi';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:camera_tutorial/functions/file_management.dart';
-import 'package:flutter/foundation.dart';
+import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as imglib;
 import 'package:camera_tutorial/models/buscode.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:camera/camera.dart';
 import 'package:camera_tutorial/screens/result_screen.dart';
 
-import '../functions/camera_processing.dart';
+typedef convert_func = Pointer<Uint32> Function(
+    Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, Int32, Int32, Int32, Int32);
+typedef Convert = Pointer<Uint32> Function(
+    Pointer<Uint8>, Pointer<Uint8>, Pointer<Uint8>, int, int, int, int);
 
 class CameraScreen extends StatefulWidget {
   CameraScreen({Key key, this.title}) : super(key: key);
@@ -23,8 +29,11 @@ class _CameraScreenState extends State<CameraScreen> {
   CameraImage _savedImage;
   String _path;
   bool _flashlightOn = true;
-  bool _isProcessing = false;
-  CustomTimer customTimer = new CustomTimer();
+
+  final DynamicLibrary convertImageLib = Platform.isAndroid
+      ? DynamicLibrary.open("libconvertImage.so")
+      : DynamicLibrary.process();
+  Convert conv;
 
   @override
   void initState() {
@@ -32,15 +41,10 @@ class _CameraScreenState extends State<CameraScreen> {
     _initializePath();
     _initializeCamera();
 
-    customTimer.startTimer();
-    customTimer.streamController.stream.listen((data) {
-      if (!_isProcessing && _cameraInitialized && _savedImage != null) {
-        _isProcessing = true;
-        Map params = {'savedImage': _savedImage, 'path': _path};
-        Future<Buscode> buscode = compute(pushScreen, params);
-        evaluateFutureBuscode(buscode);
-      }
-    });
+//  Load the convertImage() function from the library
+    conv = convertImageLib
+        .lookup<NativeFunction<convert_func>>('convertImage')
+        .asFunction<Convert>();
   }
 
   void _initializePath() async {
@@ -52,14 +56,13 @@ class _CameraScreenState extends State<CameraScreen> {
     try {
       List<CameraDescription> cameras = await availableCameras();
       // Create the CameraController
-      _camera = CameraController(cameras[0], ResolutionPreset.veryHigh);
+      _camera = CameraController(cameras[0], ResolutionPreset.high);
       _camera.initialize().then((_) async {
         // Start ImageStream
         await _camera.startImageStream(
             (CameraImage image) => _processCameraImage(image));
         setState(() {
           _cameraInitialized = true;
-          _isProcessing = false;
           _camera.enableTorch();
         });
       });
@@ -153,21 +156,104 @@ class _CameraScreenState extends State<CameraScreen> {
           ],
         ),
       ),
-    );
-  }
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0xffCE2B2F),
+        onPressed: () {
+          imglib.Image img;
 
-  void evaluateFutureBuscode(Future<Buscode> futureBuscode) async {
-    Buscode buscode = await futureBuscode;
-    _isProcessing = false;
-    print('ooooooooooooooooo');
-    if (buscode.success) {
-      _flashlightToggle(false);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ResultScreen(buscodeView: buscode.view),
-        ),
-      );
-    }
+          if (Platform.isAndroid) {
+            // Allocate memory for the 3 planes of the image
+            Pointer<Uint8> p =
+                allocate(count: _savedImage.planes[0].bytes.length);
+            print('0');
+            print(_savedImage.planes[0].bytes.length);
+            Pointer<Uint8> p1 =
+                allocate(count: _savedImage.planes[1].bytes.length);
+            print('1');
+            print(_savedImage.planes[1].bytes.length);
+            Pointer<Uint8> p2 =
+                allocate(count: _savedImage.planes[2].bytes.length);
+            print('2');
+            print(_savedImage.planes[2].bytes.length);
+
+            // Assign the planes data to the pointers of the image
+            Uint8List pointerList =
+                p.asTypedList(_savedImage.planes[0].bytes.length);
+            Uint8List pointerList1 =
+                p1.asTypedList(_savedImage.planes[1].bytes.length);
+            Uint8List pointerList2 =
+                p2.asTypedList(_savedImage.planes[2].bytes.length);
+            pointerList.setRange(
+                0,
+                _savedImage.planes[0].bytes.length,
+                _savedImage.planes[0].bytes
+                    .sublist(0, _savedImage.planes[0].bytes.length));
+            pointerList1.setRange(
+                0,
+                _savedImage.planes[1].bytes.length,
+                _savedImage.planes[1].bytes
+                    .sublist(0, _savedImage.planes[1].bytes.length));
+            pointerList2.setRange(
+                0,
+                _savedImage.planes[2].bytes.length,
+                _savedImage.planes[2].bytes
+                    .sublist(0, _savedImage.planes[2].bytes.length));
+
+            // Call the convertImage function and convert the YUV to RGB
+            Pointer<Uint32> imgP = conv(
+                p,
+                p1,
+                p2,
+                _savedImage.planes[1].bytesPerRow,
+                _savedImage.planes[1].bytesPerPixel,
+                _savedImage.planes[0].bytesPerRow,
+                _savedImage.height);
+
+            // Get the pointer of the data returned from the function to a List
+            List imgData = imgP.asTypedList(
+                (_savedImage.planes[0].bytesPerRow * _savedImage.height));
+            // Generate image from the converted data
+            img = imglib.Image.fromBytes(
+                _savedImage.height, _savedImage.planes[0].bytesPerRow, imgData);
+            // Free the memory space allocated from the planes and the converted data
+            free(p);
+            free(p1);
+            free(p2);
+            free(imgP);
+          } else if (Platform.isIOS) {
+            img = imglib.Image.fromBytes(
+              _savedImage.width,
+              _savedImage.height,
+              _savedImage.planes[0].bytes,
+              format: imglib.Format.bgra,
+            );
+          }
+
+          if (img.height > img.width) {
+            img = imglib.copyRotate(img, 90);
+          }
+
+          var horizOffset = 0;
+          var vertOffset = (img.height) * 0.40 ~/ 1;
+          var width = img.width;
+          var height = (img.width) * 0.12 ~/ 1;
+
+          img = imglib.copyCrop(img, horizOffset, vertOffset, width, height);
+
+          Buscode buscode = Buscode(image: img, path: _path);
+          if (buscode.success) {
+            _flashlightToggle(false);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ResultScreen(buscodeView: buscode.view),
+              ),
+            );
+          }
+        },
+        tooltip: 'Increment',
+        child: Icon(Icons.camera_alt),
+      ),
+    );
   }
 }
