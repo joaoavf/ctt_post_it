@@ -74,13 +74,13 @@ class _LibraryScreenState extends State<LibraryScreen> {
           'Buscode Library',
           style: TextStyle(
               fontSize: 18,
-              fontWeight: FontWeight.normal,
+              fontWeight: FontWeight.w500,
               color: Colors.black87),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
-        child: Icon(Icons.camera),
+        child: Icon(Icons.camera_alt),
         onPressed: () {
           Navigator.pushNamed(context, '/second');
         },
