@@ -24,6 +24,12 @@ List<num> preProcessImage(imglib.Image buscodeImage) {
   img_1d = conv2d(img_1d, stride: stride, height: width - 3, width: height - 3);
   img_1d = toBinaryColor(img_1d, buffer: -10);
 
+//  d.log(img_1d.toString());
+//  print(img_1d);
+//  print(height);
+//  print(width);
+
+
   return img_1d;
 }
 
@@ -61,11 +67,11 @@ List<num> invertColor(List<num> img_1d) {
 }
 
 List<num> adaptativeThresholds(List<num> inputList, height, width,
-    {buckets = 10}) {
+    {buckets = 30}) {
   List<int> partialList;
   List<num> outputList = [];
   int maxLen;
-  int bucketSize = width ~/ 10;
+  int bucketSize = width ~/ buckets;
   for (int f = 0; f < buckets; f++) {
     if (f == buckets - 1) {
       maxLen = width;
