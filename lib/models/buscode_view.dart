@@ -32,6 +32,8 @@ class BuscodeView {
     hour = buscodeDate.substring(11, 13);
     minute = buscodeDate.substring(15, 16) + '0';
 
+    serialNumber = serialNumber.substring(0, 4);
+
     idTag = formatId +
         issuerCode +
         equipmentId +
