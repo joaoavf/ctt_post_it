@@ -14,16 +14,12 @@ List<num> preProcessImage(imglib.Image buscodeImage) {
   imglib.adjustColor(buscodeImage, hue: 0.1);
 
   img_1d = filterColors(buscodeImage);
-
   img_1d = adaptativeThresholds(img_1d, height, width);
-
-  img_1d = conv2d(img_1d, stride: stride, height: width, width: height);
-  img_1d = toBinaryColor(img_1d);
 
   img_1d = invertColor(img_1d);
 
-  img_1d = conv2d(img_1d, stride: stride, height: width - 3, width: height - 3);
-  img_1d = toBinaryColor(img_1d, buffer: -10);
+  img_1d = conv2d(img_1d, stride: stride, height: width, width: height);
+  img_1d = toBinaryColor(img_1d);
 
   return img_1d;
 }
@@ -31,7 +27,7 @@ List<num> preProcessImage(imglib.Image buscodeImage) {
 List<String> readBuscode(imglib.Image buscodeImage) {
   var height = buscodeImage.height;
   var width = buscodeImage.width;
-  var stride = 7;
+  var stride = 4;
 
   List<num> img_1d = preProcessImage(buscodeImage);
 
