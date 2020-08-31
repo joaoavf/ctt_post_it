@@ -6,6 +6,7 @@ import 'package:camera_tutorial/models/buscode_view.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 
+// Generates Exif from Buscode
 class Exif {
   final List<Uint8List> bytes = sampleExif;
   final AsciiCodec codec = AsciiCodec();
@@ -24,6 +25,7 @@ class Exif {
   }
 }
 
+// Read from disk
 BuscodeView readExifFile(imglib.Image image, String path) {
   List<Uint8List> bytes = image.exif.rawData;
   String decoded;

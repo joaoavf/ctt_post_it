@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 
+// Most high level function to process image before reading the buscode
 List<num> preProcessImage(imglib.Image buscodeImage) {
   var height = buscodeImage.height;
   var width = buscodeImage.width;
@@ -22,6 +23,7 @@ List<num> preProcessImage(imglib.Image buscodeImage) {
   return img_1d;
 }
 
+// Turns black into white and vice-versa
 List<num> invertColor(List<num> img_1d) {
   List<num> outputList = [];
   for (int element in img_1d) {
@@ -30,6 +32,7 @@ List<num> invertColor(List<num> img_1d) {
   return outputList;
 }
 
+// Use adaptive threshold to turn into black and white and remove shadows
 List<num> adaptativeThresholds(List<num> inputList, height, width,
     {buckets = 30}) {
   List<int> partialList;
@@ -54,6 +57,7 @@ List<num> adaptativeThresholds(List<num> inputList, height, width,
   return outputList;
 }
 
+// Filter colors to extract tones of orange
 List<num> filterColors(imglib.Image image) {
   List<num> filteredColors = [];
   Color color;
@@ -68,7 +72,7 @@ List<num> filterColors(imglib.Image image) {
   return filteredColors;
 }
 
-
+// Turns into black and white
 List<num> threshold(List<num> img_1d, {int buffer = 10}) {
   List<num> thresholdList = [];
   thresholdList = img_1d.sublist(0);
@@ -87,6 +91,7 @@ List<num> threshold(List<num> img_1d, {int buffer = 10}) {
   return newList;
 }
 
+// Make a 2d convolution
 List<num> conv2d(List<num> img_1d, {int stride, int height, int width}) {
   List<num> newList = [];
   List<num> strideList;
@@ -105,6 +110,7 @@ List<num> conv2d(List<num> img_1d, {int stride, int height, int width}) {
   return newList;
 }
 
+// Creates an average of black by vertical line and upper part of vertical line
 List<List<num>> splitList(img_1d, int height, int width) {
   List fullCalc = [];
   List upperCalc = [];

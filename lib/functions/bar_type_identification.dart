@@ -2,6 +2,7 @@ import 'dart:math';
 import 'image_processing.dart';
 import 'package:image/image.dart' as imglib;
 
+// Most high level function to read bus codes.
 List<String> readBuscode(imglib.Image buscodeImage) {
   var height = buscodeImage.height;
   var width = buscodeImage.width;
@@ -27,6 +28,7 @@ List<String> readBuscode(imglib.Image buscodeImage) {
   return code;
 }
 
+// Trims whitespace from right and left.
 List<int> extractBuscode(List<num> fullList, {threshold = 100}) {
   List<int> counters = [];
   List<int> positions = [];
@@ -62,6 +64,7 @@ List<int> extractBuscode(List<num> fullList, {threshold = 100}) {
   return [start, finish];
 }
 
+// Returns bar type [A,D,T,F] from processed image
 List<String> identifyBars(List<num> fullList, List<num> upperList) {
   List tmp = barSeparation(fullList, upperList);
   List<int> results = tmp[0];
@@ -77,6 +80,7 @@ List<String> identifyBars(List<num> fullList, List<num> upperList) {
   return outputList;
 }
 
+// Separate original image into blocks by vertical whitespace
 List barSeparation(List<num> fullList, List<num> upperList) {
   double umin = 255;
   double wmin = 255;
@@ -110,6 +114,7 @@ List barSeparation(List<num> fullList, List<num> upperList) {
   return [results, positions, unit];
 }
 
+// If less than 75 blocks, keeps splitting the largest remaining blocks.
 furtherBarSeparation(List<num> fullList, List<num> upperList, List<int> results,
     List<int> positions, num unit) {
   unit = unit.toInt();
@@ -153,6 +158,7 @@ furtherBarSeparation(List<num> fullList, List<num> upperList, List<int> results,
   return [outputList, uList];
 }
 
+// Useful for whenever the photo is tilted right or left to identify A or D
 List<String> rotationCalibration(List<String> outputList, List uList,
     {int buffer = 30}) {
   for (int i = 0; i < outputList.length; i++) {
@@ -170,6 +176,7 @@ List<String> rotationCalibration(List<String> outputList, List uList,
   return outputList;
 }
 
+// Uses dynamic thresholds based on minima to select for [A,D,T,F]
 String blackCalibration(double t, double minima) {
   if (t < minima + 30) {
     return 'F';
@@ -180,6 +187,7 @@ String blackCalibration(double t, double minima) {
   }
 }
 
+// Logic to decide whether A or D based on neighbor bar
 compareBarHeight(outputList, uList, {currentPos, shiftPos, buffer}) {
   if (outputList[shiftPos] == 'T' || outputList[shiftPos] == 'D') {
     if ((uList[currentPos] - uList[shiftPos]).abs() < buffer) {

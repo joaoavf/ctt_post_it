@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 
+// Unifies reading from image and reading from disk
 class BuscodeView {
   String path;
   imglib.Image image;

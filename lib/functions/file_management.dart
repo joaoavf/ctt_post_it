@@ -6,12 +6,13 @@ import 'package:path_provider/path_provider.dart';
 import 'package:watcher/watcher.dart';
 import 'package:image/image.dart' as imglib;
 
-
+// File list given a folder
 List getFilesList(folder) {
   final dir = Directory(folder);
   return dir.listSync(recursive: false).toList();
 }
 
+// String processing to remove excess characters than just the path
 String cleanPath(String path) {
   path = path.substring(7, path.length - 1).replaceAll('\\', '/');
   return path;

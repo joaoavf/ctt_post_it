@@ -43,6 +43,7 @@ class Buscode {
   String idTag;
   bool success = false;
 
+  // Run all transformations required to turn image to buscode
   Buscode({@required this.image, @required this.path}) {
     code = readBuscode(imglib.copyRotate(image, 0));
     Map codeEval = evaluateCode(code);
