@@ -1,5 +1,5 @@
 import 'package:camera_tutorial/functions/file_management.dart';
-import 'package:camera_tutorial/functions/new_image_processing.dart';
+import 'package:camera_tutorial/functions/image_processing.dart';
 import 'package:camera_tutorial/models/exif.dart';
 import 'package:flutter/material.dart';
 import 'package:camera_tutorial/functions/buscode_processing.dart';
@@ -44,7 +44,7 @@ class Buscode {
   bool success = false;
 
   Buscode({@required this.image, @required this.path}) {
-    code = altReadBuscode(imglib.copyRotate(image, 0));
+    code = readBuscode(imglib.copyRotate(image, 0));
     Map codeEval = evaluateCode(code);
     if (codeEval['is_valid'] == true) {
       if (codeEval['is_rotate']) {
