@@ -1,5 +1,7 @@
 import 'dart:io';
-import 'package:camera_tutorial/functions/image_processing.dart';
+import 'package:camera_tutorial/functions/bar_type_identification.dart';
+import 'package:camera_tutorial/functions/buscode_processing.dart';
+import 'package:camera_tutorial/functions/reed_solomon.dart';
 import 'package:image/image.dart' as imglib;
 
 List getFilesList(folder) {
@@ -16,7 +18,8 @@ String getPath(String path) {
 }
 
 imglib.Image readImage(path) {
-  return imglib.readPng(File(path).readAsBytesSync());
+  print(path);
+  return imglib.readJpg(File(path).readAsBytesSync());
 }
 
 void saveImage(imglib.Image img, String filename) async {
@@ -26,14 +29,24 @@ void saveImage(imglib.Image img, String filename) async {
 
 void main() {
   List files = getFilesList('test/test_images');
-  for (var i = 0; i < 10; i++) {
+  for (var i = 0; i < files.length; i++) {
     String path = getPath(files[i].toString());
     imglib.Image image = readImage(path);
-    var code = readBuscode(image);
-    print(code);
 
-    path = path.substring(66, path.length - 4).replaceAll('\\', '/');
-    print(path);
-    saveImage(image, path + 'proc');
+    var code = readBuscode(image);
+
+    print(code);
+    if (code.length == 75) {
+      List<int> integers = busToIntegers(code);
+      List<int> reedSolomonMsg = reorderRS(integers);
+      print(reedSolomonMsg);
+      integers = [];
+      print(reedSolomonMsg.length);
+      List<int> correctMsg = rsCorrectMessage(reedSolomonMsg);
+      print('correctMsg');
+      print(correctMsg);
+    }
+
+
   }
 }
