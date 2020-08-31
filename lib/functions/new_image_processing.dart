@@ -179,35 +179,10 @@ List<String> processCollections(num unit, List<num> upperList,
   for (int i = 0; i < outputList.length; i++) {
     if (outputList[i] == 'AD') {
       if (i > 0) {
-        if (outputList[i - 1] == 'T' || outputList[i - 1] == 'D') {
-          if ((uList[i] - uList[i - 1]).abs() < buffer) {
-            outputList[i] = 'D';
-          } else {
-            outputList[i] = 'A';
-          }
-        } else if (outputList[i - 1] == 'F' || outputList[i - 1] == 'A') {
-          if ((uList[i] - uList[i - 1]).abs() < buffer) {
-            outputList[i] = 'A';
-          } else {
-            outputList[i] = 'D';
-          }
-        }
+        compare(outputList, uList, i, i - 1, buffer);
       } else {
         outputList[i] = 'D';
-        int j = 1;
-        if (outputList[i + j] == 'T' || outputList[i + j] == 'D') {
-          if ((uList[i] - uList[i + j]).abs() < buffer) {
-            outputList[i] = 'D';
-          } else {
-            outputList[i] = 'A';
-          }
-        } else if (outputList[i + j] == 'F' || outputList[i + j] == 'A') {
-          if ((uList[i] - uList[i + j]).abs() < buffer) {
-            outputList[i] = 'A';
-          } else {
-            outputList[i] = 'D';
-          }
-        }
+        compare(outputList, uList, i, i + 1, buffer);
       }
     }
   }
@@ -222,6 +197,22 @@ String calc(double t, double minima) {
     return 'AD';
   } else {
     return 'T';
+  }
+}
+
+compare(outputList, uList, i, j, buffer) {
+  if (outputList[j] == 'T' || outputList[j] == 'D') {
+    if ((uList[i] - uList[j]).abs() < buffer) {
+      outputList[i] = 'D';
+    } else {
+      outputList[i] = 'A';
+    }
+  } else if (outputList[j] == 'F' || outputList[j] == 'A') {
+    if ((uList[i] - uList[j]).abs() < buffer) {
+      outputList[i] = 'A';
+    } else {
+      outputList[i] = 'D';
+    }
   }
 }
 
