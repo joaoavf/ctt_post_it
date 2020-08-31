@@ -46,8 +46,6 @@ Future<List<BuscodeView>> readStoredBuscodes() async {
   List files = await _getFiles();
   for (var i = 0; i < files.length; i++) {
     String path = cleanPath(files[i].toString());
-    print('path');
-    print(path);
     imglib.Image image = readImage(path);
     buscodeView = readExifFile(image, path);
     listBuscodeView.add(buscodeView);
