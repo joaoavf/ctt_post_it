@@ -6,8 +6,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:watcher/watcher.dart';
 import 'package:image/image.dart' as imglib;
 
-String directory;
-List file = new List();
 
 List getFilesList(folder) {
   final dir = Directory(folder);
@@ -64,6 +62,6 @@ Future<Stream<WatchEvent>> fileEventStream() async {
   return watcher.events;
 }
 
-void saveImage(imglib.Image img, String path) async {
-  File(path)..writeAsBytesSync(imglib.encodeJpg(img));
+void saveImage(imglib.Image image, String path) async {
+  File(path)..writeAsBytesSync(imglib.encodeJpg(image));
 }
