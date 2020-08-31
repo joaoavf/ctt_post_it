@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'dart:math';
-import 'dart:developer' as d;
 
 List<num> preProcessImage(imglib.Image buscodeImage) {
   var height = buscodeImage.height;
@@ -19,7 +18,7 @@ List<num> preProcessImage(imglib.Image buscodeImage) {
   img_1d = invertColor(img_1d);
 
   img_1d = conv2d(img_1d, stride: stride, height: width, width: height);
-  img_1d = toBinaryColor(img_1d);
+  img_1d = threshold(img_1d);
 
   return img_1d;
 }
@@ -75,7 +74,7 @@ List<num> adaptativeThresholds(List<num> inputList, height, width,
         partialList.add(inputList[i + (width * j)]);
       }
     }
-    partialList = toBinaryColor(partialList, buffer: 10);
+    partialList = threshold(partialList, buffer: 10);
     outputList.addAll(partialList);
   }
   return outputList;
@@ -214,7 +213,7 @@ compare(outputList, uList, i, j, buffer) {
   }
 }
 
-List<num> toBinaryColor(List<num> img_1d, {int buffer = 10}) {
+List<num> threshold(List<num> img_1d, {int buffer = 10}) {
   List<num> thresholdList = [];
   thresholdList = img_1d.sublist(0);
   thresholdList.sort();
