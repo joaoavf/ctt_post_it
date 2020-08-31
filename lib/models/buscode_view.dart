@@ -27,6 +27,7 @@ class BuscodeView {
       @required this.itemPriority,
       @required this.serialNumber,
       @required this.trackingIndicator}) {
+    minute = buscodeDate.substring(15, 16);
     month = buscodeDate.substring(5, 7);
     day = buscodeDate.substring(8, 10);
     hour = buscodeDate.substring(11, 13);
@@ -40,6 +41,6 @@ class BuscodeView {
         minute +
         serialNumber +
         trackingIndicator;
-    minute = buscodeDate.substring(15, 16) + '0';
+    minute = minute + '0';
   }
 }
