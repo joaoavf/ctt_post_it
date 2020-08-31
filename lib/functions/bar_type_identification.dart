@@ -1,4 +1,66 @@
 import 'dart:math';
+import 'image_processing.dart';
+import 'package:image/image.dart' as imglib;
+
+List<String> readBuscode(imglib.Image buscodeImage) {
+  var height = buscodeImage.height;
+  var width = buscodeImage.width;
+  var stride = 4;
+
+  List<num> img_1d = preProcessImage(buscodeImage);
+
+  List<List<num>> splitedList =
+      splitList(img_1d, height - stride + 1, width - stride + 1);
+
+  List<num> fullList = splitedList[0];
+
+  List<int> tmp = extractBuscode(fullList);
+
+  int start = tmp[0];
+  int finish = tmp[1];
+
+  fullList = fullList.sublist(start, finish);
+  List<num> upperList = splitedList[1].sublist(start, finish);
+
+  List<String> code = identifyBars(fullList, upperList);
+
+  return code;
+}
+
+List<int> extractBuscode(List<num> fullList, {threshold = 100}) {
+  List<int> counters = [];
+  List<int> positions = [];
+  int counter = 0;
+
+  int pos;
+  for (pos = 0; pos < fullList.length; pos++)
+    if (fullList[pos] > 230) {
+      counter++;
+    } else {
+      if (counter > fullList.length / threshold || counters.length == 0) {
+        counters.add(counter);
+        positions.add(pos);
+      }
+      counter = 0;
+    }
+  if (counter > fullList.length / threshold) {
+    counters.add(counter);
+    positions.add(pos);
+  }
+
+  int start = 0;
+  int finish = fullList.length;
+
+  for (int i = 0; i < counters.length; i++) {
+    if (positions[i] < fullList.length / 2) {
+      start = positions[i];
+    } else {
+      finish = positions[i] - counters[i];
+      break;
+    }
+  }
+  return [start, finish];
+}
 
 List<String> identifyBars(List<num> fullList, List<num> upperList) {
   List tmp = barSeparation(fullList, upperList);
