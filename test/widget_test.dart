@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:camera_tutorial/functions/new_image_processing.dart';
+import 'package:camera_tutorial/functions/image_processing.dart';
 import 'package:image/image.dart' as imglib;
 
 List getFilesList(folder) {
@@ -29,7 +29,7 @@ void main() {
   for (var i = 0; i < 10; i++) {
     String path = getPath(files[i].toString());
     imglib.Image image = readImage(path);
-    var code = altReadBuscode(image);
+    var code = readBuscode(image);
     print(code);
 
     path = path.substring(66, path.length - 4).replaceAll('\\', '/');
