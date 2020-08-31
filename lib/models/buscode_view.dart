@@ -30,10 +30,6 @@ class BuscodeView {
     month = buscodeDate.substring(5, 7);
     day = buscodeDate.substring(8, 10);
     hour = buscodeDate.substring(11, 13);
-    minute = buscodeDate.substring(15, 16) + '0';
-
-    serialNumber = serialNumber.substring(0, 4);
-
     idTag = formatId +
         issuerCode +
         equipmentId +
@@ -44,5 +40,6 @@ class BuscodeView {
         minute +
         serialNumber +
         trackingIndicator;
+    minute = buscodeDate.substring(15, 16) + '0';
   }
 }
