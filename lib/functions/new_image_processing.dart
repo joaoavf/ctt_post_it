@@ -24,12 +24,6 @@ List<num> preProcessImage(imglib.Image buscodeImage) {
   img_1d = conv2d(img_1d, stride: stride, height: width - 3, width: height - 3);
   img_1d = toBinaryColor(img_1d, buffer: -10);
 
-//  d.log(img_1d.toString());
-//  print(img_1d);
-//  print(height);
-//  print(width);
-
-
   return img_1d;
 }
 
@@ -161,6 +155,10 @@ List<String> processCollections(num unit, List<num> upperList,
   double t;
   double u;
 
+  List uList = [];
+
+  double minima = fullList.reduce(min);
+
   List<num> adList = [];
   List<num> adPos = [];
   for (int i = 0; i < 75; i++) {
@@ -169,34 +167,58 @@ List<String> processCollections(num unit, List<num> upperList,
 
     t = fullList.sublist(s, e).reduce(min);
     u = upperList.sublist(s, e).reduce(min);
-    // TODO more sophisticated implementation
 
-    String temp = calc(t);
-    if (temp == 'AD') {
-      adList.add(u);
-      adPos.add(i);
-    }
+    String temp = calc(t, minima);
+    uList.add(u);
 
     outputList.add(temp);
   }
 
-  var threshold =
-      (adList.reduce(max) - adList.reduce(min)) / 2 + adList.reduce(min);
-  for (var i = 0; i < adPos.length; i++) {
-    if (adList[i] > threshold) {
-      outputList[adPos[i]] = 'D';
-    } else {
-      outputList[adPos[i]] = 'A';
+  int buffer = 30;
+
+  for (int i = 0; i < outputList.length; i++) {
+    if (outputList[i] == 'AD') {
+      if (i > 0) {
+        if (outputList[i - 1] == 'T' || outputList[i - 1] == 'D') {
+          if ((uList[i] - uList[i - 1]).abs() < buffer) {
+            outputList[i] = 'D';
+          } else {
+            outputList[i] = 'A';
+          }
+        } else if (outputList[i - 1] == 'F' || outputList[i - 1] == 'A') {
+          if ((uList[i] - uList[i - 1]).abs() < buffer) {
+            outputList[i] = 'A';
+          } else {
+            outputList[i] = 'D';
+          }
+        }
+      } else {
+        outputList[i] = 'D';
+        int j = 1;
+        if (outputList[i + j] == 'T' || outputList[i + j] == 'D') {
+          if ((uList[i] - uList[i + j]).abs() < buffer) {
+            outputList[i] = 'D';
+          } else {
+            outputList[i] = 'A';
+          }
+        } else if (outputList[i + j] == 'F' || outputList[i + j] == 'A') {
+          if ((uList[i] - uList[i + j]).abs() < buffer) {
+            outputList[i] = 'A';
+          } else {
+            outputList[i] = 'D';
+          }
+        }
+      }
     }
   }
 
   return outputList;
 }
 
-String calc(double t) {
-  if (t < 140) {
+String calc(double t, double minima) {
+  if (t < minima + 30) {
     return 'F';
-  } else if (t < 190) {
+  } else if (t < minima + 80) {
     return 'AD';
   } else {
     return 'T';
