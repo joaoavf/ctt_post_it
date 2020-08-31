@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Buscode Reader',
       theme: ThemeData(
         primaryColor: Color(0xffDE0025),
