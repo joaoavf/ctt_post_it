@@ -12,8 +12,6 @@ List<int> rsCorrectMessage(List<int> message_in, {int nsym = 12}) {
     }
   }
   if (erase_pos.length > nsym) return null;
-  print(message_out);
-  print(nsym);
   List<int> synd = _rsCalculateSyndrome(message_out, nsym);
   if (_max(synd) == 0) return message_out;
   List<int> fsynd = _rsForneySyndrome(synd, erase_pos, message_out.length);

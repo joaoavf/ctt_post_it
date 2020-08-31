@@ -1,5 +1,5 @@
+import 'package:camera_tutorial/functions/bar_type_identification.dart';
 import 'package:camera_tutorial/functions/file_management.dart';
-import 'package:camera_tutorial/functions/image_processing.dart';
 import 'package:camera_tutorial/models/exif.dart';
 import 'package:flutter/material.dart';
 import 'package:camera_tutorial/functions/buscode_processing.dart';

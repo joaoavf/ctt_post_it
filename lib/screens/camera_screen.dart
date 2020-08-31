@@ -165,16 +165,10 @@ class _CameraScreenState extends State<CameraScreen> {
             // Allocate memory for the 3 planes of the image
             Pointer<Uint8> p =
                 allocate(count: _savedImage.planes[0].bytes.length);
-            print('0');
-            print(_savedImage.planes[0].bytes.length);
             Pointer<Uint8> p1 =
                 allocate(count: _savedImage.planes[1].bytes.length);
-            print('1');
-            print(_savedImage.planes[1].bytes.length);
             Pointer<Uint8> p2 =
                 allocate(count: _savedImage.planes[2].bytes.length);
-            print('2');
-            print(_savedImage.planes[2].bytes.length);
 
             // Assign the planes data to the pointers of the image
             Uint8List pointerList =
