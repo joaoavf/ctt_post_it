@@ -158,6 +158,8 @@ List<String> processCollections(num unit, List<num> upperList,
 
   double minima = fullList.reduce(min);
 
+  List<num> adList = [];
+  List<num> adPos = [];
   for (int i = 0; i < 75; i++) {
     e = positions[i];
     s = e - results[i];
