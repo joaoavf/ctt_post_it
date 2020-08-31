@@ -13,7 +13,8 @@ List<num> preProcessImage(imglib.Image buscodeImage) {
   imglib.normalize(buscodeImage, 100, 255);
   imglib.adjustColor(buscodeImage, hue: 0.1);
 
-  img_1d = extractBlue(buscodeImage);
+  img_1d = filterColors(buscodeImage);
+
   img_1d = adaptativeThresholds(img_1d, height, width);
 
   img_1d = conv2d(img_1d, stride: stride, height: width, width: height);
@@ -84,15 +85,18 @@ List<num> adaptativeThresholds(List<num> inputList, height, width,
   return outputList;
 }
 
-List<num> extractBlue(imglib.Image image) {
-  List<num> blueVector = [];
+List<num> filterColors(imglib.Image image) {
+  List<num> filteredColors = [];
+  Color color;
+  int colorInt;
 
   for (int i = 0; i < image.data.length; i++) {
-    Color b = Color(image.data[i]);
-    blueVector.add(b.blue);
+    color = Color(image.data[i]);
+    colorInt = ((color.blue * 0.8) - (color.red * 0.4)).toInt();
+    filteredColors.add(colorInt);
   }
 
-  return blueVector;
+  return filteredColors;
 }
 
 List<String> newFrom1dToBuscode(List<num> fullList, List<num> upperList) {
